@@ -13,8 +13,18 @@ for item in el:
 az.append(2 * np.pi);
 el.append(el[0])
 
-# 天空阴影图极坐标绘制
+img = plt.imread("bj1.png")
+axes_coords = [0.123, 0.111, 0.779, 0.77] # plotting full width and height
+
+
 fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
+
+# # 绘制背景图片
+# ax_image = fig.add_axes(axes_coords, label="ax image")
+# ax_image.imshow(img, alpha=.4)
+# ax_image.axis('off')  # don't show the axes ticks/lines/etc. associated with the image
+
+# 天空阴影图极坐标绘制
 ax.patch.set_facecolor('0.85')   # 底色设置为灰色
 ax.plot(az,el)   # 绘制建筑边界
 ax.fill(az,el,'w')   #中间天空填充白色
