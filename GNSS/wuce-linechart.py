@@ -38,5 +38,5 @@ plt.plot(x,y15, label='spp-z-ecef(m)')
 plt.legend()
 
 plt.tight_layout()
-# plt.savefig('mean.jpg')   # 保存图片
-plt.show()
+plt.savefig('test-line.jpg')   # 保存图片
+# plt.show()
