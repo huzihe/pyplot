@@ -64,13 +64,14 @@ for item in el:
 az.append(2 * np.pi);
 el.append(el[0])
 
-img = plt.imread("bj2.png")
-axes_coords = [0.123, 0.111, 0.779, 0.77] # plotting full width and height
+plt.figure(figsize =(17.6,8.8))
 
+# img = plt.imread("./data/bj2.png")
+# axes_coords = [0.123, 0.111, 0.779, 0.77] # plotting full width and height
 
 fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
 
-# # 绘制背景图片
+# 绘制背景图片
 # ax_image = fig.add_axes(axes_coords, label="ax image")
 # ax_image.imshow(img, alpha=.4)
 # ax_image.axis('off')  # don't show the axes ticks/lines/etc. associated with the image
@@ -80,23 +81,23 @@ ax.patch.set_facecolor('0.85')   # 底色设置为灰色
 ax.plot(az,el)   # 绘制建筑边界
 ax.fill(az,el,'w')   #中间天空填充白色
 
-# 绘制卫星，用不同形状表示不同星座
-for x,y,t in zip(sataz,satel,satNO):
-    s = t[0]
-    if s == 'G':
-        ax.plot(x,y,marker='^',color='g',markersize=10)
-    elif s == 'R':
-        ax.plot(x,y,marker='s',color='m',markersize=10)
-    elif s == 'E':
-        ax.plot(x,y,marker='d',color='b',markersize=10)
-    elif s == 'J':
-        ax.plot(x,y,marker='o',color='y',markersize=10)
-    elif s == 'C':
-        ax.plot(x,y,marker='p',color='r',markersize=10)
-    else:
-        ax.plot(x,y,'ro')
-    ax.text(x, y, t,horizontalalignment='left',verticalalignment='bottom',color='darkslategray',fontsize=11)
-# 绘制卫星结束
+# # 绘制卫星，用不同形状表示不同星座
+# for x,y,t in zip(sataz,satel,satNO):
+#     s = t[0]
+#     if s == 'G':
+#         ax.plot(x,y,marker='^',color='g',markersize=10)
+#     elif s == 'R':
+#         ax.plot(x,y,marker='s',color='m',markersize=10)
+#     elif s == 'E':
+#         ax.plot(x,y,marker='d',color='b',markersize=10)
+#     elif s == 'J':
+#         ax.plot(x,y,marker='o',color='y',markersize=10)
+#     elif s == 'C':
+#         ax.plot(x,y,marker='p',color='r',markersize=10)
+#     else:
+#         ax.plot(x,y,'ro')
+#     ax.text(x, y, t,horizontalalignment='left',verticalalignment='bottom',color='darkslategray',fontsize=11)
+# # 绘制卫星结束
 
 ax.set_rmax(2)
 ax.set_rticks([90, 80, 60, 40, 20])  # Less radial ticks
@@ -107,5 +108,6 @@ ax.set_theta_direction(-1)   # 顺时针
 ax.set_rlim(90,0)
 # ax.grid(True)
 
-ax.set_title("A skymask on a polar axis", va='bottom')
-plt.show()
+ax.set_title("A skymask on a polar axis", va='top')
+plt.savefig('./data/polaraxis.jpg')   # 保存图片
+# plt.show()

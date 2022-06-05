@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import xlrd
 
-filename = 'data analysis.xlsx'
+filename = './data/data analysis.xlsx'
 book_wind = xlrd.open_workbook(filename=filename)
 wind_sheet1 = book_wind.sheets()[6]    
 # 读取第1行标题
@@ -19,6 +19,7 @@ y14 = wind_sheet1.col_values(14,1)
 y15 = wind_sheet1.col_values(15,1)
 # print(x)
  
+plt.figure(figsize =(17.6,8.8))
 # 绘制曲线图
 plt.title('Delt distance',fontsize=12)
 # plt.plot(x, y, x,y2,x,y3,'g-', label='mean')    # 多数据合并到一个图
@@ -38,5 +39,5 @@ plt.plot(x,y15, label='spp-z-ecef(m)')
 plt.legend()
 
 plt.tight_layout()
-plt.savefig('test-line.jpg')   # 保存图片
+plt.savefig('./data/test-line.jpg')   # 保存图片
 # plt.show()

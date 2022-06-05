@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import xlrd
 
-filename = 'data analysis.xlsx'
+filename = './data/data analysis.xlsx'
 book_wind = xlrd.open_workbook(filename=filename)
 wind_sheet1 = book_wind.sheets()[1]    
 # 读取第1行标题
