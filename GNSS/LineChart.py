@@ -30,5 +30,5 @@ plt.xlim((0,1500))
 plt.ylim((0, 180))
 plt.legend()
 plt.tight_layout()
-# plt.savefig('mean.jpg')   # 保存图片
+plt.savefig('mean0625.jpg')   # 保存图片
 plt.show()
