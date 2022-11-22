@@ -21,7 +21,6 @@ x = wind_sheet1.col_values(0, 1, 1200)
 y10 = wind_sheet1.col_values(10, 1, 1200)
 y11 = wind_sheet1.col_values(11, 1, 1200)
 y12 = wind_sheet1.col_values(12, 1, 1200)
-
 y13 = wind_sheet1.col_values(13, 1, 1200)
 y14 = wind_sheet1.col_values(14, 1, 1200)
 y15 = wind_sheet1.col_values(15, 1, 1200)
@@ -41,8 +40,8 @@ plt.title('Shadowmatching Delt distance', fontsize=12)
 
 # 以下分三个子图绘制
 ax1 = plt.subplot(311)    # 分成三行，每行一列，第一行
-ax1.set(ylabel='bias (m)')
-ax1.set_xticks([])
+ax1.set(ylabel='bias(m)')
+ax1.set_xticks([])  # 取消横坐标轴刻度显示
 ax1.set_ylim([-30, 30])
 ax1.grid(axis='y', color='grey', linestyle='--', linewidth=0.5)
 plt.plot(x, y10, 'g-', label='ref-deltx(m)')
