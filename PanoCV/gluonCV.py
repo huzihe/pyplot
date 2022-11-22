@@ -9,7 +9,7 @@ import numpy as np
 # using cpu
 ctx = mx.cpu()
 
-img = image.imread('./data/cv4.jpg')
+img = image.imread('./data/cv/cv1.jpg')
 img = test_transform(img,ctx)
 
 
@@ -20,12 +20,12 @@ sky = (predict==10)
 print('天空率为:',str(len(predict[sky])/(predict.shape[0]*predict.shape[1])))
 
 mask = get_color_pallete(predict, 'citys')
-base = mpimg.imread('./data/cv4.jpg')
+base = mpimg.imread('./data/cv/cv1.jpg')
 plt.figure(figsize=(10,5))
 plt.imshow(base)
 plt.imshow(mask,alpha=0.5)
 plt.axis('off')
-plt.savefig('./data/cv4_deeplab_citys.jpg',dpi=150,bbox_inches='tight')
+plt.savefig('./data/cv/cv1_deeplab_citys.jpg',dpi=250,bbox_inches='tight')
 
 model2 = gluoncv.model_zoo.get_model('deeplab_resnet101_ade', pretrained=True)
 output = model2.predict(img)
@@ -34,9 +34,9 @@ mask = get_color_pallete(predict, 'ade20k')
 sky = (predict==2)
 print('天空率为:',str(len(predict[sky])/(predict.shape[0]*predict.shape[1])))
 
-base = mpimg.imread('./data/cv4.jpg')
+base = mpimg.imread('./data/cv/cv4.jpg')
 plt.figure(figsize=(10,5))
 plt.imshow(base)
 plt.imshow(mask,alpha=0.5)
 plt.axis('off')
-plt.savefig('./data/cv4_deeplab_ade.jpg',dpi=150,bbox_inches='tight')
+plt.savefig('./data/cv/cv4_deeplab_ade.jpg',dpi=250,bbox_inches='tight')
