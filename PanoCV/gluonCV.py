@@ -40,4 +40,4 @@ plt.imshow(mask,alpha=0.5)
 plt.axis('off')
 plt.savefig('./data/cv/cv1_deeplab_ade.jpg',dpi=250,bbox_inches='tight')
 
-print("it's done!")
+# print("it's done!")
