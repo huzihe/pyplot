@@ -10,6 +10,7 @@ Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查�
 
 from sklearn import svm
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib
 import sklearn
@@ -24,17 +25,22 @@ def Calstr(s):
     return 1
 
 
-# # 1.读取数据集
-# path = "./data/ml-data/gnss-nlos-test.txt"
-# data = np.loadtxt(path, dtype=float, delimiter=",", converters={0: Calstr})
+# 1.读取数据集
+# # path = "./data/ml-data/gnss-nlos-test.txt"
+# path = "./data/ml-data/gnss-data-202210071.txt"
+# data = np.loadtxt(path, dtype=float, delimiter=",")
 # print(data.shape)
-iris = datasets.load_iris()
-x = iris['data']
-y = iris['target']
+
+path = "./data/ml-data/gnss-data-20230129-1.csv"
+gnssdata = pd.read_csv(path)
+print(gnssdata.shape)
+print(gnssdata.describe())
+# print(gnssdata.isnull().any())
+x = gnssdata.drop(['los','resp'], axis=1)
+y = gnssdata['los']
+
 
 # 2.划分数据与标签
-# x, y = np.split(data, indices_or_sections=(4,), axis=1)  # x为数据，y为标签
-# x = x[:, 0:2]
 train_data, test_data, train_label, test_label = train_test_split(
     x, y, random_state=1, train_size=0.6, test_size=0.4
 )  # sklearn.model_selection.
@@ -53,33 +59,42 @@ print("测试集：", classifier.score(test_data, test_label))
 # 也可直接调用accuracy_score方法计算准确率
 from sklearn.metrics import accuracy_score
 
-tra_label = classifier.predict(train_data)  # 训练集的预测标签
-tes_label = classifier.predict(test_data)  # 测试集的预测标签
-print("训练集：", accuracy_score(train_label, tra_label))
-print("测试集：", accuracy_score(test_label, tes_label))
+# tra_label = classifier.predict(train_data)  # 训练集的预测标签
+# tes_label = classifier.predict(test_data)  # 测试集的预测标签
+# print("训练集：", accuracy_score(train_label, tra_label))
+# print("测试集：", accuracy_score(test_label, tes_label))
 
 # 查看决策函数
 print("train_decision_function:\n", classifier.decision_function(train_data))  # (90,3)
 print("predict_result:\n", classifier.predict(train_data))
 
-scores1 = []
-for m in range(2,test_data.size):#循环2-79
-    classifier.fit(train_data[:m],train_label[:m])
-    # y_train_predict = classifier.predict(train_data[:m])
-    y_val_predict = classifier.predict(test_data[:m])
-    scores1.append(accuracy_score(y_val_predict,test_label[:m]))
-plt.plot(range(2,test_data.size),scores1,c='green', alpha=0.6)
-plt.savefig('./data/ml-data/mkrate1.jpg')   # 保存图片
+# scores1 = []
+# for m in range(2,test_data.size):#循环2-79
+#     classifier.fit(train_data[:m],train_label[:m])
+#     # y_train_predict = classifier.predict(train_data[:m])
+#     y_val_predict = classifier.predict(test_data[:m])
+#     scores1.append(accuracy_score(y_val_predict,test_label[:m]))
+# plt.plot(range(2,test_data.size),scores1,c='green', alpha=0.6)
+# plt.savefig('./data/ml-data/mkrate1.jpg')   # 保存图片
 
+
+# scores = []
+# for m in range(2,train_data.size):#循环2-79
+#     classifier.fit(train_data[:m],train_label[:m])
+#     y_train_predict = classifier.predict(train_data[:m])
+#     y_val_predict = classifier.predict(test_data)
+#     scores.append(accuracy_score(y_train_predict,train_label[:m]))
+# plt.plot(range(2,train_data.size),scores,c='green', alpha=0.6)
+# plt.savefig('./data/ml-data/mkrate.jpg')   # 保存图片
 
 scores = []
-for m in range(2,train_data.size):#循环2-79
+for m in range(2,800):#循环2-79
     classifier.fit(train_data[:m],train_label[:m])
     y_train_predict = classifier.predict(train_data[:m])
     y_val_predict = classifier.predict(test_data)
     scores.append(accuracy_score(y_train_predict,train_label[:m]))
-plt.plot(range(2,train_data.size),scores,c='green', alpha=0.6)
-plt.savefig('./data/ml-data/mkrate.jpg')   # 保存图片
+plt.plot(range(2,800),scores,c='green', alpha=0.6)
+plt.savefig('./data/ml-data/mkrate-gnss.jpg')   # 保存图片
 
 # # 5.绘制图形
 # # 确定坐标轴范围
