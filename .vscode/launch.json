@@ -10,8 +10,76 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-
             "justMyCode": false
+        },
+        {
+            "name": "Python: alloy",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20230511/alloy",
+            "args": [
+                "trimble-3dma-out-0602-static.txt",
+                "gins.txt"
+            ]
+        },
+        {
+            "name": "Python: alloy合并",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20230511/alloy",
+            "args": [
+                "trimble-3dma-out-0602-dynamic.txt",
+                "trimble-spp-out-0602-dynamic.txt",
+                "gins.txt"
+            ]
+        },
+        {
+            "name": "Python: ublox",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20230511/ublox",
+            "args": [
+                "ublox-3dma-0611-dynamic.txt",
+                "ublox-spp-0611-dynamic.txt",
+                "../alloy/gins.txt"
+            ]
+        },
+        {
+            "name": "Python: X6833B",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20230511/X6833B",
+            "args": [
+                "X6833B-3dma-0611-dynamic.txt",
+                "X6833B-spp-0611-dynamic.txt",
+                "../alloy/gins.txt"
+            ]
+        },
+        {
+            "name": "Python: CK6n",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20230511/CK6n",
+            "args": [
+                "CK6n-3dma-0611-static.txt",
+                "CK6n-spp-0611-static.txt",
+                "../alloy/gins.txt"
+            ]
         }
     ]
 }
