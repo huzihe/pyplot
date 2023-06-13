@@ -68,25 +68,6 @@ from sklearn.metrics import accuracy_score
 print("train_decision_function:\n", classifier.decision_function(train_data))  # (90,3)
 print("predict_result:\n", classifier.predict(train_data))
 
-# scores1 = []
-# for m in range(2,test_data.size):#循环2-79
-#     classifier.fit(train_data[:m],train_label[:m])
-#     # y_train_predict = classifier.predict(train_data[:m])
-#     y_val_predict = classifier.predict(test_data[:m])
-#     scores1.append(accuracy_score(y_val_predict,test_label[:m]))
-# plt.plot(range(2,test_data.size),scores1,c='green', alpha=0.6)
-# plt.savefig('./data/ml-data/mkrate1.jpg')   # 保存图片
-
-
-# scores = []
-# for m in range(2,train_data.size):#循环2-79
-#     classifier.fit(train_data[:m],train_label[:m])
-#     y_train_predict = classifier.predict(train_data[:m])
-#     y_val_predict = classifier.predict(test_data)
-#     scores.append(accuracy_score(y_train_predict,train_label[:m]))
-# plt.plot(range(2,train_data.size),scores,c='green', alpha=0.6)
-# plt.savefig('./data/ml-data/mkrate.jpg')   # 保存图片
-
 scores = []
 for m in range(2,800):#循环2-79
     classifier.fit(train_data[:m],train_label[:m])
