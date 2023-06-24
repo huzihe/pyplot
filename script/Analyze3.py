@@ -127,7 +127,7 @@ def ExportDifference(_file, _det):
             )
 
 
-def DrawFigure(_stat, _stat2, _figname):
+def DrawFigure(_stat, _stat2, _stat3, _figname):
     """
     @author    : shengyixu Created on 2022.8.20
     Purpose    : 绘制散点图或折线图
@@ -173,10 +173,16 @@ def DrawFigure(_stat, _stat2, _figname):
         label="rms_B: " + str(round(_stat2.rms[0], 3)) + "cm",
     )
     plt.plot_date(
+        Time_hms[0 : len(_stat3.dx)],
+        _stat3.dx,
+        fmt="y.",
+        label="rms_B_3D: " + str(round(_stat3.rms[0], 3)) + "cm",
+    )
+    plt.plot_date(
         Time_hms[0 : len(_stat.dx)],
         _stat.dx,
         fmt="b.",
-        label="rms_B_3D: " + str(round(_stat.rms[0], 3)) + "cm",
+        label="rms_B_pos3D: " + str(round(_stat.rms[0], 3)) + "cm",
     )
     #   plt.plot(Time_hms[0:len(_stat.dx)], _stat.dx, 'blue', label = 'rms_B: ' + str(round(_stat.rms[0], 3)) + 'cm')
     plt.legend(loc="lower right", fontsize=10)
@@ -196,10 +202,16 @@ def DrawFigure(_stat, _stat2, _figname):
         label="rms_L: " + str(round(_stat2.rms[1], 3)) + "cm",
     )
     plt.plot_date(
+        Time_hms[0 : len(_stat3.dy)],
+        _stat3.dy,
+        fmt="y.",
+        label="rms_B_3D: " + str(round(_stat3.rms[1], 3)) + "cm",
+    )
+    plt.plot_date(
         Time_hms[0 : len(_stat.dy)],
         _stat.dy,
         fmt="r.",
-        label="rms_L_3D: " + str(round(_stat.rms[1], 3)) + "cm",
+        label="rms_L_pos3D: " + str(round(_stat.rms[1], 3)) + "cm",
     )
     #   plt.plot(Time_hms[0:len(_stat.dy)], _stat.dy, 'red', label = 'rms_L: ' + str(round(_stat.rms[1], 3)) + 'cm')
     plt.legend(loc="upper right", fontsize=10)
@@ -218,10 +230,16 @@ def DrawFigure(_stat, _stat2, _figname):
         label="rms_H: " + str(round(_stat2.rms[2], 3)) + "cm",
     )
     plt.plot_date(
+        Time_hms[0 : len(_stat3.dz)],
+        _stat3.dz,
+        fmt="y.",
+        label="rms_B_3D: " + str(round(_stat3.rms[2], 3)) + "cm",
+    )
+    plt.plot_date(
         Time_hms[0 : len(_stat.dz)],
         _stat.dz,
         fmt="g.",
-        label="rms_H_3D: " + str(round(_stat.rms[2], 3)) + "cm",
+        label="rms_H_pos3D: " + str(round(_stat.rms[2], 3)) + "cm",
     )
 
     #   plt.plot(Time_hms[0:len(_stat.dz)], _stat.dz, 'green', label = 'rms_H: ' + str(round(_stat.rms[2], 3)) + 'cm')
@@ -239,25 +257,23 @@ def DrawFigure(_stat, _stat2, _figname):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 5:
         print("#usage  :  Analyze.py result1_file result2_file ref_file")
         print("#example:  Analyze.py re1.txt re2.txt ref.txt")
         sys.exit(0)
 
-    if len(sys.argv) == 4:
+    if len(sys.argv) == 5:
         calFile1 = sys.argv[1]
         calFile2 = sys.argv[2]
-        refFile = sys.argv[3]
+        calFile3 = sys.argv[3]
+        refFile = sys.argv[4]
     filename = calFile1.split(".")[0]
     detFile = "det-" + filename + ".txt"
-    figName = "fig-" + filename + "-merge.png"
+    figName = "fig-" + filename + ".png"
 
-    # calValue = Read3DMAResult(calFile1)
-    # calValue2 = Read3DMAResult(calFile2)
     calValue = ReadMyResult(calFile1)
     calValue2 = ReadMyResult(calFile2)
-    # calValue = ReadMyResult(calFile)
-    # refValue = ReadIERefResult(refFile)
+    calValue3 = Read3DMAResult(calFile3)
     refValue = ReadGINSResult(refFile)
 
     detValue = CalDifference(calValue, refValue)
@@ -266,5 +282,8 @@ if __name__ == "__main__":
     detValue2 = CalDifference(calValue2, refValue)
     stat2 = StatisticResult(detValue2)
 
+    detValue3 = CalDifference(calValue3, refValue)
+    stat3 = StatisticResult(detValue3)
+
     ExportDifference(detFile, detValue)
-    DrawFigure(Stat, stat2, figName)
+    DrawFigure(Stat, stat2, stat3, figName)

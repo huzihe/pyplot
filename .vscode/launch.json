@@ -80,6 +80,35 @@
                 "CK6n-spp-0611-static.txt",
                 "../alloy/gins.txt"
             ]
+        },
+        {
+            "name": "Python: posgo",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20230511/posgo",
+            "args": [
+                "X6833B-sm.txt",
+                "X6833B.txt",
+                "../alloy/gins.txt"
+            ]
+        },
+        {
+            "name": "Python: posgo3d",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20230511/posgo",
+            "args": [
+                "alloy-sm-static.txt",
+                "alloy-static.txt",
+                "../alloy/trimble-3dma-out-0602-static.txt",
+                "../alloy/gins.txt"
+            ]
         }
     ]
 }
