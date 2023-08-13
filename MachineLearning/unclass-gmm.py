@@ -28,20 +28,36 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 from sklearn import metrics
 
-path = "./data/ml-data/gnss-data-20230129-1.csv"
+# path = "./data/ml-data/gnss-data-20230129-1.csv"
+# gnssdata = pd.read_csv(path)
+# print(gnssdata.shape)
+# print(gnssdata.describe())
+# #print(gnssdata.isnull().any())
+# originX = gnssdata.drop(["los", "prn"], axis=1)
+# y = gnssdata["los"]
+
+path = "./data/ml-data/X6833B.csv"
 gnssdata = pd.read_csv(path)
 print(gnssdata.shape)
 print(gnssdata.describe())
-# print(gnssdata.isnull().any())
-originX = gnssdata.drop(["los", "prn"], axis=1)
+originX = gnssdata[["postResp", "priorR", "elevation", "SNR"]]
+# week,second,sat,los,priorResp,postResp,priorR,postR,P,L,azimuth,elevation,SNR
 y = gnssdata["los"]
 
 # 数据标准化
 X = Normalizer().fit_transform(originX)
 
 for n_clusters in range(2, 5):
+    train_data, test_data, train_label, test_label = train_test_split(
+        X, y, random_state=1, train_size=0.6, test_size=0.4
+    )
+
     # 聚类
     gmm = GaussianMixture(n_clusters, covariance_type="diag", random_state=0).fit(X)
+
+    X = test_data
+    y = test_label
+
     labels = gmm.predict(X)
     sil_samples = metrics.silhouette_samples(X, labels)
 

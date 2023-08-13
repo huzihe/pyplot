@@ -17,6 +17,7 @@ import sklearn
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 
+
 # define converts(字典)
 # def Iris_label(s):
 #     it = {b"Iris-setosa": 0, b"Iris-versicolor": 1, b"Iris-virginica": 2}
@@ -26,18 +27,21 @@ def Calstr(s):
 
 
 # 1.读取数据集
-# # path = "./data/ml-data/gnss-nlos-test.txt"
-# path = "./data/ml-data/gnss-data-202210071.txt"
-# data = np.loadtxt(path, dtype=float, delimiter=",")
-# print(data.shape)
+# path = "./data/ml-data/gnss-data-20230129-1.csv"
+# gnssdata = pd.read_csv(path)
+# print(gnssdata.shape)
+# print(gnssdata.describe())
+# # print(gnssdata.isnull().any())
+# x = gnssdata.drop(['los','resp'], axis=1)
+# y = gnssdata['los']
 
-path = "./data/ml-data/gnss-data-20230129-1.csv"
+path = "./data/ml-data/X6833B.csv"
 gnssdata = pd.read_csv(path)
 print(gnssdata.shape)
 print(gnssdata.describe())
-# print(gnssdata.isnull().any())
-x = gnssdata.drop(['los','resp'], axis=1)
-y = gnssdata['los']
+# gnssdata = gnssdata.head(300)
+x = gnssdata[["postResp", "priorR", "elevation", "SNR"]]
+y = gnssdata["los"]
 
 
 # 2.划分数据与标签
@@ -69,13 +73,13 @@ print("train_decision_function:\n", classifier.decision_function(train_data))  #
 print("predict_result:\n", classifier.predict(train_data))
 
 scores = []
-for m in range(2,800):#循环2-79
-    classifier.fit(train_data[:m],train_label[:m])
+for m in range(2, 800):  # 循环2-79
+    classifier.fit(train_data[:m], train_label[:m])
     y_train_predict = classifier.predict(train_data[:m])
     y_val_predict = classifier.predict(test_data)
-    scores.append(accuracy_score(y_train_predict,train_label[:m]))
-plt.plot(range(2,800),scores,c='green', alpha=0.6)
-plt.savefig('./data/ml-data/mkrate-gnss.jpg')   # 保存图片
+    scores.append(accuracy_score(y_train_predict, train_label[:m]))
+plt.plot(range(2, 800), scores, c="green", alpha=0.6)
+plt.savefig("./data/ml-data/mkrate-gnss.jpg")  # 保存图片
 
 # # 5.绘制图形
 # # 确定坐标轴范围
@@ -95,7 +99,7 @@ plt.savefig('./data/ml-data/mkrate-gnss.jpg')   # 保存图片
 # plt.pcolormesh(x1, x2, grid_hat, cmap=cm_light)  # 预测值的显示
 # # plt.scatter(x[:, 0], x[:, 1], c=y[:, 0], s=30, cmap=cm_dark)  # 样本
 # plt.scatter(
-#     test_data[:, 0], 
+#     test_data[:, 0],
 #     test_data[:, 1],
 #     c=test_label[:, 0],
 #     s=30,

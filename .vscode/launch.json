@@ -13,6 +13,19 @@
             "justMyCode": false
         },
         {
+            "name": "Python: posgo ai",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/ml-data",
+            "args": [
+                "res",
+                "trimble.res1",
+            ]
+        },
+        {
             "name": "Python: alloy",
             "type": "python",
             "request": "launch",
