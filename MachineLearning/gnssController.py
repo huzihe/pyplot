@@ -85,36 +85,76 @@ def out_gnss_data(rnx, outrnx, satInfo, istrimble):
 
 
 if __name__ == "__main__":
+    # if len(sys.argv) < 3:
+    #     print("\33[1;31m**Usage \33[0m")
+    #     sys.exit(1)
+    # else:
+    #     # 1：重新训练并保存模型；0：不训练模型
+    #     istrainmodel = sys.argv[0]
+    #     learningtype = sys.argv[1]
+
+    istrainmodel = 0
+    learningtype = "fcm"
+
     # resouce path
     path1 = "./data/ml-data/trimble.res1"
     path2 = "./data/ml-data/X6833B.res1"
 
-    # Supervised learning model path
-    xgboost_trimble_modelpath = "./data/ml-data/gnss_xgboost_trimble.model"
-    xgboost_X6833B_modelpath = "./data/ml-data/gnss_xgboost_X6833B.model"
-    gmm_X6833B_modelpath = "./data/ml-data/gnss_gmm_X6833B.model"
-    kmeans_X6833B_modelpath = "./data/ml-data/gnss_kmeans_X6833B.model"
-    fcm_X6833B_modelpath = "./data/ml-data/gnss_fcm_X6833B.model"
-    svm_X6833B_modelpath = "./data/ml-data/gnss_svm_X6833B.model"
+    if learningtype == "xgboost":
+        # Supervised learning model path
+        trimble_modelpath = "./data/ml-data/gnss_xgboost_trimble.model"
+        X6833B_modelpath = "./data/ml-data/gnss_xgboost_X6833B.model"
 
-    # model traning
-    # xgboost_gnss.xgboost_gnss_train_model(path1, modelpath1)
-    gnss_xgboost.xgboost_gnss_train_model(path2, xgboost_X6833B_modelpath)
-    gnss_gmm.gnss_gmm_train_model(path2, gmm_X6833B_modelpath)
-    gnss_kmeans.gnss_kmeans_train_model(path2, kmeans_X6833B_modelpath)
-    gnss_fcm.gnss_fcm_train_model(path2, fcm_X6833B_modelpath)
-    gnss_svm.gnss_svm_train_model(path2, svm_X6833B_modelpath)
+        # model traning
+        if istrainmodel:
+            gnss_xgboost.xgboost_gnss_train_model(path1, trimble_modelpath)
+            gnss_xgboost.xgboost_gnss_train_model(path2, X6833B_modelpath)
 
-    # predict
-    # satinfo_ref = xgboost_gnss.xgboost_gnss_predict(modelpath1, path1)
-    satinfo_ref = gnss_xgboost.xgboost_gnss_predict(xgboost_X6833B_modelpath, path2)
-    # satinfo_ref = xgboost_gnss.xgboost_gnss_predict(modelpath1, path2)
-    # satinfo_ref = xgboost_gnss.xgboost_gnss_predict(modelpath2, path1)
+        # predict
+        satinfo = gnss_xgboost.xgboost_gnss_predict(X6833B_modelpath, path2)
 
-    # mark los/nlos for rnx data by un/supervised learning
-    # rnx = "./data/ml-data/trimble-3dma-0520.rnx"
-    # outrnx = "./data/ml-data/trimble-3dma-0520-ai.rnx"
-    # out_gnss_data(rnx, outrnx, satinfo_ref, 1)
-    rnx = "./data/ml-data/X6833B-3dma-0730.rnx"
-    outrnx = "./data/ml-data/X6833B-3dma-0730-ai.rnx"
-    out_gnss_data(rnx, outrnx, satinfo_ref, 0)
+        # mark los/nlos for rnx data by un/supervised learning
+        rnx = "./data/ml-data/X6833B-3dma-0730.rnx"
+        outrnx = "./data/ml-data/X6833B-3dma-0730-ai.rnx"
+        out_gnss_data(rnx, outrnx, satinfo, 0)
+
+    elif learningtype == "svm":
+        svm_X6833B_modelpath = "./data/ml-data/gnss_svm_X6833B.model"
+
+        # model traning
+        if istrainmodel:
+            gnss_svm.gnss_svm_train_model(path2, svm_X6833B_modelpath)
+
+        # predict
+        satinfo = gnss_svm.gnss_svm_predict(svm_X6833B_modelpath, path2)
+
+    elif learningtype == "gmm":
+        gmm_X6833B_modelpath = "./data/ml-data/gnss_gmm_X6833B.model"
+
+        # model traning
+        if istrainmodel:
+            gnss_gmm.gnss_gmm_train_model(path2, gmm_X6833B_modelpath)
+        # predict
+        satinfo = gnss_gmm.gnss_gmm_predict(gmm_X6833B_modelpath, path2)
+
+    elif learningtype == "kmeans":
+        kmeans_X6833B_modelpath = "./data/ml-data/gnss_kmeans_X6833B.model"
+
+        # model traning
+        if istrainmodel:
+            gnss_kmeans.gnss_kmeans_train_model(path2, kmeans_X6833B_modelpath)
+
+        # predict
+        satinfo = gnss_kmeans.gnss_kmeans_predict(kmeans_X6833B_modelpath, path2)
+
+    elif learningtype == "fcm":
+        fcm_X6833B_modelpath = "./data/ml-data/gnss_fcm_X6833B.model"
+        fcm_trimble_modelpath = "./data/ml-data/gnss_fcm_trimble.model"
+
+        # model traning
+        if istrainmodel:
+            gnss_fcm.gnss_fcm_train_model(path2, fcm_X6833B_modelpath)
+
+        # predict
+        satinfo = gnss_fcm.gnss_fcm_predict(fcm_X6833B_modelpath, path2)
+        satinfo = gnss_fcm.gnss_fcm_predict(fcm_trimble_modelpath, path2)
