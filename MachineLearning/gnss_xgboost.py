@@ -32,9 +32,11 @@ def xgboost_gnss_train_model(traindata, model):
     print(gnssdata.describe())
     # 数据分段处理，可选项
     # # 2023-5-11 对应 周内秒 2261 356400
-    # # X6833B  对应前39091行为静态数据，后12670（51761-39091）行为动态数据
-    # # trimble 对应前46082行为静态数据，后9873（55955-46082）行为动态数据
-    # # gnssdata = gnssdata.head(46082)
+    # X6833B  对应前39091行为静态数据，后12670（51761-39091）行为动态数据
+    # trimble 对应前46082行为静态数据，后9873（55955-46082）行为动态数据
+    # ublox 对应33405行为静态数据，后12978（46383-33405）行为动态数据
+    # CK6n 对应33011行为静态数据，后9579（42590-33011）行为动态数据
+    # gnssdata = gnssdata.head(33011)
     # # gnssdata = gnssdata.tail(9873)
     # x = gnssdata.drop(["week","second","sat","los","priorResp","postR","P","L","azimuth",],axis=1,)
     x = gnssdata[["postResp", "priorR", "elevation", "SNR"]]
@@ -43,7 +45,7 @@ def xgboost_gnss_train_model(traindata, model):
 
     # 2.划分数据与标签
     train_data, test_data, train_label, test_label = train_test_split(
-        x, y, random_state=1, train_size=0.5, test_size=0.5
+        x, y, random_state=1, train_size=0.6, test_size=0.4
     )  # sklearn.model_selection.
 
     xgb_classifier = XGBClassifier(n_estimators=200, eval_metric="logloss", eta=0.3)
@@ -67,6 +69,7 @@ def xgboost_gnss_train_model(traindata, model):
 
 def xgboost_gnss_predict(model, testdata):
     gnssdata = pd.read_csv(testdata)
+    # gnssdata = gnssdata.head(33011)
     # x = gnssdata.drop(["week","second","sat","los","priorResp","postR","P","L","azimuth",],axis=1,)
     x = gnssdata[["postResp", "priorR", "elevation", "SNR"]]
     satInfo = gnssdata[["week", "second", "sat"]]
@@ -83,90 +86,45 @@ def xgboost_gnss_predict(model, testdata):
     print("Accuracy: %.3f" % score)
 
     satInfo.insert(loc=len(satInfo.columns), column="los", value=yhat)
+    satInfo["second"] = satInfo["second"].astype(int)
     return satInfo
 
 
-# def out_gnss_data(rnx, outrnx, satInfo, istrimble):
-#     result = {}
-#     with open(rnx, "r") as file:
-#         content = file.readlines()
-#         headerflag = False
-#         with open(outrnx, "w") as outfile:
-#             for eachLine in content:
-#                 if eachLine.startswith("%"):  # ignore comment line
-#                     outfile.write(eachLine)  # 输出 rnx 文件头
-#                     continue
-#                 ender = "END OF HEADER" in eachLine
-#                 if ender:
-#                     headerflag = True
-#                     outfile.write(eachLine)  # 输出 rnx 文件头
-#                     continue
-#                 elif headerflag:
-#                     if eachLine.startswith(">"):
-#                         outfile.write(eachLine)  # 输出时间部分
-
-#                         eachData = eachLine.split()
-#                         ws = ymdhms2gpsws(
-#                             int(eachData[1]),
-#                             int(eachData[2]),
-#                             int(eachData[3]),
-#                             int(eachData[4]),
-#                             int(eachData[5]),
-#                             int(float(eachData[6])),
-#                         )
-#                         continue
-#                     else:
-#                         eachData = eachLine.split()
-#                         los = satInfo.loc[
-#                             (satInfo["week"] == ws[0])
-#                             & (satInfo["second"] == ws[1])
-#                             & (satInfo["sat"] == eachData[0]),
-#                             :,
-#                         ]
-#                         if los.size <= 0:
-#                             outfile.write(eachLine)
-#                         else:
-#                             nlosflag = str(los.iat[0, 3])
-#                             for itr in range(6):
-#                                 if len(eachLine) > 48 * itr + 18 + 16:
-#                                     substr = eachLine[48 * itr + 18]
-#                                     if substr != " ":
-#                                         eachLine = replace_char(
-#                                             eachLine, nlosflag, 48 * itr + 18
-#                                         )
-#                                         eachLine = replace_char(
-#                                             eachLine, nlosflag, 48 * itr + 18 + 16
-#                                         )
-#                                         if not istrimble:
-#                                             eachLine = replace_char(
-#                                                 eachLine, nlosflag, 48 * itr + 18 + 32
-#                                             )
-#                                             eachLine = replace_char(
-#                                                 eachLine, nlosflag, 48 * itr + 18 + 48
-#                                             )
-#                             outfile.write(eachLine)  # 输出nlos修订后的obs记录
-#                         continue
-#                 else:
-#                     outfile.write(eachLine)  # 输出 rnx 文件头
-#                     continue
-
-
 if __name__ == "__main__":
-    path1 = "./data/ml-data/trimble.res1"
-    path2 = "./data/ml-data/X6833B.res1"
-    modelpath1 = "./data/ml-data/gnss_xgboost_trimble.model"
-    modelpath2 = "./data/ml-data/gnss_xgboost_X6833B.model"
-    # xgboost_gnss_train_model(path1, modelpath1)
-    # xgboost_gnss_train_model(path2, modelpath2)
+    trimble_path = "./data/ml-data/20230511/trimble.res1"
+    X6833B_path = "./data/ml-data/20230511/X6833B.res1"
+    ublox_path = "./data/ml-data/20230511/ublox.res1"
+    CK6n_path = "./data/ml-data/20230511/CK6n.res1"
 
-    # satinfo_ref = xgboost_gnss_predict(modelpath1, path1)
-    # satinfo_ref = xgboost_gnss_predict(modelpath2, path2)
-    # satinfo_ref = xgboost_gnss_predict(modelpath1, path2)
-    satinfo_ref = xgboost_gnss_predict(modelpath2, path1)
+    modelpath1 = "./data/ml-data/model/gnss_xgboost_trimble.model"
+    modelpath2 = "./data/ml-data/model/gnss_xgboost_X6833B.model"
 
-    # rnx = "./data/ml-data/trimble-3dma-0520.rnx"
-    # outrnx = "./data/ml-data/trimble-3dma-0520-ai.rnx"
-    # out_gnss_data(rnx, outrnx, satinfo_ref, 1)
-    rnx = "./data/ml-data/X6833B-3dma-0730.rnx"
-    outrnx = "./data/ml-data/X6833B-3dma-0730-ai.rnx"
-    # out_gnss_data(rnx, outrnx, satinfo_ref, 0)
+    trimble_modelpath = "./data/ml-data/model/gnss_xgboost_trimble-static.model"
+    X6833B_modelpath = "./data/ml-data/model/gnss_xgboost_X6833B-static.model"
+    ublox_modelpath = "./data/ml-data/model/gnss_xgboost_blox-static.model"
+    CK6n_modelpath = "./data/ml-data/model/gnss_xgboost_CK6n-static.model"
+
+    # xgboost_gnss_train_model(trimble_path, trimble_modelpath)
+    # xgboost_gnss_train_model(X6833B_path, X6833B_modelpath)
+    # xgboost_gnss_train_model(ublox_path, ublox_modelpath)
+    # xgboost_gnss_train_model(CK6n_path, CK6n_modelpath)
+
+    satinfo_ref = xgboost_gnss_predict(CK6n_modelpath, trimble_path)
+    satinfo_ref = xgboost_gnss_predict(CK6n_modelpath, X6833B_path)
+    satinfo_ref = xgboost_gnss_predict(CK6n_modelpath, ublox_path)
+    satinfo_ref = xgboost_gnss_predict(CK6n_modelpath, CK6n_path)
+
+    satinfo_ref = xgboost_gnss_predict(trimble_modelpath, trimble_path)
+    satinfo_ref = xgboost_gnss_predict(trimble_modelpath, X6833B_path)
+    satinfo_ref = xgboost_gnss_predict(trimble_modelpath, ublox_path)
+    satinfo_ref = xgboost_gnss_predict(trimble_modelpath, CK6n_path)
+
+    satinfo_ref = xgboost_gnss_predict(X6833B_modelpath, trimble_path)
+    satinfo_ref = xgboost_gnss_predict(X6833B_modelpath, X6833B_path)
+    satinfo_ref = xgboost_gnss_predict(X6833B_modelpath, ublox_path)
+    satinfo_ref = xgboost_gnss_predict(X6833B_modelpath, CK6n_path)
+
+    satinfo_ref = xgboost_gnss_predict(ublox_modelpath, trimble_path)
+    satinfo_ref = xgboost_gnss_predict(ublox_modelpath, X6833B_path)
+    satinfo_ref = xgboost_gnss_predict(ublox_modelpath, ublox_path)
+    satinfo_ref = xgboost_gnss_predict(ublox_modelpath, CK6n_path)

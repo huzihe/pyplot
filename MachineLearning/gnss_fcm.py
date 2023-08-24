@@ -46,7 +46,7 @@ def gnss_fcm_predict(model, testdata):
 
     fcm = load(model)
     labels = fcm.predict(X)
-    # labels = 1 - labels  # 将预测结果和 nlos实际意义做对应调整
+    labels = 1 - labels  # 将预测结果和 nlos实际意义做对应调整
 
     sil_samples = metrics.silhouette_samples(X, labels)
 
@@ -64,12 +64,22 @@ def gnss_fcm_predict(model, testdata):
 
 
 if __name__ == "__main__":
-    path1 = "./data/ml-data/trimble.res1"
-    path2 = "./data/ml-data/X6833B.res1"
-    modelpath1 = "./data/ml-data/gnss_fcm_trimble.model"
-    modelpath2 = "./data/ml-data/gnss_fcm_X6833B.model"
-    # gnss_fcm_train_model(path1, modelpath1)
-    # gnss_fcm_train_model(path2, modelpath2)
+    trimble_path = "./data/ml-data/20230511/trimble.res1"
+    X6833B_path = "./data/ml-data/20230511/X6833B.res1"
+    ublox_path = "./data/ml-data/20230511/ublox.res1"
+    CK6n_path = "./data/ml-data/20230511/CK6n.res1"
 
-    satinfo_ref = gnss_fcm_predict(modelpath2, path1)
-    # satinfo_ref2 = gnss_fcm_predict(modelpath2, path2)
+    trimble_modelpath = "./data/ml-data/model/gnss_fcm_trimble.model"
+    X6833B_modelpath = "./data/ml-data/model/gnss_fcm_X6833B.model"
+    ublox_modelpath = "./data/ml-data/model/gnss_fcm_ublox.model"
+    CK6n_modelpath = "./data/ml-data/model/gnss_fcm_CK6n.model"
+
+    # gnss_fcm_train_model(trimble_path, trimble_modelpath)
+    # gnss_fcm_train_model(X6833B_path, X6833B_modelpath)
+    # gnss_fcm_train_model(ublox_path, ublox_modelpath)
+    # gnss_fcm_train_model(CK6n_path, CK6n_modelpath)
+
+    satinfo = gnss_fcm_predict(trimble_modelpath, trimble_path)
+    satinfo = gnss_fcm_predict(X6833B_modelpath, X6833B_path)
+    satinfo = gnss_fcm_predict(ublox_modelpath, ublox_path)
+    satinfo = gnss_fcm_predict(CK6n_modelpath, CK6n_path)
