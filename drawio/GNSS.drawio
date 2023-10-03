@@ -1,1 +1,58 @@
-<mxfile host="1qv5hl86f5jbp46o2gus9v297kq97d02j99m39oulqtqtodove59" modified="2023-10-03T08:00:36.967Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.82.2 Chrome/114.0.5735.289 Electron/25.8.1 Safari/537.36" etag="4sqMXuRo1QxzU6OPS9W0" version="12.2.4" pages="1"><diagram id="hSrarzL_9Tm3_GTEGQjt" name="Page-1">7Vrfc6M2EP5rmLl7yI1A/DCPFy64Mz3nOmWu7asCCmgiIyqE7fSvrwTCNjae2okhjlM/2GK1wO5+364WGQMG89WUoyKbsQRTwwLJyoDfDMtyLCC/leC5EUDPbwQpJ0kjMjeCiPyDtVCfl1YkwWVHUTBGBSm6wpjlOY5FR4Y4Z8uu2iOj3bsWKMV7gihGdF/6J0lE1kgnlreR/4JJmrV3Nl3t3xy1ytqTMkMJW26J4J0BA86YaEbzVYCpil0bl+a88MDs2jCOc3HMCWpOnbFAtNLOacPEc+stZ1WeYHWCacDbZUYEjgoUq9mlhFfKMjGnehrxWOPlyKNScPaEA0YZr68FwzCQHzmzb6i2fYG5wKstkTZ8itkcC/4sVfQstHUQNYssMGmOlxtMzFYn28bDh5oLmgfp+tqbUMmBjtaByPUEzqVCOV2gvBNB9+9K4Xn7yHJxU9bR+SoVTFis5E8dDPCA4qe0jvRN3IRLqfD0AX2yHEepWdIkcGgMvgDz8+ZOcpSq3ynOMUcCS43o6XmOyqfWSOleY2ej+DrQzwCmCXbAbDNkG0zYA2YL8GuwhKdj2QXpkwPWUHSGn9cAjw++MhcERKgo6xJ8HPayKBVqmCCBIsF4XQ3/iwN7qe5734DnDcMO0+lhh+kMww7nKtlxV2R4jjkph2VFsxZIGya+KelgO67luv4EToamjGW/IWXcq6TM9D6Kap3GlQfeTvx4KDFfIEGY8k0RZCRSOTa0HBO6PjSB7Zq+cybuOF3uuCNSx7ti6hzgxIZOgzm3a881xPTNsm7sUg69I0p52y+eOx/bZ84rS8ioKiR5SClbfNkdfpdfX2nKOBHZ/HBHMLDbJM9kQyIG9ty4C43bwJhM/preMlbK24XRH7OP4bN/qY9/tr/z+Oc7+ynuwYFS3Dw9xcfP2PvvP1T3FSAaV1RX/csE07e+OB004ZgP8+YLdmbeQcH+mZcvL9kJWfT6zfHGh5zl+Cj/Tg7WwHX815sZRrkMQTidyToehsHs1PRdV+HTC+daXMf4QjJwr5yaY5bTN9hOG2cZDSgqS/JI4rbp/h2XFRXlmop1iQ6bSv1/P/GGCeD63s4aVHs1WgrYV7kGXd4G0NiPoruFFXo9rBpqa6i97mv71KMYsqZEZ9AQo2bE7n4yxYsXdqXgCMR3QQ2CMPR95SChtFcuHd+Sg/pzpv0IZ6+49DW4oIcG8Bw0eMHu8mg0UNbfgw/Jgb5d4sE4MHkHHFDtEUkqRI/+j+ma+ADBmHzwL5gPv5W4StgNR3mKPzwr7BFZ0a5Kx73d896Cu9OK2X2R7ftXwD09svJw805WPbf1Yhu8+xc=</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2023-10-03T08:07:35.557Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36" etag="5pDSTUGnsJEabzBLKiNl" version="22.0.1" type="github">
+  <diagram id="hSrarzL_9Tm3_GTEGQjt" name="Page-1">
+    <mxGraphModel dx="1024" dy="625" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="22" value="" style="rounded=1;whiteSpace=wrap;html=1;arcSize=5;strokeColor=#FFCCCC;" parent="1" vertex="1">
+          <mxGeometry x="340" y="208" width="140" height="193" as="geometry" />
+        </mxCell>
+        <mxCell id="2" value="&lt;span style=&quot;font-size: 13px ; background-color: rgba(255 , 255 , 255 , 0.01)&quot;&gt;Generate Skymask&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="100" y="220" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="&lt;span style=&quot;color: rgb(50 , 50 , 50) ; font-size: 13px ; background-color: rgba(255 , 255 , 255 , 0.01)&quot;&gt;3D City Model&lt;/span&gt;" style="shape=dataStorage;whiteSpace=wrap;html=1;strokeColor=#97D077;" parent="1" vertex="1">
+          <mxGeometry x="100" y="150" width="115" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="&lt;span style=&quot;color: rgb(50 , 50 , 50) ; font-size: 13px ; background-color: rgba(255 , 255 , 255 , 0.01)&quot;&gt;Ephemeris&lt;/span&gt;" style="shape=dataStorage;whiteSpace=wrap;html=1;size=0.08910774562669838;strokeColor=#97D077;" parent="1" vertex="1">
+          <mxGeometry x="240" y="150" width="115" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="&lt;span style=&quot;color: rgb(50 , 50 , 50) ; font-size: 13px ; background-color: rgba(255 , 255 , 255 , 0.01)&quot;&gt;GNSS &lt;br&gt;Observation data&lt;/span&gt;" style="shape=dataStorage;whiteSpace=wrap;html=1;size=0.054325136931046195;" parent="1" vertex="1">
+          <mxGeometry x="250" y="60" width="115" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="7" value="&lt;span style=&quot;color: rgb(50 , 50 , 50) ; font-size: 13px ; background-color: rgba(255 , 255 , 255 , 0.01)&quot;&gt;GNSS&lt;/span&gt;&lt;br style=&quot;color: rgb(50 , 50 , 50) ; font-size: 13px&quot;&gt;&lt;span style=&quot;color: rgb(50 , 50 , 50) ; font-size: 13px ; background-color: rgba(255 , 255 , 255 , 0.01)&quot;&gt;Observation data&lt;/span&gt;" style="shape=dataStorage;whiteSpace=wrap;html=1;size=0.08910774562669838;strokeColor=#97D077;" parent="1" vertex="1">
+          <mxGeometry x="370" y="150" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="&lt;span style=&quot;color: rgb(50 , 50 , 50) ; font-size: 13px ; background-color: rgba(255 , 255 , 255 , 0.01)&quot;&gt;Supervised ML Algorithms&lt;/span&gt;&lt;span style=&quot;color: rgb(50 , 50 , 50) ; font-size: inherit ; background-color: rgba(255 , 255 , 255 , 0.01)&quot;&gt;（XGBoost/SVM&lt;/span&gt;&lt;span style=&quot;color: rgb(50 , 50 , 50) ; font-size: inherit ; background-color: rgba(255 , 255 , 255 , 0.01)&quot;&gt;）&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="490" y="295" width="173" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="&lt;span style=&quot;font-size: 13px ; background-color: rgba(255 , 255 , 255 , 0.01)&quot;&gt;NLOS Calculation&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="100" y="335" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="12" value="&lt;span style=&quot;color: rgb(50 , 50 , 50) ; font-size: 13px ; background-color: rgba(255 , 255 , 255 , 0.01)&quot;&gt;Unsupervised ML Algorithms&lt;/span&gt;&lt;div style=&quot;resize: none ; font-size: 13px ; color: rgb(50 , 50 , 50) ; background-color: rgba(255 , 255 , 255 , 0.01)&quot;&gt;（K-Means/GMM/FCM&lt;span style=&quot;font-size: inherit&quot;&gt;）&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="490" y="215" width="173" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="13" value="&lt;span style=&quot;color: rgb(50 , 50 , 50) ; font-size: inherit ; background-color: rgba(255 , 255 , 255 , 0.01)&quot;&gt;Classification Results（LOS/NLOS&lt;/span&gt;&lt;span style=&quot;color: rgb(50 , 50 , 50) ; font-size: inherit ; background-color: rgba(255 , 255 , 255 , 0.01)&quot;&gt;）&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="697.5" y="255" width="173" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="14" value="&lt;span style=&quot;color: rgb(50 , 50 , 50) ; font-size: 13px ; background-color: rgba(255 , 255 , 255 , 0.01)&quot;&gt;GNSS &lt;br&gt;Observation data&lt;/span&gt;" style="shape=dataStorage;whiteSpace=wrap;html=1;size=0.08910774562669838;strokeColor=#97D077;" parent="1" vertex="1">
+          <mxGeometry x="530" y="150" width="115" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="15" value="&lt;span style=&quot;font-size: 13px; background-color: rgba(255, 255, 255, 0.01);&quot;&gt;Elevation&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#CCFF99;fillColor=#CCFF99;fontColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="357.5" y="220" width="105" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="16" value="&lt;span style=&quot;font-size: 13px; background-color: rgba(255, 255, 255, 0.01);&quot;&gt;C/N0&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#CCFF99;fillColor=#CCFF99;fontColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="357.5" y="260" width="105" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="18" value="&lt;span style=&quot;font-size: 13px; background-color: rgba(255, 255, 255, 0.01);&quot;&gt;C/N0 Residuals&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#CCFF99;fillColor=#CCFF99;fontColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="357.5" y="300" width="105" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="19" value="&lt;span style=&quot;font-size: 13px; background-color: rgba(255, 255, 255, 0.01);&quot;&gt;Pseudo-range Residuals&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#CCFF99;fillColor=#CCFF99;fontColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="357.5" y="340" width="105" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="fHCgVE5wzH9V_TxbyjCM-22" value="Skymask DB" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.direct_data;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="100" y="270" width="130" height="45" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
