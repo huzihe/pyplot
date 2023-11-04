@@ -140,23 +140,26 @@ sataz=[5.029615,1.124468,6.035591,1.692772,4.965678,5.429176,1.693200,3.870391,1
 satel=[34.552484,14.411867,58.274828,25.662997,40.039163,26.450032,52.535677,35.635169,21.001115,25.966741,47.892348,31.217176,66.891038,69.360874,0.000000,73.104856,57.080081,47.684195,51.009812,17.664501,19.317893,58.960229,71.325541,64.600081,]
 el = [18,18,22,29,35,39,64,67,69,71,73,74,75,75,75,74,74,74,74,73,72,72,72,71,70,69,68,68,66,65,62,60,58,56,54,51,48,15,15,13,10,10,7,7,7,7,7,7,7,7,7,7,35,39,42,46,48,50,52,54,56,57,59,60,61,63,63,62,62,63,63,64,65,65,66,66,66,66,67,67,68,68,68,68,68,68,68,69,69,69,69,69,69,69,69,68,68,68,68,68,68,68,67,67,66,66,66,68,68,68,68,68,68,67,67,67,66,66,66,66,65,65,65,63,61,59,55,9,9,9,9,9,28,28,28,28,28,27,17,17,17,18,26,26,26,26,26,18,20,21,22,44,46,47,48,49,50,52,52,53,54,55,55,55,56,54,55,55,55,54,50,17,17,16,13,13,13,7,7,17,]
 
-az=[]
+
+az = []
 index = 0
 for item in el:
-    az.append((360 / len(el)) * index *np.pi / 180)
-    index +=1
-az.append(2 * np.pi);
+    az.append((360 / len(el)) * index * np.pi / 180)
+    index += 1
+az.append(2 * np.pi)
 el.append(el[0])
 
-img = plt.imread("./data/bj3.png")
-axes_coords = [0.123, 0.111, 0.779, 0.77] # plotting full width and height
+# img = plt.imread("./data/bj3.png")
+# axes_coords = [0.123, 0.111, 0.779, 0.77] # plotting full width and height
 
-font1 = {'family' : 'Times New Roman',
-'weight' : 'normal',
-'size'   : 12,
+font1 = {
+    "family": "Times New Roman",
+    "weight": "normal",
+    "size": 24,
 }
 
-fig, ax = plt.subplots(subplot_kw={'projection': 'polar'},figsize =(8.8,8.8))
+mm = 1 / 25.4
+fig, ax = plt.subplots(subplot_kw={"projection": "polar"}, figsize=(80 * mm, 80 * mm))
 
 # # 绘制背景图片
 # ax_image = fig.add_axes(axes_coords, label="ax image")
@@ -164,37 +167,45 @@ fig, ax = plt.subplots(subplot_kw={'projection': 'polar'},figsize =(8.8,8.8))
 # ax_image.axis('off')  # don't show the axes ticks/lines/etc. associated with the image
 
 # 天空阴影图极坐标绘制
-ax.patch.set_facecolor('0.85')   # 底色设置为灰色
-ax.plot(az,el)   # 绘制建筑边界
-ax.fill(az,el,'w')   #中间天空填充白色
+ax.patch.set_facecolor("0.85")  # 底色设置为灰色
+ax.plot(az, el)  # 绘制建筑边界
+ax.fill(az, el, "w")  # 中间天空填充白色
 
 # 绘制卫星，用不同形状表示不同星座
-for x,y,t in zip(sataz,satel,satNO):
+for x, y, t in zip(sataz, satel, satNO):
     s = t[0]
-    if s == 'G':
-        ax.plot(x,y,marker='^',color='g',markersize=10)
-    elif s == 'R':
-        ax.plot(x,y,marker='s',color='m',markersize=10)
-    elif s == 'E':
-        ax.plot(x,y,marker='d',color='b',markersize=10)
-    elif s == 'J':
-        ax.plot(x,y,marker='o',color='y',markersize=10)
-    elif s == 'C':
-        ax.plot(x,y,marker='p',color='r',markersize=10)
+    if s == "G":
+        ax.plot(x, y, marker="^", color="g", markersize=10)
+    elif s == "R":
+        ax.plot(x, y, marker="s", color="m", markersize=10)
+    elif s == "E":
+        ax.plot(x, y, marker="d", color="b", markersize=10)
+    elif s == "J":
+        ax.plot(x, y, marker="o", color="y", markersize=10)
+    elif s == "C":
+        ax.plot(x, y, marker="p", color="r", markersize=10)
     else:
-        ax.plot(x,y,'ro')
-    ax.text(x, y, t,horizontalalignment='left',verticalalignment='bottom',color='darkslategray',fontsize=11)
+        ax.plot(x, y, "ro")
+    ax.text(
+        x,
+        y,
+        t,
+        horizontalalignment="left",
+        verticalalignment="bottom",
+        color="darkslategray",
+        fontsize=11,
+    )
 # 绘制卫星结束
 
 ax.set_rmax(2)
 ax.set_rticks([90, 80, 60, 40, 20])  # Less radial ticks
 ax.set_rlabel_position(0)  # Move radial labels away from plotted line
-ax.set_theta_zero_location('N')  #0°位置为正北方向
+ax.set_theta_zero_location("N")  # 0°位置为正北方向
 ax.set_thetagrids(np.arange(0.0, 360.0, 30.0))
-ax.set_theta_direction(-1)   # 顺时针
-ax.set_rlim(90,0)
+ax.set_theta_direction(-1)  # 顺时针
+ax.set_rlim(90, 0)
 # ax.grid(True)
 
 # ax.set_title("A skymask on a polar axis", va='top')
-plt.savefig('./data/polaraxis-12-32-15.png')   # 保存图片
+plt.savefig("./data/polaraxis-12-32-15.png")  # 保存图片
 plt.show()
