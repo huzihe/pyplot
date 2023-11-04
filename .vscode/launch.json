@@ -19,10 +19,26 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "cwd": "${workspaceFolder}/data/ml-data",
+            "cwd": "${workspaceFolder}/data/20230511/ai",
             "args": [
-                "res",
-                "trimble.res1",
+                "spp-lsq-CK6n-3dma-0824.txt",
+                "spp-lsq-CK6n-0824.txt",
+                "../alloy/gins.txt"
+            ]
+        },
+        {
+            "name": "Python: ai",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20230511/ai",
+            "args": [
+                "spp-go-trimble-3dma-0824.txt",
+                "spp-lsq-trimble-3dma-0824.txt",
+                "spp-lsq-trimble-0824.txt",
+                "../alloy/gins.txt"
             ]
         },
         {
@@ -77,6 +93,20 @@
             "args": [
                 "X6833B-3dma-0611-dynamic.txt",
                 "X6833B-spp-0611-dynamic.txt",
+                "../alloy/gins.txt"
+            ]
+        },
+        {
+            "name": "Python: X6833B-all",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20230511/X6833B",
+            "args": [
+                "spp-lsq-X6833B-full-1005.txt",
+                "spp-lsq-X6833B-full-1001.txt",
                 "../alloy/gins.txt"
             ]
         },

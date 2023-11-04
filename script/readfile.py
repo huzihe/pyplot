@@ -78,8 +78,10 @@ def ReadMyResult(_file):
                 continue
             eachData = eachLine.split(",")
             # GPSweek(int) + GPSsecond => week(float)
-            time = int(eachData[0]) + float(eachData[1]) / 86400.0 / 7.0
-
+            time = int(eachData[0]) + int(float(eachData[1])) / 86400.0 / 7.0
+            # if float(eachData[1]) >= 356340:    #2023 5 11 2 59 0
+            # if float(eachData[1]) >= 357120:    #2023 5 11 3 12 0
+            # if 361008 >= float(eachData[1])>= 360717:
             result.update(
                 {
                     time: {

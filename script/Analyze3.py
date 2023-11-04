@@ -170,19 +170,19 @@ def DrawFigure(_stat, _stat2, _stat3, _figname):
         Time_hms[0 : len(_stat2.dx)],
         _stat2.dx,
         fmt="c.",
-        label="rms_B: " + str(round(_stat2.rms[0], 3)) + "cm",
+        label="rms_B_lsq3d: " + str(round(_stat2.rms[0], 3)) + "cm",
     )
     plt.plot_date(
         Time_hms[0 : len(_stat3.dx)],
         _stat3.dx,
         fmt="y.",
-        label="rms_B_3D: " + str(round(_stat3.rms[0], 3)) + "cm",
+        label="rms_B_lsq: " + str(round(_stat3.rms[0], 3)) + "cm",
     )
     plt.plot_date(
         Time_hms[0 : len(_stat.dx)],
         _stat.dx,
         fmt="b.",
-        label="rms_B_pos3D: " + str(round(_stat.rms[0], 3)) + "cm",
+        label="rms_B_go3d: " + str(round(_stat.rms[0], 3)) + "cm",
     )
     #   plt.plot(Time_hms[0:len(_stat.dx)], _stat.dx, 'blue', label = 'rms_B: ' + str(round(_stat.rms[0], 3)) + 'cm')
     plt.legend(loc="lower right", fontsize=10)
@@ -199,19 +199,19 @@ def DrawFigure(_stat, _stat2, _stat3, _figname):
         Time_hms[0 : len(_stat2.dy)],
         _stat2.dy,
         fmt="c.",
-        label="rms_L: " + str(round(_stat2.rms[1], 3)) + "cm",
+        label="rms_L_lsq3d: " + str(round(_stat2.rms[1], 3)) + "cm",
     )
     plt.plot_date(
         Time_hms[0 : len(_stat3.dy)],
         _stat3.dy,
         fmt="y.",
-        label="rms_B_3D: " + str(round(_stat3.rms[1], 3)) + "cm",
+        label="rms_L_lsq: " + str(round(_stat3.rms[1], 3)) + "cm",
     )
     plt.plot_date(
         Time_hms[0 : len(_stat.dy)],
         _stat.dy,
         fmt="r.",
-        label="rms_L_pos3D: " + str(round(_stat.rms[1], 3)) + "cm",
+        label="rms_L_go3d: " + str(round(_stat.rms[1], 3)) + "cm",
     )
     #   plt.plot(Time_hms[0:len(_stat.dy)], _stat.dy, 'red', label = 'rms_L: ' + str(round(_stat.rms[1], 3)) + 'cm')
     plt.legend(loc="upper right", fontsize=10)
@@ -227,19 +227,19 @@ def DrawFigure(_stat, _stat2, _stat3, _figname):
         Time_hms[0 : len(_stat2.dz)],
         _stat2.dz,
         fmt="c.",
-        label="rms_H: " + str(round(_stat2.rms[2], 3)) + "cm",
+        label="rms_H_lsq3d: " + str(round(_stat2.rms[2], 3)) + "cm",
     )
     plt.plot_date(
         Time_hms[0 : len(_stat3.dz)],
         _stat3.dz,
         fmt="y.",
-        label="rms_B_3D: " + str(round(_stat3.rms[2], 3)) + "cm",
+        label="rms_H_lsq: " + str(round(_stat3.rms[2], 3)) + "cm",
     )
     plt.plot_date(
         Time_hms[0 : len(_stat.dz)],
         _stat.dz,
         fmt="g.",
-        label="rms_H_pos3D: " + str(round(_stat.rms[2], 3)) + "cm",
+        label="rms_H_go3d: " + str(round(_stat.rms[2], 3)) + "cm",
     )
 
     #   plt.plot(Time_hms[0:len(_stat.dz)], _stat.dz, 'green', label = 'rms_H: ' + str(round(_stat.rms[2], 3)) + 'cm')
@@ -273,7 +273,7 @@ if __name__ == "__main__":
 
     calValue = ReadMyResult(calFile1)
     calValue2 = ReadMyResult(calFile2)
-    calValue3 = Read3DMAResult(calFile3)
+    calValue3 = ReadMyResult(calFile3)
     refValue = ReadGINSResult(refFile)
 
     detValue = CalDifference(calValue, refValue)

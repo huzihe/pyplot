@@ -62,7 +62,7 @@ def out_gnss_data(rnx, outrnx, satInfo, istrimble):
                             nlosflag = str(los.iat[0, 3])
                             for itr in range(6):
                                 if len(eachLine) > 48 * itr + 18 + 16:
-                                    substr = eachLine[48 * itr + 18]
+                                    substr = eachLine[48 * itr + 16]
                                     if substr != " ":
                                         eachLine = replace_char(
                                             eachLine, nlosflag, 48 * itr + 18
@@ -74,12 +74,13 @@ def out_gnss_data(rnx, outrnx, satInfo, istrimble):
                                             eachLine = replace_char(
                                                 eachLine, nlosflag, 48 * itr + 18 + 32
                                             )
-                                            if eachLine[48 * itr + 18 + 48] != " ":
-                                                eachLine = replace_char(
-                                                    eachLine,
-                                                    nlosflag,
-                                                    48 * itr + 18 + 48,
-                                                )
+                                            if len(eachLine) >= 48 * itr + 18 + 48:
+                                                if eachLine[48 * itr + 18 + 48] != " ":
+                                                    eachLine = replace_char(
+                                                        eachLine,
+                                                        nlosflag,
+                                                        48 * itr + 18 + 48,
+                                                    )
                             outfile.write(eachLine)  # 输出nlos修订后的obs记录
                         continue
                 else:
@@ -108,6 +109,11 @@ if __name__ == "__main__":
     X6833B_path = "./data/ml-data/20230511/X6833B.res1"
     ublox_path = "./data/ml-data/20230511/ublox.res1"
     CK6n_path = "./data/ml-data/20230511/CK6n.res1"
+    X6833B_full_path = "./data/ml-data/20230511/X6833B-full-1001.res1"
+    CK6n_full_path = "./data/ml-data/20230511/CK6n-lsq-full-predata-1005.res1"
+    ublox_full_path = "./data/ml-data/20230511/ublox-spp-lsq-1006.res1"
+    trimble_full_path = "./data/ml-data/20230511/Trimble-spp-lsq-1006.res1"
+
 
     if learningtype == "xgboost":
         # Supervised learning model path
@@ -127,7 +133,7 @@ if __name__ == "__main__":
         # satinfo_t = gnss_xgboost.xgboost_gnss_predict(trimble_modelpath, trimble_path)
         # satinfo_X = gnss_xgboost.xgboost_gnss_predict(X6833B_modelpath, X6833B_path)
         # satinfo_ublox = gnss_xgboost.xgboost_gnss_predict(ublox_modelpath, ublox_path)
-        satinfo_CK6n = gnss_xgboost.xgboost_gnss_predict(CK6n_modelpath, CK6n_path)
+        # satinfo_CK6n = gnss_xgboost.xgboost_gnss_predict(CK6n_modelpath, CK6n_path)
 
         # # mark los/nlos for rnx data by un/supervised learning
         # rnx = "./data/ml-data/20230511/trimble-3dma-0520.rnx"
@@ -142,9 +148,29 @@ if __name__ == "__main__":
         # outrnx = "./data/ml-data/20230511/ublox-3dma-0730-xgboost.rnx"
         # out_gnss_data(rnx, outrnx, satinfo_ublox, 1)
 
-        rnx = "./data/ml-data/20230511/CK6n-3dma-0730.rnx"
-        outrnx = "./data/ml-data/20230511/CK6n-3dma-0730-xgboost.rnx"
-        out_gnss_data(rnx, outrnx, satinfo_CK6n, 0)
+        # rnx = "./data/ml-data/20230511/CK6n-3dma-0730.rnx"
+        # outrnx = "./data/ml-data/20230511/CK6n-3dma-0730-xgboost.rnx"
+        # out_gnss_data(rnx, outrnx, satinfo_CK6n, 0)
+        # satinfo_X = gnss_xgboost.xgboost_gnss_predict(X6833B_modelpath, X6833B_full_path)
+
+        # rnx = "./data/ml-data/20230511/X6833B.23o"
+        # outrnx = "./data/ml-data/20230511/X6833B-3dma-xgboost-1001.rnx"
+        # out_gnss_data(rnx, outrnx, satinfo_X, 0)
+
+        # satinfo_X = gnss_xgboost.xgboost_gnss_predict(CK6n_modelpath, CK6n_full_path)
+        # rnx = "./data/ml-data/20230511/CK6n.23o"
+        # outrnx = "./data/ml-data/20230511/CK6n-xgboost-1005.rnx"
+        # out_gnss_data(rnx, outrnx, satinfo_X, 1)
+
+        satinfo_X = gnss_xgboost.xgboost_gnss_predict(trimble_modelpath, trimble_full_path)
+        rnx = "./data/ml-data/20230511/IGS000USA_R_20231310150_01D_01S_MO.rnx"
+        outrnx = "./data/ml-data/20230511/trimble-xgboost-1006.rnx"
+        out_gnss_data(rnx, outrnx, satinfo_X, 1)
+
+        # satinfo_X = gnss_xgboost.xgboost_gnss_predict(ublox_modelpath, ublox_full_path)
+        # rnx = "./data/ml-data/20230511/ublox.obs"
+        # outrnx = "./data/ml-data/20230511/ulbox-xgboost-1006.rnx"
+        # out_gnss_data(rnx, outrnx, satinfo_X, 0)
 
     elif learningtype == "svm":
         svm_trimble_modelpath = "./data/ml-data/model/gnss_svm_trimble.model"
@@ -207,7 +233,7 @@ if __name__ == "__main__":
         # satinfo_t = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, trimble_path)
         # satinfo_X = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, X6833B_path)
         # satinfo_ublox = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, ublox_path)
-        satinfo_CK6n = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, CK6n_path)
+        # satinfo_CK6n = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, CK6n_path)
 
         # # mark los/nlos for rnx data by un/supervised learning
         # rnx = "./data/ml-data/20230511/trimble-3dma-0520.rnx"
@@ -221,10 +247,26 @@ if __name__ == "__main__":
         # rnx = "./data/ml-data/20230511/ublox-3dma-0730.rnx"
         # outrnx = "./data/ml-data/20230511/ublox-3dma-0730-kmeans.rnx"
         # out_gnss_data(rnx, outrnx, satinfo_ublox, 1)
+        # satinfo_X = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, X6833B_full_path)
 
-        rnx = "./data/ml-data/20230511/CK6n-3dma-0730.rnx"
-        outrnx = "./data/ml-data/20230511/CK6n-3dma-0730-kmeans.rnx"
-        out_gnss_data(rnx, outrnx, satinfo_CK6n, 0)
+        # rnx = "./data/ml-data/20230511/X6833B.23o"
+        # outrnx = "./data/ml-data/20230511/X6833B-3dma-kmeans-1001.rnx"
+        # out_gnss_data(rnx, outrnx, satinfo_X, 0)
+        
+        # satinfo_X = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, CK6n_full_path)
+        # rnx = "./data/ml-data/20230511/CK6n.23o"
+        # outrnx = "./data/ml-data/20230511/CK6n-kmeans-1005.rnx"
+        # out_gnss_data(rnx, outrnx, satinfo_X, 0)
+
+        satinfo_X = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, ublox_full_path)
+        rnx = "./data/ml-data/20230511/ublox.obs"
+        outrnx = "./data/ml-data/20230511/ublox-kmeans-1006.rnx"
+        out_gnss_data(rnx, outrnx, satinfo_X, 0)
+
+        # satinfo_X = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, trimble_full_path)
+        # rnx = "./data/ml-data/20230511/IGS000USA_R_20231310150_01D_01S_MO.rnx"
+        # outrnx = "./data/ml-data/20230511/trimble-kmeans-1006.rnx"
+        # out_gnss_data(rnx, outrnx, satinfo_X, 1)
 
     elif learningtype == "fcm":
         fcm_trimble_modelpath = "./data/ml-data/model/gnss_fcm_trimble.model"

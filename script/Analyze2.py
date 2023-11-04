@@ -13,6 +13,17 @@ from math import radians, sin
 from com import std, rms, mean, maxabs
 from readfile import ReadMyResult, ReadIERefResult, ReadGINSResult, Read3DMAResult
 
+# 字体调整
+plt.rcParams['font.sans-serif'] = ['Arial']  # 如果要显示中文字体,则在此处设为：simhei,Arial Unicode MS
+plt.rcParams['font.weight'] = 'light'
+plt.rcParams['axes.unicode_minus'] = False  # 坐标轴负号显示
+plt.rcParams['axes.titlesize'] = 8  # 标题字体大小
+plt.rcParams['axes.labelsize'] = 7  # 坐标轴标签字体大小
+plt.rcParams['xtick.labelsize'] = 7  # x轴刻度字体大小
+plt.rcParams['ytick.labelsize'] = 7  # y轴刻度字体大小
+plt.rcParams['legend.fontsize'] = 6
+
+Inch = 2.54
 
 class cStat(object):
     """
@@ -161,71 +172,73 @@ def DrawFigure(_stat, _stat2, _figname):
         )
     Time_hms = [datetime.strptime(date, "%Y-%m-%d %H:%M:%S") for date in Time_hms]
 
-    limMax = 20
+    limMax = 50
     ## draw position
-    plt.figure(dpi=100, figsize=(10, 6.18))
+    plt.figure(dpi=300, figsize=(16.5/Inch, 8/Inch))
     myFmt = mdates.DateFormatter("%H:%M:%S")
     plt.subplot(3, 1, 1)
-    plt.plot_date(
+    # plt.plot(Time_hms[0 : len(_stat.dx)],_stat.dx,color='C1',linestyle='', marker='.',markersize='2',label="satellite")
+    plt.plot(
         Time_hms[0 : len(_stat2.dx)],
         _stat2.dx,
-        fmt="c.",
-        label="rms_B: " + str(round(_stat2.rms[0], 3)) + "cm",
+        color='C1',linestyle='', marker='.',markersize='2',
+        label="lsq: " + str(round(_stat2.rms[0]/100, 3)) + "m",
     )
-    plt.plot_date(
+    plt.plot(
         Time_hms[0 : len(_stat.dx)],
         _stat.dx,
-        fmt="b.",
-        label="rms_B_3D: " + str(round(_stat.rms[0], 3)) + "cm",
+        color='C9',linestyle='', marker='.',markersize='1.5',
+        label="lsq_kmeans: " + str(round(_stat.rms[0]/100, 3)) + "m",
     )
     #   plt.plot(Time_hms[0:len(_stat.dx)], _stat.dx, 'blue', label = 'rms_B: ' + str(round(_stat.rms[0], 3)) + 'cm')
-    plt.legend(loc="lower right", fontsize=10)
+    plt.legend(loc="lower right", fontsize=6)
     plt.ylabel("Latitude(m)")
     if max(_stat.max[0:2]) / 100 > 5:
         plt.ylim(-limMax, limMax)
     else:
         plt.ylim(-max(_stat.max[0:1]) / 100, max(_stat.max[0:1]) / 100)
-    plt.gca().xaxis.set_major_formatter(myFmt)
+    # plt.gca().xaxis.set_major_formatter(myFmt)
+    plt.gca().xaxis.set_ticklabels([])
     plt.grid(True)
 
     plt.subplot(3, 1, 2)
-    plt.plot_date(
+    plt.plot(
         Time_hms[0 : len(_stat2.dy)],
         _stat2.dy,
-        fmt="c.",
-        label="rms_L: " + str(round(_stat2.rms[1], 3)) + "cm",
+        color='C6',linestyle='', marker='.',markersize='2',
+        label="lsq: " + str(round(_stat2.rms[1]/100, 3)) + "m",
     )
-    plt.plot_date(
+    plt.plot(
         Time_hms[0 : len(_stat.dy)],
         _stat.dy,
-        fmt="r.",
-        label="rms_L_3D: " + str(round(_stat.rms[1], 3)) + "cm",
+        color='C9',linestyle='', marker='.',markersize='1.5',
+        label="lsq_kmeans: " + str(round(_stat.rms[1]/100, 3)) + "m",
     )
     #   plt.plot(Time_hms[0:len(_stat.dy)], _stat.dy, 'red', label = 'rms_L: ' + str(round(_stat.rms[1], 3)) + 'cm')
-    plt.legend(loc="upper right", fontsize=10)
+    plt.legend(loc="upper right", fontsize=6)
     plt.ylabel("Longitude(m)")
     plt.ylim(-max(_stat.max[0:1]) / 100, max(_stat.max[0:1]) / 100)
     if max(_stat.max[0:2]) / 100 > 5:
         plt.ylim(-limMax, limMax)
-    plt.gca().xaxis.set_major_formatter(myFmt)
+    plt.gca().xaxis.set_ticklabels([])
     plt.grid(True)
 
     plt.subplot(3, 1, 3)
-    plt.plot_date(
+    plt.plot(
         Time_hms[0 : len(_stat2.dz)],
         _stat2.dz,
-        fmt="c.",
-        label="rms_H: " + str(round(_stat2.rms[2], 3)) + "cm",
+        color='C8',linestyle='', marker='.',markersize='2',
+        label="lsq: " + str(round(_stat2.rms[2]/100, 3)) + "m",
     )
-    plt.plot_date(
+    plt.plot(
         Time_hms[0 : len(_stat.dz)],
         _stat.dz,
-        fmt="g.",
-        label="rms_H_3D: " + str(round(_stat.rms[2], 3)) + "cm",
+        color='C9',linestyle='', marker='.',markersize='1.5',
+        label="lsq_kmeans: " + str(round(_stat.rms[2]/100, 3)) + "m",
     )
 
     #   plt.plot(Time_hms[0:len(_stat.dz)], _stat.dz, 'green', label = 'rms_H: ' + str(round(_stat.rms[2], 3)) + 'cm')
-    plt.legend(loc="lower right", fontsize=10)
+    plt.legend(loc="lower right", fontsize=6)
     plt.ylabel("Height(m)")
     plt.ylim(-max(_stat.max[0:1]) / 100, max(_stat.max[0:1]) / 100)
     if max(_stat.max[0:2]) / 100 > 5:
@@ -234,7 +247,7 @@ def DrawFigure(_stat, _stat2, _figname):
     plt.grid(True)
 
     plt.xlabel("Epoch")
-    plt.savefig(_figname, bbox_inches="tight", pad_inches=0.2)
+    plt.savefig(_figname, bbox_inches="tight")
     plt.show()
 
 
@@ -250,7 +263,7 @@ if __name__ == "__main__":
         refFile = sys.argv[3]
     filename = calFile1.split(".")[0]
     detFile = "det-" + filename + ".txt"
-    figName = "fig-" + filename + "-merge.png"
+    figName = "fig-" + filename + ".png"
 
     # calValue = Read3DMAResult(calFile1)
     # calValue2 = Read3DMAResult(calFile2)
