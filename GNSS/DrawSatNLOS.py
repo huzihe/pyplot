@@ -1,7 +1,7 @@
 '''
 Author: hzh huzihe@whu.edu.cn
 Date: 2023-10-29 21:36:51
-LastEditTime: 2023-12-11 22:28:05
+LastEditTime: 2023-12-11 22:39:42
 FilePath: /pyplot/GNSS/DrawSatNLOS.py
 Descripttion: 
 '''
@@ -141,14 +141,54 @@ def DrawFiguresPsu(_file,_figname):
     plt.savefig(_figname, bbox_inches="tight") #pad_inches=0.2*inch
     plt.show()
 
+def DrawFiguresDeltSNR(_file,_figname):
+    gnssdata = pd.read_csv(_file)
+    base = gnssdata[["second","los","postResp", "priorR", "elevation", "SNR"]]
+    los = gnssdata[base.los==1]
+    nlos = gnssdata[base.los==0]
+
+    limMax = 50
+    inch = 1/2.54
+
+    plt.figure(dpi=300, figsize=(8.4*inch, 5*inch))
+    plt.plot(
+        los["second"],
+        los["priorR"],
+        color='C9',
+        linestyle='',
+        marker='.',
+        markersize='1',
+        label="los"
+        )
+    plt.plot(
+        nlos["second"],
+        nlos["priorR"],
+        color='C1',
+        linestyle='',
+        marker='.',
+        markersize='1',
+        label="nlos"
+        )
+    plt.legend(loc="lower right",handletextpad=0)
+    plt.ylabel("∆C/N0(dB-Hz)")
+    plt.ylim(0, 30)
+    plt.grid(True)
+
+    plt.xlabel("Time")
+    plt.savefig(_figname, bbox_inches="tight") #pad_inches=0.2*inch
+    plt.show()
+
 if __name__ == '__main__':
     res = "./data/ml-data/20230511/X6833B.res1"
-    snrfig = "./data/ml-data/X6833B-nlos-snr1.png"
-    DrawFiguresSNR(res,snrfig)
+    # snrfig = "./data/ml-data/X6833B-nlos-snr1.png"
+    # DrawFiguresSNR(res,snrfig)
 
     # elefig = "./data/ml-data/X6833B-nlos-elevation1.png"
     # DrawFiguresElevation(res,elefig)
 
     # psufig = "./data/ml-data/X6833B-nlos-psu1.png"
     # DrawFiguresPsu(res,psufig)
+
+    deltsnrfig = "./data/ml-data/X6833B-nlos-deltsnr.png"
+    DrawFiguresDeltSNR(res,deltsnrfig)
     
