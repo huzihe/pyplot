@@ -20,6 +20,7 @@ from xgboost import Booster
 from xgboost import plot_importance
 import sys
 import os
+import time
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from com.mytime import ymdhms2gpsws
@@ -43,9 +44,11 @@ def xgboost_gnss_train_model(traindata, model):
     # week,second,sat,los,priorResp,postResp,priorR,postR,P,L,azimuth,elevation,SNR
     y = gnssdata["los"]
 
+    start = time.time()
+
     # 2.划分数据与标签
     train_data, test_data, train_label, test_label = train_test_split(
-        x, y, random_state=1, train_size=0.6, test_size=0.4
+        x, y, random_state=1, train_size=0.99, test_size=0.01
     )  # sklearn.model_selection.
 
     xgb_classifier = XGBClassifier(n_estimators=200, eval_metric="logloss", eta=0.3)
@@ -54,6 +57,9 @@ def xgboost_gnss_train_model(traindata, model):
     evalset = [(train_data, train_label), (test_data, test_label)]
     # fit the model
     xgb_classifier.fit(train_data, train_label, eval_set=evalset)
+
+    end  = time.time()
+    print("训练算法耗时：",end - start)
     # save model
     xgb_classifier.save_model(model)
 
@@ -66,7 +72,7 @@ def xgboost_gnss_train_model(traindata, model):
     score = accuracy_score(test_label, yhat)
     print("Accuracy: %.3f" % score)
 
-    plot_importance(xgb_classifier)
+    # plot_importance(xgb_classifier)
 
 
 def xgboost_gnss_predict(model, testdata):
@@ -77,6 +83,8 @@ def xgboost_gnss_predict(model, testdata):
     satInfo = gnssdata[["week", "second", "sat"]]
     y = gnssdata["los"]
 
+    start  = time.time()
+
     xgb_classifier = XGBClassifier()
     booster = Booster()
     booster.load_model(model)
@@ -84,11 +92,15 @@ def xgboost_gnss_predict(model, testdata):
 
     # evaluate performance
     yhat = xgb_classifier.predict(x)
+
+    end  = time.time()
+    print("预测算法耗时：",end - start)
+
     score = accuracy_score(y, yhat)
     print("Accuracy: %.3f" % score)
 
     # 绘制特征重要性
-    plot_importance(xgb_classifier)
+    # plot_importance(xgb_classifier)
     
 
     satInfo.insert(loc=len(satInfo.columns), column="los", value=yhat)
@@ -104,12 +116,16 @@ if __name__ == "__main__":
 
     modelpath1 = "./data/ml-data/model/gnss_xgboost_trimble.model"
     modelpath2 = "./data/ml-data/model/gnss_xgboost_X6833B.model"
+    modeltest = "./data/ml-data/model/gnss_xgboost_X6833B-test.model"
 
     trimble_modelpath = "./data/ml-data/model/gnss_xgboost_trimble-static.model"
     X6833B_modelpath = "./data/ml-data/model/gnss_xgboost_X6833B-static.model"
     ublox_modelpath = "./data/ml-data/model/gnss_xgboost_blox-static.model"
     CK6n_modelpath = "./data/ml-data/model/gnss_xgboost_CK6n-static.model"
 
+    xgboost_gnss_train_model(trimble_path, modeltest)
+    xgboost_gnss_train_model(ublox_path, modeltest)
+    xgboost_gnss_train_model(X6833B_path, modeltest)
     # xgboost_gnss_train_model(trimble_path, trimble_modelpath)
     # xgboost_gnss_train_model(X6833B_path, X6833B_modelpath)
     # xgboost_gnss_train_model(ublox_path, ublox_modelpath)
@@ -126,11 +142,11 @@ if __name__ == "__main__":
     # satinfo_ref = xgboost_gnss_predict(trimble_modelpath, CK6n_path)
 
     # satinfo_ref = xgboost_gnss_predict(X6833B_modelpath, trimble_path)
-    # satinfo_ref = xgboost_gnss_predict(X6833B_modelpath, X6833B_path)
+    satinfo_ref = xgboost_gnss_predict(X6833B_modelpath, X6833B_path)
     # satinfo_ref = xgboost_gnss_predict(X6833B_modelpath, ublox_path)
     # satinfo_ref = xgboost_gnss_predict(X6833B_modelpath, CK6n_path)
 
     # satinfo_ref = xgboost_gnss_predict(ublox_modelpath, trimble_path)
     # satinfo_ref = xgboost_gnss_predict(ublox_modelpath, X6833B_path)
-    # satinfo_ref = xgboost_gnss_predict(ublox_modelpath, ublox_path)
+    satinfo_ref = xgboost_gnss_predict(ublox_modelpath, ublox_path)
     # satinfo_ref = xgboost_gnss_predict(ublox_modelpath, CK6n_path)

@@ -61,26 +61,46 @@ def out_gnss_data(rnx, outrnx, satInfo, istrimble):
                         else:
                             nlosflag = str(los.iat[0, 3])
                             for itr in range(6):
-                                if len(eachLine) > 48 * itr + 18 + 16:
-                                    substr = eachLine[48 * itr + 16]
-                                    if substr != " ":
-                                        eachLine = replace_char(
-                                            eachLine, nlosflag, 48 * itr + 18
-                                        )
-                                        eachLine = replace_char(
-                                            eachLine, nlosflag, 48 * itr + 18 + 16
-                                        )
-                                        if not istrimble:
+                                if istrimble:
+                                    if len(eachLine) > 48 * itr + 18 + 16:
+                                        substr = eachLine[48 * itr + 16]
+                                        if substr != " ":
                                             eachLine = replace_char(
-                                                eachLine, nlosflag, 48 * itr + 18 + 32
+                                                eachLine, nlosflag, 48 * itr + 18
                                             )
-                                            if len(eachLine) >= 48 * itr + 18 + 48:
-                                                if eachLine[48 * itr + 18 + 48] != " ":
-                                                    eachLine = replace_char(
-                                                        eachLine,
-                                                        nlosflag,
-                                                        48 * itr + 18 + 48,
-                                                    )
+                                            eachLine = replace_char(
+                                                eachLine, nlosflag, 48 * itr + 18 + 16
+                                            )
+                                else:
+                                    if len(eachLine) > 64 * itr + 18 + 16:
+                                        substr = eachLine[64 * itr + 16]
+                                        if substr != " ":
+                                            eachLine = replace_char(
+                                                eachLine, nlosflag, 64 * itr + 18
+                                            )
+                                            eachLine = replace_char(
+                                                eachLine, nlosflag, 64 * itr + 18 + 16
+                                            )
+                                # if len(eachLine) > 48 * itr + 18 + 16:
+                                #     substr = eachLine[48 * itr + 16]
+                                #     if substr != " ":
+                                #         eachLine = replace_char(
+                                #             eachLine, nlosflag, 48 * itr + 18
+                                #         )
+                                #         eachLine = replace_char(
+                                #             eachLine, nlosflag, 48 * itr + 18 + 16
+                                #         )
+                                #         if not istrimble:
+                                #             eachLine = replace_char(
+                                #                 eachLine, nlosflag, 48 * itr + 18 + 32
+                                #             )
+                                #             if len(eachLine) >= 48 * itr + 18 + 48:
+                                #                 if eachLine[48 * itr + 18 + 48] != " ":
+                                #                     eachLine = replace_char(
+                                #                         eachLine,
+                                #                         nlosflag,
+                                #                         48 * itr + 18 + 48,
+                                #                     )
                             outfile.write(eachLine)  # 输出nlos修订后的obs记录
                         continue
                 else:
@@ -98,7 +118,7 @@ if __name__ == "__main__":
     #     learningtype = sys.argv[1]
 
     istrainmodel = 0
-    learningtype = "kmeans"
+    learningtype = "xgboost"
 
     # resouce path
     # X6833B  对应前39091行为静态数据，后12670（51761-39091）行为动态数据
@@ -162,15 +182,15 @@ if __name__ == "__main__":
         # outrnx = "./data/ml-data/20230511/CK6n-xgboost-1005.rnx"
         # out_gnss_data(rnx, outrnx, satinfo_X, 1)
 
-        satinfo_X = gnss_xgboost.xgboost_gnss_predict(trimble_modelpath, trimble_full_path)
-        rnx = "./data/ml-data/20230511/IGS000USA_R_20231310150_01D_01S_MO.rnx"
-        outrnx = "./data/ml-data/20230511/trimble-xgboost-1006.rnx"
-        out_gnss_data(rnx, outrnx, satinfo_X, 1)
+        # satinfo_X = gnss_xgboost.xgboost_gnss_predict(trimble_modelpath, trimble_full_path)
+        # rnx = "./data/ml-data/20230511/IGS000USA_R_20231310150_01D_01S_MO.rnx"
+        # outrnx = "./data/ml-data/20230511/trimble-xgboost-1006.rnx"
+        # out_gnss_data(rnx, outrnx, satinfo_X, 1)
 
-        # satinfo_X = gnss_xgboost.xgboost_gnss_predict(ublox_modelpath, ublox_full_path)
-        # rnx = "./data/ml-data/20230511/ublox.obs"
-        # outrnx = "./data/ml-data/20230511/ulbox-xgboost-1006.rnx"
-        # out_gnss_data(rnx, outrnx, satinfo_X, 0)
+        satinfo_X = gnss_xgboost.xgboost_gnss_predict(ublox_modelpath, ublox_full_path)
+        rnx = "./data/ml-data/20230511/ublox.obs"
+        outrnx = "./data/ml-data/20230511/ulbox-xgboost-1006.rnx"
+        out_gnss_data(rnx, outrnx, satinfo_X, 0)
 
     elif learningtype == "svm":
         svm_trimble_modelpath = "./data/ml-data/model/gnss_svm_trimble.model"
@@ -258,15 +278,15 @@ if __name__ == "__main__":
         # outrnx = "./data/ml-data/20230511/CK6n-kmeans-1005.rnx"
         # out_gnss_data(rnx, outrnx, satinfo_X, 0)
 
-        satinfo_X = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, ublox_full_path)
-        rnx = "./data/ml-data/20230511/ublox.obs"
-        outrnx = "./data/ml-data/20230511/ublox-kmeans-1006.rnx"
-        out_gnss_data(rnx, outrnx, satinfo_X, 0)
+        # satinfo_X = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, ublox_full_path)
+        # rnx = "./data/ml-data/20230511/ublox.obs"
+        # outrnx = "./data/ml-data/20230511/ublox-kmeans-1006.rnx"
+        # out_gnss_data(rnx, outrnx, satinfo_X, 0)
 
-        # satinfo_X = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, trimble_full_path)
-        # rnx = "./data/ml-data/20230511/IGS000USA_R_20231310150_01D_01S_MO.rnx"
-        # outrnx = "./data/ml-data/20230511/trimble-kmeans-1006.rnx"
-        # out_gnss_data(rnx, outrnx, satinfo_X, 1)
+        satinfo_X = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, trimble_full_path)
+        rnx = "./data/ml-data/20230511/IGS000USA_R_20231310150_01D_01S_MO.rnx"
+        outrnx = "./data/ml-data/20230511/trimble-kmeans-1006.rnx"
+        out_gnss_data(rnx, outrnx, satinfo_X, 1)
 
     elif learningtype == "fcm":
         fcm_trimble_modelpath = "./data/ml-data/model/gnss_fcm_trimble.model"

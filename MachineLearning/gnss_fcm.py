@@ -1,3 +1,10 @@
+'''
+Author: hzh huzihe@whu.edu.cn
+Date: 2023-08-19 20:38:37
+LastEditTime: 2023-11-17 20:00:51
+FilePath: /pyplot/MachineLearning/gnss_fcm.py
+Descripttion: 
+'''
 """
 Author: hzh huzihe@whu.edu.cn
 Date: 2023-08-19 20:38:37
@@ -17,6 +24,7 @@ import pandas as pd
 from sklearn import metrics
 
 from joblib import dump, load
+import time
 
 
 def gnss_fcm_train_model(traindata, model):
@@ -24,6 +32,7 @@ def gnss_fcm_train_model(traindata, model):
     originX = gnssdata[["postResp", "priorR", "elevation", "SNR"]]
     y = gnssdata["los"]
 
+    start = time.time()
     # 数据标准化
     X = Normalizer().fit_transform(originX)
 
@@ -33,6 +42,8 @@ def gnss_fcm_train_model(traindata, model):
     fcm.fit(X)
 
     dump(fcm, model)
+    end = time.time()
+    print("训练算法耗时：",end - start)
 
 
 def gnss_fcm_predict(model, testdata):
@@ -42,22 +53,26 @@ def gnss_fcm_predict(model, testdata):
     satInfo = gnssdata[["week", "second", "sat"]]
     y = gnssdata["los"]
 
+    start = time.time()
     X = Normalizer().fit_transform(originX)
 
     fcm = load(model)
     labels = fcm.predict(X)
     labels = 1 - labels  # 将预测结果和 nlos实际意义做对应调整
 
-    sil_samples = metrics.silhouette_samples(X, labels)
+    end = time.time()
+    print("预测算法耗时：",end - start)
 
-    from sklearn.metrics import accuracy_score
+    # sil_samples = metrics.silhouette_samples(X, labels)
 
-    score = accuracy_score(y, labels)
-    print(
-        "fcm silhouette score = {:.3}, accuracy score = {:.3}\n".format(
-            sil_samples.mean(), score
-        )
-    )
+    # from sklearn.metrics import accuracy_score
+
+    # score = accuracy_score(y, labels)
+    # print(
+    #     "fcm silhouette score = {:.3}, accuracy score = {:.3}\n".format(
+    #         sil_samples.mean(), score
+    #     )
+    # )
 
     satInfo.insert(loc=len(satInfo.columns), column="los", value=labels)
     return satInfo
@@ -74,12 +89,12 @@ if __name__ == "__main__":
     ublox_modelpath = "./data/ml-data/model/gnss_fcm_ublox.model"
     CK6n_modelpath = "./data/ml-data/model/gnss_fcm_CK6n.model"
 
-    # gnss_fcm_train_model(trimble_path, trimble_modelpath)
-    # gnss_fcm_train_model(X6833B_path, X6833B_modelpath)
-    # gnss_fcm_train_model(ublox_path, ublox_modelpath)
+    gnss_fcm_train_model(trimble_path, trimble_modelpath)
+    gnss_fcm_train_model(X6833B_path, X6833B_modelpath)
+    gnss_fcm_train_model(ublox_path, ublox_modelpath)
     # gnss_fcm_train_model(CK6n_path, CK6n_modelpath)
 
     satinfo = gnss_fcm_predict(trimble_modelpath, trimble_path)
     satinfo = gnss_fcm_predict(X6833B_modelpath, X6833B_path)
     satinfo = gnss_fcm_predict(ublox_modelpath, ublox_path)
-    satinfo = gnss_fcm_predict(CK6n_modelpath, CK6n_path)
+    # satinfo = gnss_fcm_predict(CK6n_modelpath, CK6n_path)

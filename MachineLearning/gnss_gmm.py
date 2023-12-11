@@ -7,6 +7,7 @@ Descripttion:
 """
 
 import numpy as np
+import time
 
 # from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture
@@ -30,6 +31,7 @@ def gnss_gmm_train_model(traindata, model):
     # 数据标准化
     X = Normalizer().fit_transform(originX)
 
+    start = time.time()
     # for n_clusters in range(2, 5):
     train_data, test_data, train_label, test_label = train_test_split(
         X, y, random_state=1, train_size=0.7, test_size=0.3
@@ -39,6 +41,9 @@ def gnss_gmm_train_model(traindata, model):
     gmm = GaussianMixture(2, covariance_type="diag", random_state=0).fit(X)
 
     dump(gmm, model)
+
+    end = time.time()
+    print("训练算法耗时：",end - start)
 
 
 def gnss_gmm_predict(model, testdata):
@@ -51,9 +56,13 @@ def gnss_gmm_predict(model, testdata):
 
     X = Normalizer().fit_transform(originX)
 
+    start = time.time()
     gmm = load(model)
     labels = gmm.predict(X)
     labels = 1 - labels  # 将预测结果和 nlos实际意义做对应调整
+
+    end = time.time()
+    print("预测算法耗时：",end - start)
 
     sil_samples = metrics.silhouette_samples(X, labels)
 

@@ -16,6 +16,7 @@ import matplotlib
 import sklearn
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
+import time
 
 from joblib import dump, load
 from sklearn.metrics import accuracy_score
@@ -30,6 +31,7 @@ def gnss_svm_train_model(traindata, model):
     x = gnssdata[["postResp", "priorR", "elevation", "SNR"]]
     y = gnssdata["los"]
 
+    start  = time.time()
     # 2.划分数据与标签
     train_data, test_data, train_label, test_label = train_test_split(
         x, y, random_state=1, train_size=0.6, test_size=0.4
@@ -40,6 +42,9 @@ def gnss_svm_train_model(traindata, model):
         C=2, kernel="rbf", gamma=10, decision_function_shape="ovo"
     )  # ovr:一对多策略
     classifier.fit(train_data, train_label.ravel())  # ravel函数在降维时默认是行序优先
+
+    end  = time.time()
+    print("预测算法耗时：",end - start)
 
     dump(classifier, model)
 
@@ -55,8 +60,12 @@ def gnss_svm_predict(model, testdata):
     # X = Normalizer().fit_transform(originX)
     X = originX
 
+    start  = time.time()
     svm = load(model)
     labels = svm.predict(X)
+
+    end  = time.time()
+    print("预测算法耗时：",end - start)
 
     # evaluate performance
     score = accuracy_score(y, labels)
@@ -67,17 +76,31 @@ def gnss_svm_predict(model, testdata):
 
 
 if __name__ == "__main__":
+    trimble_path = "./data/ml-data/20230511/trimble.res1"
+    X6833B_path = "./data/ml-data/20230511/X6833B.res1"
+    ublox_path = "./data/ml-data/20230511/ublox.res1"
+    CK6n_path = "./data/ml-data/20230511/CK6n.res1"
+
     path1 = "./data/ml-data/trimble.res1"
     path2 = "./data/ml-data/X6833B.res1"
     modelpath1 = "./data/ml-data/gnss_svm_trimble.model"
     modelpath2 = "./data/ml-data/gnss_svm_X6833B.model"
+    modeltest = "./data/ml-data/gnss_svm_test.model"
     # gnss_svm_train_model(path1, modelpath1)
     # gnss_svm_train_model(path2, modelpath2)
 
-    # satinfo_ref = gnss_svm_predict(modelpath1, path1)
-    # satinfo_ref = gnss_svm_predict(modelpath2, path2)
-    # satinfo_ref = gnss_svm_predict(modelpath1, path2)
-    satinfo_ref = gnss_svm_predict(modelpath2, path1)
+    # gnss_svm_train_model(trimble_path, modeltest)
+    # gnss_svm_train_model(ublox_path, modeltest)
+    # gnss_svm_train_model(X6833B_path, modeltest)
+    svm_trimble_modelpath = "./data/ml-data/model/gnss_svm_trimble.model"
+    svm_X6833B_modelpath = "./data/ml-data/model/gnss_svm_X6833B.model"
+    svm_ublox_modelpath = "./data/ml-data/model/gnss_svm_ublox.model"
+    svm_CK6n_modelpath = "./data/ml-data/model/gnss_svm_CK6n.model"
+
+    satinfo_ref = gnss_svm_predict(svm_trimble_modelpath, trimble_path)
+    satinfo_ref = gnss_svm_predict(svm_ublox_modelpath, ublox_path)
+    satinfo_ref = gnss_svm_predict(svm_X6833B_modelpath, X6833B_path)
+    # satinfo_ref = gnss_svm_predict(modelpath2, path1)
 
 
 # # 4.计算svc分类器的准确率

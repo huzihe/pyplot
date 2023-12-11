@@ -1,7 +1,7 @@
 '''
 Author: hzh huzihe@whu.edu.cn
 Date: 2023-10-29 21:36:51
-LastEditTime: 2023-11-04 22:20:35
+LastEditTime: 2023-11-10 23:58:09
 FilePath: /pyplot/GNSS/DrawSatNum.py
 Descripttion: 
 '''
@@ -22,11 +22,11 @@ from datetime import datetime
 plt.rcParams['font.sans-serif'] = ['Arial']  # 如果要显示中文字体,则在此处设为：simhei,Arial Unicode MS
 plt.rcParams['font.weight'] = 'light'
 plt.rcParams['axes.unicode_minus'] = False  # 坐标轴负号显示
-plt.rcParams['axes.titlesize'] = 8  # 标题字体大小
-plt.rcParams['axes.labelsize'] = 7  # 坐标轴标签字体大小
-plt.rcParams['xtick.labelsize'] = 7  # x轴刻度字体大小
-plt.rcParams['ytick.labelsize'] = 7  # y轴刻度字体大小
-plt.rcParams['legend.fontsize'] = 6
+plt.rcParams['axes.titlesize'] = 10  # 标题字体大小
+plt.rcParams['axes.labelsize'] = 9  # 坐标轴标签字体大小
+plt.rcParams['xtick.labelsize'] = 8  # x轴刻度字体大小
+plt.rcParams['ytick.labelsize'] = 8  # y轴刻度字体大小
+plt.rcParams['legend.fontsize'] = 8
 
 
 def DrawFigures(_stat,_figname):
@@ -66,7 +66,7 @@ def DrawFigures(_stat,_figname):
     limMax = 40
     inch = 1/2.54
     ## draw position
-    plt.figure(dpi=300, figsize=(8.3*inch, 5*inch))
+    plt.figure(dpi=300, figsize=(8.4*inch, 5*inch))
     myFmt = mdates.DateFormatter("%H:%M:%S")
     plt.plot(
         Time_hms[0 : len(_stat.dx)],
@@ -86,14 +86,15 @@ def DrawFigures(_stat,_figname):
         markersize='2',
         label="los"
         )
-    plt.legend(loc="lower right", fontsize=6)
+    plt.legend(loc="lower right",handletextpad=0)
     plt.ylabel("Satellite Num")
     plt.ylim(0, limMax)
+    # plt.xticks(rotation=15)
     plt.gca().xaxis.set_major_formatter(myFmt)
     plt.grid(True)
 
     plt.xlabel("Epoch")
-    plt.savefig(_figname, bbox_inches="tight", pad_inches=0.2*inch)
+    plt.savefig(_figname, bbox_inches="tight") #pad_inches=0.2*inch
     plt.show()
 
 if __name__ == '__main__':

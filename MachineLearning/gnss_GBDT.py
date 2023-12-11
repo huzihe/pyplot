@@ -10,6 +10,7 @@ from sklearn import svm
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import time
 import matplotlib
 import sklearn
 from sklearn import datasets
@@ -48,8 +49,10 @@ def gbdt_gnss_train_model(traindata, model):
 
     # 2.划分数据与标签
     train_data, test_data, train_label, test_label = train_test_split(
-        x, y, random_state=1, train_size=0.6, test_size=0.4
+        x, y, random_state=1, train_size=0.99, test_size=0.01
     )  # sklearn.model_selection.
+
+    start  = time.time()
 
     gbdt_classifier = GradientBoostingClassifier(n_estimators=3000, max_depth=2, min_samples_split=2, learning_rate=0.1)
 
@@ -60,6 +63,9 @@ def gbdt_gnss_train_model(traindata, model):
     # save model
     # gbdt_classifier.save_model(model)
     dump(gbdt_classifier, model)
+
+    end  = time.time()
+    print("预测算法耗时：",end - start)
 
     # 4.计算xgb分类器的准确率
     print("训练集：", gbdt_classifier.score(train_data, train_label))
@@ -81,8 +87,13 @@ def gbdt_gnss_predict(model, testdata):
     satInfo = gnssdata[["week", "second", "sat"]]
     y = gnssdata["los"]
 
+    start  = time.time()
+
     gbdt_classifier = load(model)
     yhat = gbdt_classifier.predict(x)
+
+    end  = time.time()
+    print("预测算法耗时：",end - start)
 
     # evaluate performance
     score = accuracy_score(y, yhat)
@@ -108,29 +119,34 @@ if __name__ == "__main__":
     ublox_modelpath = "./data/ml-data/model/gnss_gbdt_blox-static.model"
     CK6n_modelpath = "./data/ml-data/model/gnss_gbdt_CK6n-static.model"
 
+    test_modelpath = "./data/ml-data/model/gnss_gbdt_test.model"
+
     # gbdt_gnss_train_model(trimble_path, trimble_modelpath)
     # gbdt_gnss_train_model(X6833B_path, X6833B_modelpath)
     # gbdt_gnss_train_model(ublox_path, ublox_modelpath)
-    gbdt_gnss_train_model(CK6n_path, CK6n_modelpath)
+    # gbdt_gnss_train_model(CK6n_path, CK6n_modelpath)
+    gbdt_gnss_train_model(trimble_path, test_modelpath)
+    gbdt_gnss_train_model(ublox_path, test_modelpath)
+    gbdt_gnss_train_model(X6833B_path, test_modelpath)
 
-    satinfo_ref = gbdt_gnss_predict(CK6n_modelpath, trimble_path)
-    satinfo_ref = gbdt_gnss_predict(CK6n_modelpath, ublox_path)
-    satinfo_ref = gbdt_gnss_predict(CK6n_modelpath, X6833B_path)
-    satinfo_ref = gbdt_gnss_predict(CK6n_modelpath, CK6n_path)
+    # satinfo_ref = gbdt_gnss_predict(CK6n_modelpath, trimble_path)
+    # satinfo_ref = gbdt_gnss_predict(CK6n_modelpath, ublox_path)
+    # satinfo_ref = gbdt_gnss_predict(CK6n_modelpath, X6833B_path)
+    # satinfo_ref = gbdt_gnss_predict(CK6n_modelpath, CK6n_path)
 
-    # satinfo_ref = gbdt_gnss_predict(trimble_modelpath, trimble_path)
+    satinfo_ref = gbdt_gnss_predict(trimble_modelpath, trimble_path)
     # satinfo_ref = gbdt_gnss_predict(trimble_modelpath, ublox_path)
     # satinfo_ref = gbdt_gnss_predict(trimble_modelpath, X6833B_path)
-    satinfo_ref = gbdt_gnss_predict(trimble_modelpath, CK6n_path)
+    # satinfo_ref = gbdt_gnss_predict(trimble_modelpath, CK6n_path)
 
     # satinfo_ref = gbdt_gnss_predict(ublox_modelpath, trimble_path)
-    # satinfo_ref = gbdt_gnss_predict(ublox_modelpath, ublox_path)
+    satinfo_ref = gbdt_gnss_predict(ublox_modelpath, ublox_path)
     # satinfo_ref = gbdt_gnss_predict(ublox_modelpath, X6833B_path)
-    satinfo_ref = gbdt_gnss_predict(ublox_modelpath, CK6n_path)
+    # satinfo_ref = gbdt_gnss_predict(ublox_modelpath, CK6n_path)
 
     # satinfo_ref = gbdt_gnss_predict(X6833B_modelpath, trimble_path)
     # satinfo_ref = gbdt_gnss_predict(X6833B_modelpath, ublox_path)
-    # satinfo_ref = gbdt_gnss_predict(X6833B_modelpath, X6833B_path)
-    satinfo_ref = gbdt_gnss_predict(X6833B_modelpath, CK6n_path)
+    satinfo_ref = gbdt_gnss_predict(X6833B_modelpath, X6833B_path)
+    # satinfo_ref = gbdt_gnss_predict(X6833B_modelpath, CK6n_path)
 
 

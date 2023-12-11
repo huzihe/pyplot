@@ -42,71 +42,143 @@
             ]
         },
         {
-            "name": "Python: alloy",
+            "name": "Python: alloy-kmeans",
             "type": "python",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "cwd": "${workspaceFolder}/data/20230511/alloy",
+            "cwd": "${workspaceFolder}/data/20230511/pos",
             "args": [
-                "trimble-3dma-out-0602-static.txt",
-                "gins.txt"
-            ]
-        },
-        {
-            "name": "Python: alloy合并",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "justMyCode": false,
-            "cwd": "${workspaceFolder}/data/20230511/alloy",
-            "args": [
-                "trimble-3dma-out-0602-dynamic.txt",
-                "trimble-spp-out-0602-dynamic.txt",
-                "gins.txt"
-            ]
-        },
-        {
-            "name": "Python: ublox",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "justMyCode": false,
-            "cwd": "${workspaceFolder}/data/20230511/ublox",
-            "args": [
-                "ublox-3dma-0611-dynamic.txt",
-                "ublox-spp-0611-dynamic.txt",
+                "spp-lsq-trimble-kmeans-1108.txt",
+                "spp-lsq-trimble-1108.txt",
                 "../alloy/gins.txt"
             ]
         },
         {
-            "name": "Python: X6833B",
+            "name": "Python: alloy-xgboost",
             "type": "python",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "cwd": "${workspaceFolder}/data/20230511/X6833B",
+            "cwd": "${workspaceFolder}/data/20230511/pos",
             "args": [
-                "X6833B-3dma-0611-dynamic.txt",
-                "X6833B-spp-0611-dynamic.txt",
+                "spp-lsq-trimble-xgboost-1108.txt",
+                "spp-lsq-trimble-1108.txt",
                 "../alloy/gins.txt"
             ]
         },
         {
-            "name": "Python: X6833B-all",
+            "name": "Python: alloy-3dma",
             "type": "python",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "cwd": "${workspaceFolder}/data/20230511/X6833B",
+            "cwd": "${workspaceFolder}/data/20230511/pos",
             "args": [
-                "spp-lsq-X6833B-full-1005.txt",
-                "spp-lsq-X6833B-full-1001.txt",
+                "spp-lsq-trimble-3dma-1108.txt",
+                "spp-lsq-trimble-1108.txt",
+                "../alloy/gins.txt"
+            ]
+        },
+        {
+            "name": "Python: ublox-3dma",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20230511/pos",
+            "args": [
+                "spp-lsq-ublox-3dma-1108.txt",
+                "spp-lsq-ublox-1108.txt",
+                "../alloy/gins.txt"
+            ]
+        },
+        {
+            "name": "Python: ublox-kmeans",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20230511/pos",
+            "args": [
+                "spp-lsq-ublox-kmeans-1108.txt",
+                "spp-lsq-ublox-1108.txt",
+                "../alloy/gins.txt"
+            ]
+        },
+        {
+            "name": "Python: ublox-xgboost",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20230511/pos",
+            "args": [
+                "spp-lsq-ublox-xgboost-1108.txt",
+                "spp-lsq-ublox-1108.txt",
+                "../alloy/gins.txt"
+            ]
+        },
+        {
+            "name": "Python: X6833B-3dma",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20230511/pos",
+            "args": [
+                "spp-lsq-X6833B-3dma-1108.txt",
+                "spp-lsq-X6833B-1108.txt",
+                "../alloy/gins.txt"
+            ]
+        },
+        {
+            "name": "Python: X6833B-kmeans",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20230511/pos",
+            "args": [
+                "spp-lsq-X6833B-kmeans-1108.txt",
+                "spp-lsq-X6833B-1108.txt",
+                "../alloy/gins.txt"
+            ]
+        },
+        {
+            "name": "Python: X6833B-xgboost",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20230511/pos",
+            "args": [
+                "spp-lsq-X6833B-xgboost-1108.txt",
+                "spp-lsq-X6833B-1108.txt",
+                "../alloy/gins.txt"
+            ]
+        },
+        {
+            "name": "Python: X6833B-xgboost-kmeans",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20230511/pos",
+            "args": [
+                "spp-lsq-X6833B-kmeans-1108.txt",
+                "spp-lsq-X6833B-xgboost-1108.txt",
+                "spp-lsq-X6833B-1108.txt",
                 "../alloy/gins.txt"
             ]
         },

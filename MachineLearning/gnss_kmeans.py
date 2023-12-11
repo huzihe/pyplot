@@ -13,6 +13,7 @@ FilePath: /pyplot/MachineLearning/gnss_kmeans.py
 Descripttion: 
 """
 import numpy as np
+import time
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import Normalizer
@@ -30,6 +31,7 @@ def gnss_kmeans_train_model(traindata, model):
     originX = gnssdata[["postResp", "priorR", "elevation", "SNR"]]
     y = gnssdata["los"]
 
+    start = time.time()
     # 数据标准化
     X = Normalizer().fit_transform(originX)
 
@@ -38,6 +40,9 @@ def gnss_kmeans_train_model(traindata, model):
     # labels = kmeans.labels_
 
     dump(kmeans, model)
+    
+    end = time.time()
+    print("训练算法耗时：",end - start)
 
 
 def gnss_kmeans_predict(model, testdata):
@@ -47,22 +52,27 @@ def gnss_kmeans_predict(model, testdata):
     satInfo = gnssdata[["week", "second", "sat"]]
     y = gnssdata["los"]
 
+    start = time.time()
+
     X = Normalizer().fit_transform(originX)
 
     kmeans = load(model)
     labels = kmeans.predict(X)
     labels = 1 - labels  # 将预测结果和 nlos实际意义做对应调整
 
-    sil_samples = metrics.silhouette_samples(X, labels)
+    end = time.time()
+    print("预测算法耗时：",end - start)
 
-    from sklearn.metrics import accuracy_score
+    # sil_samples = metrics.silhouette_samples(X, labels)
 
-    score = accuracy_score(y, labels)
-    print(
-        "kmeans silhouette score = {:.3}, accuracy score = {:.3}\n".format(
-            sil_samples.mean(), score
-        )
-    )
+    # from sklearn.metrics import accuracy_score
+
+    # score = accuracy_score(y, labels)
+    # print(
+    #     "kmeans silhouette score = {:.3}, accuracy score = {:.3}\n".format(
+    #         sil_samples.mean(), score
+    #     )
+    # )
 
     satInfo.insert(loc=len(satInfo.columns), column="los", value=labels)
     satInfo["second"] = satInfo["second"].astype(int)
@@ -80,25 +90,25 @@ if __name__ == "__main__":
     ublox_modelpath = "./data/ml-data/model/gnss_kmeans_ublox.model"
     CK6n_modelpath = "./data/ml-data/model/gnss_kmeans_CK6n.model"
 
-    # gnss_kmeans_train_model(trimble_path, trimble_modelpath)
-    # gnss_kmeans_train_model(X6833B_path, X6833B_modelpath)
-    # gnss_kmeans_train_model(ublox_path, ublox_modelpath)
-    # gnss_kmeans_train_model(CK6n_path, CK6n_modelpath)
+    gnss_kmeans_train_model(trimble_path, trimble_modelpath)
+    gnss_kmeans_train_model(X6833B_path, X6833B_modelpath)
+    gnss_kmeans_train_model(ublox_path, ublox_modelpath)
+    gnss_kmeans_train_model(CK6n_path, CK6n_modelpath)
 
     # satinfo = gnss_kmeans_predict(trimble_modelpath, trimble_path)
     # satinfo = gnss_kmeans_predict(X6833B_modelpath, X6833B_path)
     # satinfo = gnss_kmeans_predict(ublox_modelpath, ublox_path)
     # satinfo = gnss_kmeans_predict(CK6n_modelpath, CK6n_path)
 
-    satinfo = gnss_kmeans_predict(trimble_modelpath, trimble_path)
-    satinfo = gnss_kmeans_predict(trimble_modelpath, X6833B_path)
-    satinfo = gnss_kmeans_predict(trimble_modelpath, ublox_path)
-    satinfo = gnss_kmeans_predict(trimble_modelpath, CK6n_path)
+    # satinfo = gnss_kmeans_predict(trimble_modelpath, trimble_path)
+    # satinfo = gnss_kmeans_predict(trimble_modelpath, X6833B_path)
+    # satinfo = gnss_kmeans_predict(trimble_modelpath, ublox_path)
+    # satinfo = gnss_kmeans_predict(trimble_modelpath, CK6n_path)
 
-    # satinfo = gnss_kmeans_predict(X6833B_modelpath, trimble_path)
-    # satinfo = gnss_kmeans_predict(X6833B_modelpath, X6833B_path)
-    # satinfo = gnss_kmeans_predict(X6833B_modelpath, ublox_path)
-    # satinfo = gnss_kmeans_predict(X6833B_modelpath, CK6n_path)
+    satinfo = gnss_kmeans_predict(X6833B_modelpath, trimble_path)
+    satinfo = gnss_kmeans_predict(X6833B_modelpath, X6833B_path)
+    satinfo = gnss_kmeans_predict(X6833B_modelpath, ublox_path)
+    satinfo = gnss_kmeans_predict(X6833B_modelpath, CK6n_path)
 
     # satinfo = gnss_kmeans_predict(ublox_modelpath, trimble_path)
     # satinfo = gnss_kmeans_predict(ublox_modelpath, X6833B_path)
