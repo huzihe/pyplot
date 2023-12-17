@@ -19,6 +19,11 @@ def gpswd2ydoy(gweek, gday):
     doy = time.strftime("%j")
     return year, doy
 
+def gpsws2datetime(gweek, gsec):
+    wday = gweek * 7
+    delta = datetime.timedelta(days=wday, seconds=gsec)
+    time = datetime.datetime(1980, 1, 6) + delta
+    return time
 
 def gpsws2ymdhms(gweek, gsec):
     """
