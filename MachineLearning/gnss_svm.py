@@ -28,7 +28,7 @@ def gnss_svm_train_model(traindata, model):
 
     # 1.读取数据集
     gnssdata = pd.read_csv(traindata)
-    x = gnssdata[["postResp", "priorR", "elevation", "SNR"]]
+    x = gnssdata[["postResp", "priorR", "elevation", "SNR", "resSNR"]]
     y = gnssdata["los"]
 
     start  = time.time()
@@ -53,7 +53,7 @@ def gnss_svm_predict(model, testdata):
     gnssdata = pd.read_csv(testdata)
     # gnssdata = gnssdata.head(39091)
     # x = gnssdata.drop(["week","second","sat","los","priorResp","postR","P","L","azimuth",],axis=1,)
-    originX = gnssdata[["postResp", "priorR", "elevation", "SNR"]]
+    originX = gnssdata[["postResp", "priorR", "elevation", "SNR", "resSNR"]]
     satInfo = gnssdata[["week", "second", "sat"]]
     y = gnssdata["los"]
 
@@ -97,9 +97,31 @@ if __name__ == "__main__":
     svm_ublox_modelpath = "./data/ml-data/model/gnss_svm_ublox.model"
     svm_CK6n_modelpath = "./data/ml-data/model/gnss_svm_CK6n.model"
 
-    satinfo_ref = gnss_svm_predict(svm_trimble_modelpath, trimble_path)
-    satinfo_ref = gnss_svm_predict(svm_ublox_modelpath, ublox_path)
-    satinfo_ref = gnss_svm_predict(svm_X6833B_modelpath, X6833B_path)
+    alloy_path = "./data/202401/log-spp-alloy.res1"
+    ublox_path = "./data/202401/log-spp-ublox.res1"
+    p40_path = "./data/202401/log-spp-p40.res1"
+    alloy_modelpth = "./data/202401/model/gnss_svm_alloy.model"
+    ublox_modelpth = "./data/202401/model/gnss_svm_ublox.model"
+    p40_modelpth = "./data/202401/model/gnss_svm_p40.model"
+    gnss_svm_train_model(alloy_path, alloy_modelpth)
+    gnss_svm_train_model(ublox_path, ublox_modelpth)
+    gnss_svm_train_model(p40_path, p40_modelpth)
+
+    satinfo_ref = gnss_svm_predict(alloy_modelpth, alloy_path)
+    satinfo_ref = gnss_svm_predict(alloy_modelpth, ublox_path)
+    satinfo_ref = gnss_svm_predict(alloy_modelpth, p40_path)
+
+    satinfo_ref = gnss_svm_predict(ublox_modelpth, alloy_path)
+    satinfo_ref = gnss_svm_predict(ublox_modelpth, ublox_path)
+    satinfo_ref = gnss_svm_predict(ublox_modelpth, p40_path)
+
+    satinfo_ref = gnss_svm_predict(p40_modelpth, alloy_path)
+    satinfo_ref = gnss_svm_predict(p40_modelpth, ublox_path)
+    satinfo_ref = gnss_svm_predict(p40_modelpth, p40_path)
+
+    # satinfo_ref = gnss_svm_predict(svm_trimble_modelpath, trimble_path)
+    # satinfo_ref = gnss_svm_predict(svm_ublox_modelpath, ublox_path)
+    # satinfo_ref = gnss_svm_predict(svm_X6833B_modelpath, X6833B_path)
     # satinfo_ref = gnss_svm_predict(modelpath2, path1)
 
 
