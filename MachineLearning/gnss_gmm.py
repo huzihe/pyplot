@@ -24,7 +24,7 @@ from sklearn import metrics
 
 def gnss_gmm_train_model(traindata, model):
     gnssdata = pd.read_csv(traindata)
-    # gnssdata = gnssdata.head(39091)
+    gnssdata = gnssdata.head(10000)
     originX = gnssdata[["postResp", "priorR", "elevation", "SNR"]]
     y = gnssdata["los"]
 
@@ -43,7 +43,7 @@ def gnss_gmm_train_model(traindata, model):
     dump(gmm, model)
 
     end = time.time()
-    print("训练算法耗时：",end - start)
+    print("gmm 训练算法耗时：",end - start)
 
 
 def gnss_gmm_predict(model, testdata):
@@ -62,13 +62,13 @@ def gnss_gmm_predict(model, testdata):
     labels = 1 - labels  # 将预测结果和 nlos实际意义做对应调整
 
     end = time.time()
-    print("预测算法耗时：",end - start)
-
-    sil_samples = metrics.silhouette_samples(X, labels)
+    print("gmm 预测算法耗时：",end - start)
 
     from sklearn.metrics import accuracy_score
-
     score = accuracy_score(y, labels)
+    print("gmm accuracy score = {:.3}\n".format(score))
+
+    sil_samples = metrics.silhouette_samples(X, labels)
     print(
         "gmm silhouette score = {:.3}, accuracy score = {:.3}\n".format(
             sil_samples.mean(), score
@@ -80,22 +80,49 @@ def gnss_gmm_predict(model, testdata):
 
 
 if __name__ == "__main__":
-    trimble_path = "./data/ml-data/20230511/trimble.res1"
-    X6833B_path = "./data/ml-data/20230511/X6833B.res1"
-    ublox_path = "./data/ml-data/20230511/ublox.res1"
-    CK6n_path = "./data/ml-data/20230511/CK6n.res1"
+    # trimble_path = "./data/ml-data/20230511/trimble.res1"
+    # X6833B_path = "./data/ml-data/20230511/X6833B.res1"
+    # ublox_path = "./data/ml-data/20230511/ublox.res1"
+    # CK6n_path = "./data/ml-data/20230511/CK6n.res1"
 
     trimble_modelpath = "./data/ml-data/model/gnss_gmm_trimble.model"
     X6833B_modelpath = "./data/ml-data/model/gnss_gmm_X6833B.model"
     ublox_modelpath = "./data/ml-data/model/gnss_gmm_ublox.model"
     CK6n_modelpath = "./data/ml-data/model/gnss_gmm_CK6n.model"
 
-    gnss_gmm_train_model(trimble_path, trimble_modelpath)
-    gnss_gmm_train_model(X6833B_path, X6833B_modelpath)
-    gnss_gmm_train_model(ublox_path, ublox_modelpath)
-    gnss_gmm_train_model(CK6n_path, CK6n_modelpath)
+    # gnss_gmm_train_model(trimble_path, trimble_modelpath)
+    # gnss_gmm_train_model(X6833B_path, X6833B_modelpath)
+    # gnss_gmm_train_model(ublox_path, ublox_modelpath)
+    # gnss_gmm_train_model(CK6n_path, CK6n_modelpath)
 
-    satinfo = gnss_gmm_predict(trimble_modelpath, trimble_path)
-    satinfo = gnss_gmm_predict(X6833B_modelpath, X6833B_path)
-    satinfo = gnss_gmm_predict(ublox_modelpath, ublox_path)
-    satinfo = gnss_gmm_predict(CK6n_modelpath, CK6n_path)
+    # satinfo = gnss_gmm_predict(trimble_modelpath, trimble_path)
+    # satinfo = gnss_gmm_predict(X6833B_modelpath, X6833B_path)
+    # satinfo = gnss_gmm_predict(ublox_modelpath, ublox_path)
+    # satinfo = gnss_gmm_predict(CK6n_modelpath, CK6n_path)
+
+    # 202401 data 
+    # alloy_path = "./data/202401/log-spp-alloy.res1"
+    # ublox_path = "./data/202401/log-spp-ublox.res1"
+    # p40_path = "./data/202401/log-spp-p40.res1"
+    alloy_path = "./data/202401/log-spp-alloy-new.res1"
+    ublox_path = "./data/202401/log-spp-ublox-new.res1"
+    p40_path = "./data/202401/log-spp-p40-new.res1"
+    alloy_modelpath = "./data/202401/model/gnss_gmm_alloy.model"
+    # ublox_modelpath = "./data/202401/model/gnss_gmm_ublox.model"
+    p40_modelpath = "./data/202401/model/gnss_gmm_p40.model"
+    # gnss_gmm_train_model(alloy_path, alloy_modelpath)
+    # gnss_gmm_train_model(ublox_path, ublox_modelpath)
+    # gnss_gmm_train_model(p40_path, p40_modelpath)
+
+    # satinfo_ref = gnss_gmm_predict(alloy_modelpath, alloy_path)
+    # satinfo_ref = gnss_gmm_predict(alloy_modelpath, ublox_path)
+    # satinfo_ref = gnss_gmm_predict(alloy_modelpath, p40_path)
+
+    satinfo_ref = gnss_gmm_predict(CK6n_modelpath, alloy_path)
+    satinfo_ref = gnss_gmm_predict(CK6n_modelpath, ublox_path)
+    satinfo_ref = gnss_gmm_predict(CK6n_modelpath, p40_path)
+
+    # satinfo_ref = gnss_gmm_predict(p40_modelpath, alloy_path)
+    # satinfo_ref = gnss_gmm_predict(p40_modelpath, ublox_path)
+    # satinfo_ref = gnss_gmm_predict(p40_modelpath, p40_path)
+    # 202401 data end
