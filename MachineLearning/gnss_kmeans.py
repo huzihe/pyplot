@@ -28,7 +28,9 @@ from joblib import dump, load
 
 def gnss_kmeans_train_model(traindata, model):
     gnssdata = pd.read_csv(traindata)
-    originX = gnssdata[["postResp", "priorR", "elevation", "SNR"]]
+    # print(gnssdata.describe())
+    originX = gnssdata[["postResp", "postR", "elevation", "SNR"]]
+    print(originX.describe())
     y = gnssdata["los"]
 
     start = time.time()
@@ -48,7 +50,9 @@ def gnss_kmeans_train_model(traindata, model):
 def gnss_kmeans_predict(model, testdata):
     gnssdata = pd.read_csv(testdata)
     # x = gnssdata.drop(["week","second","sat","los","priorResp","postR","P","L","azimuth",],axis=1,)
-    originX = gnssdata[["postResp", "priorR", "elevation", "SNR"]]
+    gnssdata = gnssdata.head(20000)
+    originX = gnssdata[["postResp", "postR", "elevation", "SNR"]]
+    # print(originX.describe())
     satInfo = gnssdata[["week", "second", "sat"]]
     y = gnssdata["los"]
 
@@ -58,21 +62,22 @@ def gnss_kmeans_predict(model, testdata):
 
     kmeans = load(model)
     labels = kmeans.predict(X)
-    labels = 1 - labels  # 将预测结果和 nlos实际意义做对应调整
+    # labels = 1 - labels  # 将预测结果和 nlos实际意义做对应调整
 
     end = time.time()
     print("预测算法耗时：",end - start)
 
-    # sil_samples = metrics.silhouette_samples(X, labels)
+    from sklearn.metrics import accuracy_score
 
-    # from sklearn.metrics import accuracy_score
+    score = accuracy_score(y, labels)
+    print("kmeans accuracy score = {:.3}\n".format(score))
 
-    # score = accuracy_score(y, labels)
-    # print(
-    #     "kmeans silhouette score = {:.3}, accuracy score = {:.3}\n".format(
-    #         sil_samples.mean(), score
-    #     )
-    # )
+    sil_samples = metrics.silhouette_samples(X, labels)
+    print(
+        "kmeans silhouette score = {:.3}, accuracy score = {:.3}\n".format(
+            sil_samples.mean(), score
+        )
+    )
 
     satInfo.insert(loc=len(satInfo.columns), column="los", value=labels)
     satInfo["second"] = satInfo["second"].astype(int)
@@ -90,10 +95,47 @@ if __name__ == "__main__":
     ublox_modelpath = "./data/ml-data/model/gnss_kmeans_ublox.model"
     CK6n_modelpath = "./data/ml-data/model/gnss_kmeans_CK6n.model"
 
-    gnss_kmeans_train_model(trimble_path, trimble_modelpath)
-    gnss_kmeans_train_model(X6833B_path, X6833B_modelpath)
-    gnss_kmeans_train_model(ublox_path, ublox_modelpath)
-    gnss_kmeans_train_model(CK6n_path, CK6n_modelpath)
+    # 202401 data 
+    # alloy_path = "./data/202401/log-spp-alloy.res1"
+    # ublox_path = "./data/202401/log-spp-ublox.res1"
+    # p40_path = "./data/202401/log-spp-p40.res1"
+    alloy_path = "./data/202401/log-spp-alloy-new.res1"
+    ublox_path = "./data/202401/log-spp-ublox-new.res1"
+    p40_path = "./data/202401/log-spp-p40-new.res1"
+    alloy_modelpath = "./data/202401/model/gnss_kmeans_alloy.model"
+    ublox_modelpath = "./data/202401/model/gnss_kmeans_ublox.model"
+    p40_modelpath = "./data/202401/model/gnss_kmeans_p40.model"
+    # alloy_path = "./data/202401/log-spp-alloy-0120.res1"
+    # ublox_path = "./data/202401/log-spp-ublox-0120.res1"
+    # p40_path = "./data/202401/log-spp-p40-0120.res1"
+    # alloy_modelpath = "./data/202401/model/gnss_kmeans_alloy0120.model"
+    # ublox_modelpath = "./data/202401/model/gnss_kmeans_ublox0120.model"
+    # p40_modelpath = "./data/202401/model/gnss_kmeans_p400120.model"
+    # gnss_kmeans_train_model(alloy_path, alloy_modelpath)
+    # gnss_kmeans_train_model(ublox_path, ublox_modelpath)
+    # gnss_kmeans_train_model(p40_path, p40_modelpath)
+
+    satinfo_ref = gnss_kmeans_predict(X6833B_modelpath, alloy_path)
+    satinfo_ref = gnss_kmeans_predict(X6833B_modelpath, ublox_path)
+    satinfo_ref = gnss_kmeans_predict(X6833B_modelpath, p40_path)
+
+    # satinfo_ref = gnss_kmeans_predict(alloy_modelpath, alloy_path)
+    # satinfo_ref = gnss_kmeans_predict(alloy_modelpath, ublox_path)
+    # satinfo_ref = gnss_kmeans_predict(alloy_modelpath, p40_path)
+
+    # satinfo_ref = gnss_kmeans_predict(ublox_modelpath, alloy_path)
+    # satinfo_ref = gnss_kmeans_predict(ublox_modelpath, ublox_path)
+    # satinfo_ref = gnss_kmeans_predict(ublox_modelpath, p40_path)
+
+    # satinfo_ref = gnss_kmeans_predict(p40_modelpath, alloy_path)
+    # satinfo_ref = gnss_kmeans_predict(p40_modelpath, ublox_path)
+    # satinfo_ref = gnss_kmeans_predict(p40_modelpath, p40_path)
+    # 202401 data end
+
+    # gnss_kmeans_train_model(trimble_path, trimble_modelpath)
+    # gnss_kmeans_train_model(X6833B_path, X6833B_modelpath)
+    # gnss_kmeans_train_model(ublox_path, ublox_modelpath)
+    # gnss_kmeans_train_model(CK6n_path, CK6n_modelpath)
 
     # satinfo = gnss_kmeans_predict(trimble_modelpath, trimble_path)
     # satinfo = gnss_kmeans_predict(X6833B_modelpath, X6833B_path)
@@ -105,17 +147,17 @@ if __name__ == "__main__":
     # satinfo = gnss_kmeans_predict(trimble_modelpath, ublox_path)
     # satinfo = gnss_kmeans_predict(trimble_modelpath, CK6n_path)
 
-    satinfo = gnss_kmeans_predict(X6833B_modelpath, trimble_path)
-    satinfo = gnss_kmeans_predict(X6833B_modelpath, X6833B_path)
-    satinfo = gnss_kmeans_predict(X6833B_modelpath, ublox_path)
-    satinfo = gnss_kmeans_predict(X6833B_modelpath, CK6n_path)
+    # satinfo = gnss_kmeans_predict(X6833B_modelpath, trimble_path)
+    # satinfo = gnss_kmeans_predict(X6833B_modelpath, X6833B_path)
+    # satinfo = gnss_kmeans_predict(X6833B_modelpath, ublox_path)
+    # satinfo = gnss_kmeans_predict(X6833B_modelpath, CK6n_path)
 
     # satinfo = gnss_kmeans_predict(ublox_modelpath, trimble_path)
     # satinfo = gnss_kmeans_predict(ublox_modelpath, X6833B_path)
     # satinfo = gnss_kmeans_predict(ublox_modelpath, ublox_path)
     # satinfo = gnss_kmeans_predict(ublox_modelpath, CK6n_path)
 
-    satinfo = gnss_kmeans_predict(CK6n_modelpath, trimble_path)
-    satinfo = gnss_kmeans_predict(CK6n_modelpath, X6833B_path)
-    satinfo = gnss_kmeans_predict(CK6n_modelpath, ublox_path)
-    satinfo = gnss_kmeans_predict(CK6n_modelpath, CK6n_path)
+    # satinfo = gnss_kmeans_predict(CK6n_modelpath, trimble_path)
+    # satinfo = gnss_kmeans_predict(CK6n_modelpath, X6833B_path)
+    # satinfo = gnss_kmeans_predict(CK6n_modelpath, ublox_path)
+    # satinfo = gnss_kmeans_predict(CK6n_modelpath, CK6n_path)

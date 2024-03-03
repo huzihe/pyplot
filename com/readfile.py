@@ -86,16 +86,24 @@ def ReadMyResult(_file):
             # if 358670 >= float(eachData[1])>= 358520:
             # if 358607 >= float(eachData[1])>= 358606:
             # if float(eachData[1])<= 356340 or float(eachData[1])>= 357120:
-            result.update(
-                {
-                    time: {
-                        "b": float(eachData[2]),
-                        "l": float(eachData[3]),
-                        "h": float(eachData[4]),
-                        "num": float(eachData[9]),
-                        "stat": float(eachData[8]),
+            # if 533622 >= float(eachData[1]) >= 529522:   # 20240120 动态
+            # if 534034 >= float(eachData[1]) >= 529012:   # 20240120 动态
+            # if 530887 >= float(eachData[1]) >= 530387:   # 20240120 动态  洪山广场
+            # if 530362 >= float(eachData[1]) >= 530234:   # 20240120 动态  中南路
+            # if 531408 >= float(eachData[1]) >= 531230:   # 20240120 动态  东三路
+            if 529895 >= float(eachData[1]) >= 529801:   # 20240120 动态  劝业场
+            # if 536047 >= float(eachData[1]) >= 534035:   # 20240120 静态 星湖大楼东侧门口
+            # if 529012 >= float(eachData[1]) >= 528000:   # 20240120 静态 星湖大楼西北角
+                result.update(
+                    {
+                        time: {
+                            "b": float(eachData[2]),
+                            "l": float(eachData[3]),
+                            "h": float(eachData[4]),
+                            "num": float(eachData[9]),
+                            "stat": float(eachData[8]),
+                        }
                     }
-                }
             )
     return result
 

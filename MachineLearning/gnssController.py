@@ -118,7 +118,7 @@ if __name__ == "__main__":
     #     learningtype = sys.argv[1]
 
     istrainmodel = 0
-    learningtype = "xgboost"
+    learningtype = "kmeans"
 
     # resouce path
     # X6833B  对应前39091行为静态数据，后12670（51761-39091）行为动态数据
@@ -134,6 +134,10 @@ if __name__ == "__main__":
     ublox_full_path = "./data/ml-data/20230511/ublox-spp-lsq-1006.res1"
     trimble_full_path = "./data/ml-data/20230511/Trimble-spp-lsq-1006.res1"
 
+    alloy_path = "./data/202401/log-spp-alloy-0120.res1"
+    ublox_path = "./data/202401/log-spp-ublox-0120.res1"
+    p40_path = "./data/202401/log-spp-p40-0120.res1"
+
 
     if learningtype == "xgboost":
         # Supervised learning model path
@@ -142,6 +146,13 @@ if __name__ == "__main__":
         ublox_modelpath = "./data/ml-data/model/gnss_xgboost_ublox.model"
         CK6n_modelpath = "./data/ml-data/model/gnss_xgboost_CK6n.model"
 
+        # alloy_modelpth = "./data/202401/model/gnss_xgboost_alloy.model"
+        # ublox_modelpth = "./data/202401/model/gnss_xgboost_ublox.model"
+        # p40_modelpth = "./data/202401/model/gnss_xgboost_p40.model"
+        alloy_modelpth = "./data/202401/model/gnss_xgboost_alloy0120.model"
+        ublox_modelpth = "./data/202401/model/gnss_xgboost_ublox0120.model"
+        p40_modelpth = "./data/202401/model/gnss_xgboost_p400120.model"
+
         # model traning
         if istrainmodel:
             gnss_xgboost.xgboost_gnss_train_model(trimble_path, trimble_modelpath)
@@ -149,6 +160,20 @@ if __name__ == "__main__":
             gnss_xgboost.xgboost_gnss_train_model(ublox_path, ublox_modelpath)
             gnss_xgboost.xgboost_gnss_train_model(CK6n_path, CK6n_modelpath)
 
+        # satinfo_X = gnss_xgboost.xgboost_gnss_predict(alloy_modelpth, alloy_path)
+        # oriRNX = "./data/202401/5827R40082202401200130O.obs"
+        # outRNX = "./data/202401/alloy-xgboost-0120.rnx"
+        # out_gnss_data(oriRNX, outRNX, satinfo_X, 0)
+
+        satinfo_X = gnss_xgboost.xgboost_gnss_predict(ublox_modelpth, ublox_path)
+        oriRNX = "./data/202401/COM14___9600_240120_013309.obs"
+        outRNX = "./data/202401/ublox-xgboost-0120.rnx"
+        out_gnss_data(oriRNX, outRNX, satinfo_X, 0)
+
+        satinfo_X = gnss_xgboost.xgboost_gnss_predict(p40_modelpth, p40_path)
+        oriRNX = "./data/202401/HISI00CHN_R_20240200110_04H_01S_MO.rnx"
+        outRNX = "./data/202401/p40-xgboost-0120.rnx"
+        out_gnss_data(oriRNX, outRNX, satinfo_X, 0)
         # predict
         # satinfo_t = gnss_xgboost.xgboost_gnss_predict(trimble_modelpath, trimble_path)
         # satinfo_X = gnss_xgboost.xgboost_gnss_predict(X6833B_modelpath, X6833B_path)
@@ -187,10 +212,10 @@ if __name__ == "__main__":
         # outrnx = "./data/ml-data/20230511/trimble-xgboost-1006.rnx"
         # out_gnss_data(rnx, outrnx, satinfo_X, 1)
 
-        satinfo_X = gnss_xgboost.xgboost_gnss_predict(ublox_modelpath, ublox_full_path)
-        rnx = "./data/ml-data/20230511/ublox.obs"
-        outrnx = "./data/ml-data/20230511/ulbox-xgboost-1006.rnx"
-        out_gnss_data(rnx, outrnx, satinfo_X, 0)
+        # satinfo_X = gnss_xgboost.xgboost_gnss_predict(ublox_modelpath, ublox_full_path)
+        # rnx = "./data/ml-data/20230511/ublox.obs"
+        # outrnx = "./data/ml-data/20230511/ulbox-xgboost-1006.rnx"
+        # out_gnss_data(rnx, outrnx, satinfo_X, 0)
 
     elif learningtype == "svm":
         svm_trimble_modelpath = "./data/ml-data/model/gnss_svm_trimble.model"
@@ -249,6 +274,20 @@ if __name__ == "__main__":
             gnss_kmeans.gnss_kmeans_train_model(ublox_path, ublox_modelpath)
             gnss_kmeans.gnss_kmeans_train_model(CK6n_path, CK6n_modelpath)
 
+        satinfo_X = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, alloy_path)
+        oriRNX = "./data/202401/5827R40082202401200130O.obs"
+        outRNX = "./data/202401/alloy-kmeans-0120.rnx"
+        out_gnss_data(oriRNX, outRNX, satinfo_X, 0)
+
+        satinfo_X = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, ublox_path)
+        oriRNX = "./data/202401/COM14___9600_240120_013309.obs"
+        outRNX = "./data/202401/ublox-kmeans-0120.rnx"
+        out_gnss_data(oriRNX, outRNX, satinfo_X, 0)
+
+        satinfo_X = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, p40_path)
+        oriRNX = "./data/202401/HISI00CHN_R_20240200110_04H_01S_MO.rnx"
+        outRNX = "./data/202401/p40-kmeans-0120.rnx"
+        out_gnss_data(oriRNX, outRNX, satinfo_X, 0)
         # predict
         # satinfo_t = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, trimble_path)
         # satinfo_X = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, X6833B_path)
@@ -283,10 +322,10 @@ if __name__ == "__main__":
         # outrnx = "./data/ml-data/20230511/ublox-kmeans-1006.rnx"
         # out_gnss_data(rnx, outrnx, satinfo_X, 0)
 
-        satinfo_X = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, trimble_full_path)
-        rnx = "./data/ml-data/20230511/IGS000USA_R_20231310150_01D_01S_MO.rnx"
-        outrnx = "./data/ml-data/20230511/trimble-kmeans-1006.rnx"
-        out_gnss_data(rnx, outrnx, satinfo_X, 1)
+        # satinfo_X = gnss_kmeans.gnss_kmeans_predict(X6833B_modelpath, trimble_full_path)
+        # rnx = "./data/ml-data/20230511/IGS000USA_R_20231310150_01D_01S_MO.rnx"
+        # outrnx = "./data/ml-data/20230511/trimble-kmeans-1006.rnx"
+        # out_gnss_data(rnx, outrnx, satinfo_X, 1)
 
     elif learningtype == "fcm":
         fcm_trimble_modelpath = "./data/ml-data/model/gnss_fcm_trimble.model"

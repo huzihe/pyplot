@@ -183,6 +183,51 @@
             ]
         },
         {
+            "name": "Python: ublox0120",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/202401/pos",
+            "args": [
+                "spp-lsq-ublox-kmeans-0120.txt",
+                "spp-lsq-ublox-xgboost-0120.txt",
+                "spp-lsq-ublox-0120.txt",
+                "gins.txt"
+            ]
+        },
+        {
+            "name": "Python: P400120",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/202401/pos",
+            "args": [
+                "spp-lsq-P40-kmeans-0120.txt",
+                "spp-lsq-P40-xgboost-0120.txt",
+                "spp-lsq-P40-0120.txt",
+                "gins.txt"
+            ]
+        },
+        {
+            "name": "Python: alloy0120",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/202401/pos",
+            "args": [
+                "spp-lsq-alloy-kmeans-0120.txt",
+                "spp-lsq-alloy-xgboost-0120.txt",
+                "spp-lsq-alloy-0120.txt",
+                "gins.txt"
+            ]
+        },
+        {
             "name": "Python: CK6n",
             "type": "python",
             "request": "launch",

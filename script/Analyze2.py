@@ -9,19 +9,19 @@ from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-from math import radians, sin
-from com import std, rms, mean, maxabs
+from math import radians, sin,fabs,cos,asin,sqrt
+from com import std, rms, mean, maxabs, get_distance_hav, get_deltB, get_deltL
 from readfile import ReadMyResult, ReadIERefResult, ReadGINSResult, Read3DMAResult
 
 # 字体调整
 plt.rcParams['font.sans-serif'] = ['Arial']  # 如果要显示中文字体,则在此处设为：simhei,Arial Unicode MS
 plt.rcParams['font.weight'] = 'light'
 plt.rcParams['axes.unicode_minus'] = False  # 坐标轴负号显示
-plt.rcParams['axes.titlesize'] = 8  # 标题字体大小
-plt.rcParams['axes.labelsize'] = 7  # 坐标轴标签字体大小
-plt.rcParams['xtick.labelsize'] = 7  # x轴刻度字体大小
-plt.rcParams['ytick.labelsize'] = 7  # y轴刻度字体大小
-plt.rcParams['legend.fontsize'] = 6
+plt.rcParams['axes.titlesize'] = 10  # 标题字体大小
+plt.rcParams['axes.labelsize'] = 9  # 坐标轴标签字体大小
+plt.rcParams['xtick.labelsize'] = 8  # x轴刻度字体大小
+plt.rcParams['ytick.labelsize'] = 8  # y轴刻度字体大小
+plt.rcParams['legend.fontsize'] = 8
 
 Inch = 2.54
 
@@ -44,6 +44,26 @@ class cStat(object):
 RE = 6378137
 
 
+# def hav(theta):
+#     s = sin(theta / 2)
+#     return s * s
+ 
+ 
+# def get_distance_hav(lat0, lng0, lat1, lng1):
+#     """用haversine公式计算球面两点间的距离。"""
+#     # 经纬度转换成弧度
+#     lat0 = radians(lat0)
+#     lat1 = radians(lat1)
+#     lng0 = radians(lng0)
+#     lng1 = radians(lng1)
+ 
+#     dlng = fabs(lng0 - lng1)
+#     dlat = fabs(lat0 - lat1)
+#     h = hav(dlat) + cos(lat0) * cos(lat1) * hav(dlng)
+#     distance = 2 * RE * asin(sqrt(h))
+#     return distance
+
+
 def CalDifference(_cal, _ref):
     """
     @author    : shengyixu Created on 2022.8.20
@@ -56,16 +76,26 @@ def CalDifference(_cal, _ref):
         if time in _ref.keys():
             result.update(
                 {
+                    # time: {
+                    #     "b": radians(cal["b"] - _ref[time]["b"]) * RE,
+                    #     "l": radians(cal["l"] - _ref[time]["l"])
+                    #     * RE
+                    #     / sin(radians(cal["b"])),
+                    #     "h": cal["h"] - _ref[time]["h"],
+                    #     "stat": cal["stat"],
+                    # }
                     time: {
-                        "b": radians(cal["b"] - _ref[time]["b"]) * RE,
-                        "l": radians(cal["l"] - _ref[time]["l"])
-                        * RE
-                        / sin(radians(cal["b"])),
+                        "b": get_deltB(cal["b"],cal["l"],_ref[time]["b"],_ref[time]["l"]),
+                        "l": get_deltL(cal["b"],cal["l"],_ref[time]["b"],_ref[time]["l"]),
                         "h": cal["h"] - _ref[time]["h"],
                         "stat": cal["stat"],
                     }
+                    
                 }
             )
+            b = get_distance_hav(cal["b"],cal["l"],_ref[time]["b"],cal["l"])
+            l = get_distance_hav(_ref[time]["b"],cal["l"],_ref[time]["b"],_ref[time]["l"])
+            dist = get_distance_hav(cal["b"],cal["l"],_ref[time]["b"],_ref[time]["l"])
     return result
 
 
@@ -81,11 +111,11 @@ def StatisticResult(_det):
         all += 1
         _stat.gpsw.append(time)
 
-        if abs(det["b"]) < 100:
+        if abs(det["b"]) < 200:
             _stat.dx.append(det["b"])
-        if abs(det["l"]) < 100:
+        if abs(det["l"]) < 200:
             _stat.dy.append(det["l"])
-        if abs(det["h"]) < 100:
+        if abs(det["h"]) < 200:
             _stat.dz.append(det["h"])
         if det["stat"] == 1 or det["stat"] == 3:
             fix += 1
@@ -172,9 +202,9 @@ def DrawFigure(_stat, _stat2, _figname):
         )
     Time_hms = [datetime.strptime(date, "%Y-%m-%d %H:%M:%S") for date in Time_hms]
 
-    limMax = 50
+    limMax = 60
     ## draw position
-    plt.figure(dpi=300, figsize=(16.5/Inch, 8/Inch))
+    plt.figure(dpi=300, figsize=(12.9/Inch, 8/Inch))
     myFmt = mdates.DateFormatter("%H:%M:%S")
     plt.subplot(3, 1, 1)
     # plt.plot(Time_hms[0 : len(_stat.dx)],_stat.dx,color='C1',linestyle='', marker='.',markersize='2',label="satellite")
@@ -191,7 +221,7 @@ def DrawFigure(_stat, _stat2, _figname):
         label="lsq_kmeans: " + str(round(_stat.rms[0]/100, 3)) + "m",
     )
     #   plt.plot(Time_hms[0:len(_stat.dx)], _stat.dx, 'blue', label = 'rms_B: ' + str(round(_stat.rms[0], 3)) + 'cm')
-    plt.legend(loc="lower right", fontsize=6)
+    plt.legend(loc="lower right",handletextpad=0)
     plt.ylabel("Latitude(m)")
     if max(_stat.max[0:2]) / 100 > 5:
         plt.ylim(-limMax, limMax)
@@ -205,7 +235,7 @@ def DrawFigure(_stat, _stat2, _figname):
     plt.plot(
         Time_hms[0 : len(_stat2.dy)],
         _stat2.dy,
-        color='C6',linestyle='', marker='.',markersize='2',
+        color='C1',linestyle='', marker='.',markersize='2',
         label="lsq: " + str(round(_stat2.rms[1]/100, 3)) + "m",
     )
     plt.plot(
@@ -215,7 +245,7 @@ def DrawFigure(_stat, _stat2, _figname):
         label="lsq_kmeans: " + str(round(_stat.rms[1]/100, 3)) + "m",
     )
     #   plt.plot(Time_hms[0:len(_stat.dy)], _stat.dy, 'red', label = 'rms_L: ' + str(round(_stat.rms[1], 3)) + 'cm')
-    plt.legend(loc="upper right", fontsize=6)
+    plt.legend(loc="upper right",handletextpad=0)
     plt.ylabel("Longitude(m)")
     plt.ylim(-max(_stat.max[0:1]) / 100, max(_stat.max[0:1]) / 100)
     if max(_stat.max[0:2]) / 100 > 5:
@@ -227,7 +257,7 @@ def DrawFigure(_stat, _stat2, _figname):
     plt.plot(
         Time_hms[0 : len(_stat2.dz)],
         _stat2.dz,
-        color='C8',linestyle='', marker='.',markersize='2',
+        color='C1',linestyle='', marker='.',markersize='2',
         label="lsq: " + str(round(_stat2.rms[2]/100, 3)) + "m",
     )
     plt.plot(
@@ -238,7 +268,7 @@ def DrawFigure(_stat, _stat2, _figname):
     )
 
     #   plt.plot(Time_hms[0:len(_stat.dz)], _stat.dz, 'green', label = 'rms_H: ' + str(round(_stat.rms[2], 3)) + 'cm')
-    plt.legend(loc="lower right", fontsize=6)
+    plt.legend(loc="lower right",handletextpad=0)
     plt.ylabel("Height(m)")
     plt.ylim(-max(_stat.max[0:1]) / 100, max(_stat.max[0:1]) / 100)
     if max(_stat.max[0:2]) / 100 > 5:
@@ -263,7 +293,7 @@ if __name__ == "__main__":
         refFile = sys.argv[3]
     filename = calFile1.split(".")[0]
     detFile = "det-" + filename + ".txt"
-    figName = "fig-" + filename + ".png"
+    figName = "fig-" + filename + "-static.png"
 
     # calValue = Read3DMAResult(calFile1)
     # calValue2 = Read3DMAResult(calFile2)

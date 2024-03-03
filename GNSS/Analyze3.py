@@ -82,16 +82,16 @@ def StatisticResult(_det):
     input      : 残差序列:_det
     """
     all, fix = 0, 0
+    border = 100
     _stat = cStat()
     for time, det in _det.items():
         all += 1
         _stat.gpsw.append(time)
-
-        if abs(det["b"]) < 200:
+        if abs(det["b"]) < border:
             _stat.dx.append(det["b"])
-        if abs(det["l"]) < 200:
+        if abs(det["l"]) < border:
             _stat.dy.append(det["l"])
-        if abs(det["h"]) < 200:
+        if abs(det["h"]) < border:
             _stat.dz.append(det["h"])
         if det["stat"] == 1 or det["stat"] == 3:
             fix += 1
@@ -178,33 +178,63 @@ def DrawFigure(_stat, _stat2, _stat3, _figname):
         )
     Time_hms = [datetime.strptime(date, "%Y-%m-%d %H:%M:%S") for date in Time_hms]
 
-    limMax = 120
+    limMax = 60
     ## draw position
-    plt.figure(dpi=600, figsize=(12.9/Inch, 8/Inch))
+    plt.figure(dpi=300, figsize=(14.9/Inch, 7/Inch))
     myFmt = mdates.DateFormatter("%H:%M:%S")
     plt.subplot(3, 1, 1)
-    # plt.plot(Time_hms[0 : len(_stat.dx)],_stat.dx,color='C1',linestyle='', marker='.',markersize='2',label="satellite")
     plt.plot(
         Time_hms[0 : len(_stat2.dx)],
+        _stat3.dy,
+        color='grey',linestyle='', marker='.',markersize='2',
+        label=str(round(_stat3.rms[1]/100, 2)) + "/" + str(round(_stat3.rms[0]/100, 2)) + "/" + str(round(_stat3.rms[2]/100, 2)) +" spp" ,
+    )
+    plt.plot(
+        Time_hms[0 : len(_stat2.dy)],
+        _stat2.dy,
+        color='deeppink',linestyle='', marker='.',markersize='2',
+        label=str(round(_stat2.rms[1]/100, 2)) + "/" + str(round(_stat2.rms[0]/100, 2)) + "/" + str(round(_stat2.rms[2]/100, 2)) + "     spp-xgb",
+    )
+    plt.plot(
+        Time_hms[0 : len(_stat.dy)],
+        _stat.dy,
+        color='limegreen',linestyle='', marker='.',markersize='1.5',
+        label=str(round(_stat.rms[1]/100, 2)) + "/" + str(round(_stat.rms[0]/100, 2)) + "/" + str(round(_stat.rms[2]/100, 2)) + "     spp-kmeans",
+    )
+    #   plt.plot(Time_hms[0:len(_stat.dy)], _stat.dy, 'red', label = 'rms_L: ' + str(round(_stat.rms[1], 3)) + 'cm')
+    # plt.legend(loc="lower right",ncol=3,handletextpad=0)
+    plt.legend(loc="upper left",bbox_to_anchor=(-0.05,1.8),markerscale=2, handletextpad=0,frameon=False)
+    plt.ylabel("East(m)")
+    plt.ylim(-max(_stat.max[0:1]) / 100, max(_stat.max[0:1]) / 100)
+    if max(_stat.max[0:2]) / 100 > 5:
+        plt.ylim(-limMax, limMax)
+    plt.gca().xaxis.set_ticklabels([])
+    plt.grid(True)
+    plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
+
+    # plt.plot(Time_hms[0 : len(_stat.dx)],_stat.dx,color='C1',linestyle='', marker='.',markersize='2',label="satellite")
+
+    plt.subplot(3, 1, 2)
+    plt.plot(
+        Time_hms[0 : len(_stat3.dx)],
         _stat3.dx,
-        color='C1',linestyle='', marker='.',markersize='2',
-        label="lsq: " + str(round(_stat3.rms[0]/100, 3)) + "m",
+        color='grey',linestyle='', marker='.',markersize='2',
+        # label=str(round(_stat3.rms[0]/100, 2)) + "/" + str(round(_stat3.rms[1]/100, 2)) + "/" + str(round(_stat3.rms[2]/100, 2)) +" spp" ,
     )
     plt.plot(
         Time_hms[0 : len(_stat2.dx)],
         _stat2.dx,
-        color='C4',linestyle='', marker='.',markersize='2',
-        label="lsq_xgb: " + str(round(_stat2.rms[0]/100, 3)) + "m",
+        color='deeppink',linestyle='', marker='.',markersize='2',
+        # label=str(round(_stat2.rms[0]/100, 2)) + "/" + str(round(_stat2.rms[1]/100, 2)) + "/" + str(round(_stat2.rms[2]/100, 2)) + " spp-xgb",
     )
     plt.plot(
         Time_hms[0 : len(_stat.dx)],
         _stat.dx,
-        color='C9',linestyle='', marker='.',markersize='1.5',
-        label="lsq_kmeans: " + str(round(_stat.rms[0]/100, 3)) + "m",
+        color='limegreen',linestyle='', marker='.',markersize='1.5',
+        # label=str(round(_stat.rms[0]/100, 2)) + "/" + str(round(_stat.rms[1]/100, 2)) + "/" + str(round(_stat.rms[2]/100, 2)) + " spp-kmeans",
     )
     #   plt.plot(Time_hms[0:len(_stat.dx)], _stat.dx, 'blue', label = 'rms_B: ' + str(round(_stat.rms[0], 3)) + 'cm')
-    plt.legend(loc="lower right",ncol=3,handletextpad=0)
-    plt.ylabel("Latitude(m)")
+    plt.ylabel("North(m)")
     if max(_stat.max[0:2]) / 100 > 5:
         plt.ylim(-limMax, limMax)
     else:
@@ -212,65 +242,38 @@ def DrawFigure(_stat, _stat2, _stat3, _figname):
     # plt.gca().xaxis.set_major_formatter(myFmt)
     plt.gca().xaxis.set_ticklabels([])
     plt.grid(True)
-
-    plt.subplot(3, 1, 2)
-    plt.plot(
-        Time_hms[0 : len(_stat2.dx)],
-        _stat3.dy,
-        color='C1',linestyle='', marker='.',markersize='2',
-        label="lsq: " + str(round(_stat3.rms[1]/100, 3)) + "m",
-    )
-    plt.plot(
-        Time_hms[0 : len(_stat2.dy)],
-        _stat2.dy,
-        color='C4',linestyle='', marker='.',markersize='2',
-        label="lsq_xgb: " + str(round(_stat2.rms[1]/100, 3)) + "m",
-    )
-    plt.plot(
-        Time_hms[0 : len(_stat.dy)],
-        _stat.dy,
-        color='C9',linestyle='', marker='.',markersize='1.5',
-        label="lsq_kmeans: " + str(round(_stat.rms[1]/100, 3)) + "m",
-    )
-    #   plt.plot(Time_hms[0:len(_stat.dy)], _stat.dy, 'red', label = 'rms_L: ' + str(round(_stat.rms[1], 3)) + 'cm')
-    plt.legend(loc="lower right",ncol=3,handletextpad=0)
-    plt.ylabel("Longitude(m)")
-    plt.ylim(-max(_stat.max[0:1]) / 100, max(_stat.max[0:1]) / 100)
-    if max(_stat.max[0:2]) / 100 > 5:
-        plt.ylim(-limMax, limMax)
-    plt.gca().xaxis.set_ticklabels([])
-    plt.grid(True)
+    plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
 
     plt.subplot(3, 1, 3)
     plt.plot(
         Time_hms[0 : len(_stat2.dx)],
         _stat3.dz,
-        color='C1',linestyle='', marker='.',markersize='2',
-        label="lsq: " + str(round(_stat3.rms[2]/100, 3)) + "m",
+        color='grey',linestyle='', marker='.',markersize='1.5',
+        # label="spp: " + str(round(_stat3.rms[2]/100, 3)) + "m",
     )
     plt.plot(
         Time_hms[0 : len(_stat2.dz)],
         _stat2.dz,
-        color='C4',linestyle='', marker='.',markersize='2',
-        label="lsq_xgb: " + str(round(_stat2.rms[2]/100, 3)) + "m",
+        color='deeppink',linestyle='', marker='.',markersize='1.5',
+        # label="spp_xgb: " + str(round(_stat2.rms[2]/100, 3)) + "m",
     )
     plt.plot(
         Time_hms[0 : len(_stat.dz)],
         _stat.dz,
-        color='C9',linestyle='', marker='.',markersize='1.5',
-        label="lsq_kmeans: " + str(round(_stat.rms[2]/100, 3)) + "m",
+        color='limegreen',linestyle='', marker='.',markersize='1',
+        # label="spp_kmeans: " + str(round(_stat.rms[2]/100, 3)) + "m",
     )
-
-    #   plt.plot(Time_hms[0:len(_stat.dz)], _stat.dz, 'green', label = 'rms_H: ' + str(round(_stat.rms[2], 3)) + 'cm')
-    plt.legend(loc="lower right",ncol=3,handletextpad=0)
-    plt.ylabel("Height(m)")
+    # plt.legend(loc="lower right",ncol=3,handletextpad=0)
+    plt.ylabel("Up(m)")
     plt.ylim(-max(_stat.max[0:1]) / 100, max(_stat.max[0:1]) / 100)
     if max(_stat.max[0:2]) / 100 > 5:
         plt.ylim(-limMax, limMax)
     plt.gca().xaxis.set_major_formatter(myFmt)
     plt.grid(True)
+    plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
+    plt.subplots_adjust(wspace =0, hspace =0.05)#调整子图间距
 
-    plt.xlabel("Epoch")
+    # plt.xlabel("Time")
     plt.savefig(_figname, bbox_inches="tight")
     # plt.show()
 
@@ -287,8 +290,11 @@ if __name__ == "__main__":
         calFile3 = sys.argv[3]
         refFile = sys.argv[4]
     filename = calFile1.split(".")[0]
-    detFile = "det-" + filename + ".txt"
-    figName = "fig-" + filename + "-toutou.png"
+    deltname ="-quanyechang"  # 文件标记
+    detFile = "det-" + filename + deltname + ".txt"
+    detFile2 = "det-" + calFile2.split(".")[0] + deltname +".txt"
+    detFile3 = "det-" + calFile3.split(".")[0] + deltname +".txt"
+    figName = "fig-" + filename + deltname +".png"
 
     calValue = ReadMyResult(calFile1)
     calValue2 = ReadMyResult(calFile2)
@@ -306,4 +312,6 @@ if __name__ == "__main__":
     stat3 = StatisticResult(detValue3)
 
     ExportDifference(detFile, detValue)
+    ExportDifference(detFile2, detValue2)
+    ExportDifference(detFile3, detValue3)
     DrawFigure(Stat, stat2, stat3, figName)

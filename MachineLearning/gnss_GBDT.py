@@ -121,6 +121,17 @@ if __name__ == "__main__":
 
     test_modelpath = "./data/ml-data/model/gnss_gbdt_test.model"
 
+    alloy_path = "./data/202401/log-spp-alloy.res1"
+    ublox_path = "./data/202401/log-spp-ublox.res1"
+    p40_path = "./data/202401/log-spp-p40.res1"
+    alloy_modelpth = "./data/202401/model/gnss_gbdt_alloy.model"
+    ublox_modelpth = "./data/202401/model/gnss_gbdt_ublox.model"
+    p40_modelpth = "./data/202401/model/gnss_gbdt_p40.model"
+    gbdt_gnss_train_model(alloy_path, alloy_modelpth)
+    gbdt_gnss_train_model(ublox_path, ublox_modelpth)
+    gbdt_gnss_train_model(p40_path, p40_modelpth)
+    # satinfo_ref = xgboost_gnss_predict(alloy_modelpth, alloy_path)
+
     # gbdt_gnss_train_model(trimble_path, trimble_modelpath)
     # gbdt_gnss_train_model(X6833B_path, X6833B_modelpath)
     # gbdt_gnss_train_model(ublox_path, ublox_modelpath)
