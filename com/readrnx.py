@@ -1,7 +1,7 @@
 '''
 Author: hzh huzihe@whu.edu.cn
 Date: 2023-08-13 21:05:21
-LastEditTime: 2023-11-04 16:00:25
+LastEditTime: 2024-07-06 15:50:12
 FilePath: /pyplot/com/readrnx.py
 Descripttion: 
 '''
@@ -53,33 +53,48 @@ def readrnx(rnx):
                         int(float(eachData[6])),
                     )
                     time = int(ws[0]) + float(ws[1]) / 86400.0 / 7.0
-                    if 361008 >= float(ws[1])>= 360717:
+                    # if 533622 >= float(ws[1]) >= 529522:   # 20240120 动态
+                    # if 361008 >= float(ws[1])>= 360717:
+                    # if 529895 >= float(ws[1]) >= 529801: # 20240120 动态  劝业场
+                    # if 530362 >= float(ws[1]) >= 530266: # 20240120 动态  中南路
+                    # if 532239 >= float(ws[1]) >= 532212:   # 20240120 动态  凌波门
+                    if 532239 >= float(ws[1]) >= 532158:   # 20240120 动态  东湖南路
                     # if time >0:
                         result.update(
                             {
                                 (time): {
                                     "nsat":nsat,
-                                    "los": los
+                                    "los": los, 
+                                    "nlos": nlos,
+                                    # "los": realsat-los-2,
+                                    "realSat":realsat
                                     }
                                 })
                     los = 0
+                    nlos = 0
+                    realsat = 0
                     nsat = int(eachData[8])
                     continue
                 else:
                     # eachData = eachLine.split()
-                    for itr in range(6):
-                        if len(eachLine) > 48 * itr + 18 + 16:
-                            substr = eachLine[48 * itr + 18]
-                            if substr == '1':
-                                los = los + 1
-                        else:
-                            break
-                    continue
+                    substr = eachLine[0]
+                    if substr == 'G' or substr == 'E' or substr == 'R' or substr == 'C':
+                        realsat = realsat + 1
+                        for itr in range(6):
+                            if len(eachLine) > 48 * itr + 18 + 16:
+                                substr = eachLine[48 * itr + 18]
+                                if substr == '1':
+                                    los = los + 1
+                                if substr == "0":
+                                    nlos = nlos + 1
+                            else:
+                                break
+                        continue
             else:
                 continue
     return result
 
-def StatisticResult(_det):
+def StatisticSatNumResult(_det):
     """
     @author    : shengyixu Created on 2022.8.20
     Purpose    : 统计残差序列的数值特征
@@ -95,8 +110,12 @@ def StatisticResult(_det):
 
         if abs(det["nsat"]) < 100:
             _stat.dx.append(det["nsat"])
+            _stat.max.append(det["nlos"])
         if abs(det["los"]) < 100:
             _stat.dy.append(det["los"])
+        if abs(det["realSat"]) < 100:
+            _stat.dz.append(det["realSat"])
+            
 
     # _stat.std = [std(_stat.dx) * 100, std(_stat.dy) * 100, std(_stat.dz) * 100]
     # _stat.rms = [rms(_stat.dx) * 100, rms(_stat.dy) * 100, rms(_stat.dz) * 100]
@@ -104,11 +123,17 @@ def StatisticResult(_det):
 
     _stat.dx.clear()
     _stat.dy.clear()
+    _stat.dz.clear()
+    _stat.max.clear()
+    _stat.mean.clear()
 
     # 重新保存残差序列
     for time, det in _det.items():
         _stat.dx.append(det["nsat"])
         _stat.dy.append(det["los"])
+        _stat.dz.append(det["realSat"])
+        _stat.max.append(det["nlos"])
+        _stat.mean.append(det["realSat"]- det["nlos"]+3)
 
     return _stat
     

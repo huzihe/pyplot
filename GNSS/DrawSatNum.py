@@ -1,7 +1,7 @@
 '''
 Author: hzh huzihe@whu.edu.cn
 Date: 2023-10-29 21:36:51
-LastEditTime: 2023-11-10 23:58:09
+LastEditTime: 2024-03-03 21:59:39
 FilePath: /pyplot/GNSS/DrawSatNum.py
 Descripttion: 
 '''
@@ -98,9 +98,14 @@ def DrawFigures(_stat,_figname):
     plt.show()
 
 if __name__ == '__main__':
-    rnx = "./data/ml-data/20230511/X6833B-xgboost-1001.rnx"
-    fig = "./data/ml-data/X6833B-satnum.png"
+    # rnx = "./data/ml-data/20230511/X6833B-xgboost-1001.rnx"
+    # fig = "./data/ml-data/X6833B-satnum.png"
+    # data = readrnx(rnx)
+    # ref = StatisticResult(data)
+    # DrawFigures(ref,fig)
+
+    rnx = "./data/202401/p40-kmeans-0120.rnx"
+    fig = "./data/202401/SatNUM/P40-satnum.png"
     data = readrnx(rnx)
     ref = StatisticResult(data)
     DrawFigures(ref,fig)
-    te=1

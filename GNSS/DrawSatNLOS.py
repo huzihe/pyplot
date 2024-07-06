@@ -1,7 +1,7 @@
 '''
 Author: hzh huzihe@whu.edu.cn
 Date: 2023-10-29 21:36:51
-LastEditTime: 2023-12-17 22:56:01
+LastEditTime: 2024-03-17 22:26:05
 FilePath: /pyplot/GNSS/DrawSatNLOS.py
 Descripttion: 
 '''
@@ -15,12 +15,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from com.readrnx import readrnx
-from com.readrnx import StatisticResult
+# from com.readrnx import StatisticResult
 from com.mytime import gpsws2ymdhms,gpsws2datetime
 from datetime import datetime
 
-locator1 = mdates.MinuteLocator(interval=8)
-locator2 = mdates.MinuteLocator(interval=3)
+locator1 = mdates.MinuteLocator(interval=5)
+locator2 = mdates.MinuteLocator(interval=5)
 
 # 字体调整
 plt.rcParams['font.sans-serif'] = ['Arial']  # 如果要显示中文字体,则在此处设为：simhei,Arial Unicode MS
@@ -80,8 +80,11 @@ def DrawFiguresSNR2(_file,_figname):
     gnssdata['hms']=gnssdata['second'].apply(ws2hms2)
     base = gnssdata[["hms","week","second","los","postResp", "priorR", "elevation", "SNR"]]
     
-    gnssdata_static = gnssdata[(base.second<356350)&(base.second>354630)]
-    gnssdata = gnssdata[base.second>356350]
+    # gnssdata_static = gnssdata[(base.second<356350)&(base.second>354630)]
+    # gnssdata = gnssdata[base.second>356350]
+    gnssdata_static = gnssdata[(base.second<115200)]   # 115200  116040
+    gnssdata = gnssdata[(base.second>115200)&(base.second<116460)]
+
 
     los_s = gnssdata_static[base.los==1]
     nlos_s = gnssdata_static[base.los==0]
@@ -92,7 +95,7 @@ def DrawFiguresSNR2(_file,_figname):
     limMax = 50
     inch = 1/2.54
 
-    plt.figure(dpi=300, figsize=(12.9*inch, 5*inch))
+    plt.figure(dpi=300, figsize=(12.9*inch, 4.2*inch))
     plt.subplots_adjust(wspace =0.1, hspace =0)#调整子图间距
     
     plt.subplot(1,2,1)
@@ -200,8 +203,11 @@ def DrawFiguresElevation2(_file,_figname):
     gnssdata['hms']=gnssdata['second'].apply(ws2hms2)
     base = gnssdata[["hms","week","second","los","postResp", "priorR", "elevation", "SNR"]]
     
-    gnssdata_static = gnssdata[(base.second<356350)&(base.second>354630)]
-    gnssdata = gnssdata[base.second>356350]
+    # gnssdata_static = gnssdata[(base.second<356350)&(base.second>354630)]
+    # gnssdata = gnssdata[base.second>356350]
+    gnssdata_static = gnssdata[(base.second<115200)]   # 115200  116040
+    gnssdata = gnssdata[(base.second>115200)&(base.second<116460)]
+
 
     los_s = gnssdata_static[base.los==1]
     nlos_s = gnssdata_static[base.los==0]
@@ -212,7 +218,7 @@ def DrawFiguresElevation2(_file,_figname):
     limMax = 50
     inch = 1/2.54
 
-    plt.figure(dpi=300, figsize=(12.9*inch, 5*inch))
+    plt.figure(dpi=300, figsize=(12.9*inch, 4.2*inch))
     plt.subplots_adjust(wspace =0.1, hspace =0)#调整子图间距
     
     plt.subplot(1,2,1)
@@ -321,8 +327,11 @@ def DrawFiguresPsu2(_file,_figname):
     gnssdata['hms']=gnssdata['second'].apply(ws2hms2)
     base = gnssdata[["hms","week","second","los","postResp", "priorR", "elevation", "SNR"]]
     
-    gnssdata_static = gnssdata[(base.second<356350)&(base.second>354630)]
-    gnssdata = gnssdata[base.second>356350]
+    # gnssdata_static = gnssdata[(base.second<356350)&(base.second>354630)]
+    # gnssdata = gnssdata[base.second>356350]
+    gnssdata_static = gnssdata[(base.second<115200)]   # 115200  116040
+    gnssdata = gnssdata[(base.second>115200)&(base.second<116460)]
+
 
     los_s = gnssdata_static[base.los==1]
     nlos_s = gnssdata_static[base.los==0]
@@ -333,7 +342,7 @@ def DrawFiguresPsu2(_file,_figname):
     limMax = 50
     inch = 1/2.54
 
-    plt.figure(dpi=300, figsize=(12.9*inch, 5*inch))
+    plt.figure(dpi=300, figsize=(12.9*inch, 4.2*inch))
     plt.subplots_adjust(wspace =0.1, hspace =0)#调整子图间距
     
     plt.subplot(1,2,1)
@@ -436,6 +445,87 @@ def DrawFiguresDeltSNR(_file,_figname):
     plt.savefig(_figname, bbox_inches="tight") #pad_inches=0.2*inch
     plt.show()
 
+def DrawFiguresDeltSNR2(_file,_figname):
+    gnssdata = pd.read_csv(_file)
+    gnssdata['hms']=gnssdata['second'].apply(ws2hms2)
+    base = gnssdata[["hms","week","second","los","postResp", "priorR", "elevation", "SNR","resSNR"]]
+    
+    gnssdata_static = gnssdata[(base.second<115200)]   # 115200  116040
+    gnssdata = gnssdata[(base.second>115200)&(base.second<116460)]
+
+    los_s = gnssdata_static[base.los==1]
+    nlos_s = gnssdata_static[base.los==0]
+
+    los = gnssdata[base.los==1]
+    nlos = gnssdata[base.los==0]
+
+    limMax = 50
+    inch = 1/2.54
+
+    plt.figure(dpi=300, figsize=(12.9*inch, 4.2*inch))
+    plt.subplots_adjust(wspace =0.1, hspace =0)#调整子图间距
+    
+    plt.subplot(1,2,1)
+    plt.plot(
+        los_s["hms"],
+        los_s["resSNR"],
+        color='limegreen',
+        linestyle='',
+        marker='.',
+        markersize='1',
+        label="los"
+        )
+    plt.plot(
+        nlos_s["hms"],
+        nlos_s["resSNR"],
+        color='deeppink',
+        linestyle='',
+        marker='.',
+        markersize='1',
+        label="nlos"
+        )
+    # plt.legend(loc="lower right",handletextpad=0)
+    plt.ylabel("∆C/N0(dB-Hz)")
+    plt.ylim(-30, 20)
+    plt.grid(True)
+    # plt.xlabel("Time")
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))  # 设置 x 轴为日期格式
+    plt.gca().xaxis.set_major_locator(locator1)  # x 轴间隔
+    plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
+
+    ax2 = plt.subplot(1,2,2)
+    plt.plot(
+        los["hms"],
+        los["resSNR"],
+        color='limegreen',
+        linestyle='',
+        marker='.',
+        markersize='1',
+        label="los"
+        )
+    plt.plot(
+        nlos["hms"],
+        nlos["resSNR"],
+        color='deeppink',
+        linestyle='',
+        marker='.',
+        markersize='1',
+        label="nlos"
+        )
+    plt.legend(loc="lower right",markerscale=4,handletextpad=0)
+    # plt.ylabel("C/N0(dB-Hz)")
+    ax2.yaxis.set_major_formatter(plt.NullFormatter())
+    plt.ylim(-30, 20)
+    plt.grid(True)
+    # plt.xlabel("Time")
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))  # 设置 x 轴为日期格式
+    plt.gca().xaxis.set_major_locator(locator2)  # x 轴间隔
+    plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
+
+    plt.savefig(_figname, bbox_inches="tight") #pad_inches=0.2*inch
+    # plt.show()
+
+
 if __name__ == '__main__':
     res = "./data/ml-data/20230511/X6833B.res1"
     # snrfig = "./data/ml-data/X6833B-nlos-snr.png"
@@ -450,13 +540,26 @@ if __name__ == '__main__':
     # deltsnrfig = "./data/ml-data/X6833B-nlos-deltsnr-s.png"
     # DrawFiguresDeltSNR(res,deltsnrfig)
 
-    snrfig = "./data/ml-data/X6833B-nlos-snr2.png"
+    # snrfig = "./data/ml-data/X6833B-nlos-snr3.png"
+    # DrawFiguresSNR2(res,snrfig)
+
+    # elefig = "./data/ml-data/X6833B-nlos-elevation3.png"
+    # DrawFiguresElevation2(res,elefig)
+
+    # psufig = "./data/ml-data/X6833B-nlos-psu3.png"
+    # DrawFiguresPsu2(res,psufig)
+
+    res = "./data/202401/log-spp-ublox.res1"
+    psufig = "./data/ml-data/ublox-nlos-deltSNR3.png"
+    DrawFiguresDeltSNR2(res,psufig)
+
+    snrfig = "./data/ml-data/ublox-nlos-snr3.png"
     DrawFiguresSNR2(res,snrfig)
 
-    elefig = "./data/ml-data/X6833B-nlos-elevation2.png"
+    elefig = "./data/ml-data/ublox-nlos-elevation3.png"
     DrawFiguresElevation2(res,elefig)
 
-    psufig = "./data/ml-data/X6833B-nlos-psu2.png"
+    psufig = "./data/ml-data/ublox-nlos-psu3.png"
     DrawFiguresPsu2(res,psufig)
 
     # deltsnrfig = "./data/ml-data/X6833B-nlos-deltsnr-s.png"

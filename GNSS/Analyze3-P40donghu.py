@@ -89,7 +89,7 @@ def StatisticResult(_det):
     input      : 残差序列:_det
     """
     all, fix = 0, 0
-    border = 33
+    border = 100
     _stat = cStat()
     for time, det in _det.items():
         all += 1
@@ -216,7 +216,7 @@ def DrawFigure(_stat, _stat2, _stat3, _figname):
     if max(_stat.max[0:2]) / 100 > 5:
         plt.ylim(-limMax, limMax)
     plt.gca().xaxis.set_ticklabels([])
-    plt.grid(True)
+    plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
     plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
 
     # plt.plot(Time_hms[0 : len(_stat.dx)],_stat.dx,color='C1',linestyle='', marker='.',markersize='2',label="satellite")
@@ -248,7 +248,7 @@ def DrawFigure(_stat, _stat2, _stat3, _figname):
         plt.ylim(-max(_stat.max[0:1]) / 100, max(_stat.max[0:1]) / 100)
     # plt.gca().xaxis.set_major_formatter(myFmt)
     plt.gca().xaxis.set_ticklabels([])
-    plt.grid(True)
+    plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
     plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
 
     plt.subplot(3, 1, 3)
@@ -276,7 +276,7 @@ def DrawFigure(_stat, _stat2, _stat3, _figname):
     if max(_stat.max[0:2]) / 100 > 5:
         plt.ylim(-limMax, limMax)
     plt.gca().xaxis.set_major_formatter(myFmt)
-    plt.grid(True)
+    plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
     plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
     plt.subplots_adjust(wspace =0, hspace =0.05)#调整子图间距
 
@@ -450,7 +450,7 @@ def DrawFigureLineWithSat(_stat, _stat2, _stat3, _satnum1, _satnum2, _figname):
         )
     Time_hms = [datetime.strptime(date, "%Y-%m-%d %H:%M:%S") for date in Time_hms]
 
-    limMax = 30
+    limMax = 8
     mScale = 0.7
     lWidth = 0.8
     # locator = mdates.SecondLocator(30)
@@ -465,7 +465,7 @@ def DrawFigureLineWithSat(_stat, _stat2, _stat3, _satnum1, _satnum2, _figname):
         Time_hms[0 : len(_stat2.dx)],
         _stat3.dy,
         color='grey', linestyle='-', linewidth= lWidth, marker='o',markersize= mScale,
-        label=str(round(_stat3.rms[1]/100, 2)) + "/" + str(round(_stat3.rms[0]/100, 2)) + "/" + str(round(_stat3.rms[2]/100, 2)) +" SPP" ,
+        label=str(round(_stat3.rms[1]/100, 2)) + "/" + str(round(_stat3.rms[0]/100, 2)) + "/" + str(round(_stat3.rms[2]/100, 2)) +"   SPP" ,
     )
     plt.plot(
         Time_hms[0 : len(_stat2.dy)],
@@ -546,13 +546,12 @@ def DrawFigureLineWithSat(_stat, _stat2, _stat3, _satnum1, _satnum2, _figname):
     plt.ylabel("dU(m)")
     plt.ylim(-max(_stat.max[0:1]) / 100, max(_stat.max[0:1]) / 100)
     if max(_stat.max[0:2]) / 100 > 2:
-        plt.ylim(-95, 95)
-    plt.yticks(np.arange(-80, 80+0.1, 80))
+        plt.ylim(-12, 12)
+    # plt.yticks(np.arange(-80, 80+0.1, 80))
     plt.gca().xaxis.set_major_locator(locator)
     plt.gca().xaxis.set_ticklabels([])
     # plt.gca().xaxis.set_major_formatter(myFmt)
     plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
-
     plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
 
     plt.subplot(4, 1, 4)
@@ -572,14 +571,14 @@ def DrawFigureLineWithSat(_stat, _stat2, _stat3, _satnum1, _satnum2, _figname):
         )
     plt.plot(
         Time_hms[0 : len(_stat2.dx)],
-        _satnum2.dy,
+        _satnum2.mean,
         color='deeppink',
         linestyle='-',linewidth= lWidth, marker='o',markersize= mScale,
         label="xgboost"
         )
     # plt.legend(loc="lower right",)
     plt.ylabel("Sat. Num")
-    plt.ylim(0, 25)
+    plt.ylim(0, 35)
     plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
     plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
     plt.gca().xaxis.set_major_locator(locator)
@@ -602,7 +601,7 @@ if __name__ == "__main__":
         calFile3 = sys.argv[3]
         refFile = sys.argv[4]
     filename = calFile1.split(".")[0]
-    deltname ="-all—0614"  # 文件标记
+    deltname ="-donghu—0706"  # 文件标记
     detFile = "det-" + filename + deltname + ".txt"
     detFile2 = "det-" + calFile2.split(".")[0] + deltname +".txt"
     detFile3 = "det-" + calFile3.split(".")[0] + deltname +".txt"
@@ -626,15 +625,14 @@ if __name__ == "__main__":
     ExportDifference(detFile, detValue)
     ExportDifference(detFile2, detValue2)
     ExportDifference(detFile3, detValue3)
-    DrawFigureLine(Stat, stat2, stat3, figName)
+    # DrawFigureLine(Stat, stat2, stat3, figName)
     
-    # # 带卫星数的统计
-    # kmrnx = "../p40-kmeans-0120.rnx"
-    # kmeans = readrnx(kmrnx)
-    # kmeansSatnum = StatisticSatNumResult(kmeans)
+    kmrnx = "../p40-kmeans-0120.rnx"
+    kmeans = readrnx(kmrnx)
+    kmeansSatnum = StatisticSatNumResult(kmeans)
 
-    # xgbrnx = "../p40-xgboost-0120.rnx"
-    # xgboost = readrnx(xgbrnx)
-    # xgbSatnum = StatisticSatNumResult(xgboost)
+    xgbrnx = "../p40-xgboost-0120.rnx"
+    xgboost = readrnx(xgbrnx)
+    xgbSatnum = StatisticSatNumResult(xgboost)
 
-    # DrawFigureLineWithSat(Stat, stat2, stat3, kmeansSatnum, xgbSatnum, figName)
+    DrawFigureLineWithSat(Stat, stat2, stat3, kmeansSatnum, xgbSatnum, figName)
