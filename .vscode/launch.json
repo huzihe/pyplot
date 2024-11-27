@@ -213,6 +213,51 @@
             ]
         },
         {
+            "name": "Python: P40-SM-0120",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/202401/shadowmatching/",
+            "args": [
+                "2-p40-sm-0120-20241124-0.1max.pos",
+                "2-p40-sm-0120-20241124-0.5max.pos",
+                "2-p40-spp-0120-20241124.pos",
+                "gins.txt"
+            ]
+        },
+        {
+            "name": "Python: ublox-SM-0120",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/202401/shadowmatching/",
+            "args": [
+                "2-ublox-sm-0120-20241124-0.1max.pos",
+                "2-ublox-sm-0120-20241124-0.5max.pos",
+                "2-ublox-spp-0120-20241124.pos",
+                "gins.txt"
+            ]
+        },
+        {
+            "name": "Python: alloy-SM-0120",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/202401/shadowmatching/",
+            "args": [
+                "2-alloy-sm-0120-20241124-0.1max.pos",
+                "2-alloy-sm-0120-20241124-0.5max.pos",
+                "2-alloy-spp-0120-20241124.pos",
+                "gins.txt"
+            ]
+        },
+        {
             "name": "Python: alloy0120",
             "type": "python",
             "request": "launch",

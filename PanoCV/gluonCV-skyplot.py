@@ -98,7 +98,7 @@ def skysegmentaion(idir, filename, flag):
     print(file + " skyplot is done!")
 
 
-path = "./data/sky/"
+path = "./data/sky/res"
 
 # filenames = os.walk(path)
 # for filename in filenames:

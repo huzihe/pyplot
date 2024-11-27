@@ -64,6 +64,36 @@ def Read3DMAResult(_file):
 
     return result
 
+def Read3DMAResult2(_file):
+    """
+    @author    : huzihe Create on 2024.11.24
+    Purpose    : read the gnss-3dma results
+    """
+    result = {}
+    with open(_file, "r") as file:
+        content = file.readlines()
+        for eacheline in content:
+            if eacheline.startswith("%"):
+                continue
+            eachData = eacheline.split(",")
+            time = int(eachData[0]) + float(eachData[1]) / 86400.0 / 7.0
+            if 529458 >= float(eachData[1]) >= 529020:   # 20240120 动态 星湖大楼四周绕圈 "02:55:00"-"03:04:00"
+            # if 534034 >= float(eachData[1]):   # 20240120 动态 星湖大楼四周绕圈 回程
+            # if 536047 >= float(eachData[1]) >= 534035:   # 静态 回程
+                result.update(
+                    {
+                        time: {
+                            "b": float(eachData[5]),
+                            "l": float(eachData[6]),
+                            "h": float(eachData[7]),
+                            # "num": int(eachData[7]),
+                            "stat": int(2),
+                        }
+                    }
+                )
+
+    return result
+
 
 def ReadMyResult(_file):
     """
@@ -91,11 +121,12 @@ def ReadMyResult(_file):
             # if 530887 >= float(eachData[1]) >= 530387:   # 20240120 动态  洪山广场
             # if 530362 >= float(eachData[1]) >= 530266:   # 20240120 动态  中南路
             # if 532239 >= float(eachData[1]) >= 532212:   # 20240120 动态  东湖凌波门
-            if 532239 >= float(eachData[1]) >= 532158:   # 20240120 动态  东湖南路
+            # if 532239 >= float(eachData[1]) >= 532158:   # 20240120 动态  东湖南路
             # if 531408 >= float(eachData[1]) >= 531230:   # 20240120 动态  东三路
             # if 529895 >= float(eachData[1]) >= 529801:   # 20240120 动态  劝业场
             # if 536047 >= float(eachData[1]) >= 534035:   # 20240120 静态 星湖大楼东侧门口
             # if 529012 >= float(eachData[1]) >= 528000:   # 20240120 静态 星湖大楼西北角
+            if 529458 >= float(eachData[1]) >= 529020:   # 20240120 动态 星湖大楼四周绕圈 "02:55:00"-"03:04:00"
                 result.update(
                     {
                         time: {
@@ -106,7 +137,7 @@ def ReadMyResult(_file):
                             "stat": float(eachData[8]),
                         }
                     }
-            )
+                )
     return result
 
 
