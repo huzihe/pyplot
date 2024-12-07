@@ -327,19 +327,19 @@ def DrawFigureLine(_stat, _stat2, _stat3, _figname):
         Time_hms[0 : len(_stat3.dy)],
         _stat3.dy,
         color='grey',linestyle='-', linewidth='0.8', #marker='.',markersize='2',
-        label=str(round(_stat3.rms[1]/100, 2)) + "/" + str(round(_stat3.rms[0]/100, 2)) + "   spp" ,
+        label=str(round(_stat3.rms[1]/100, 2)) + "/" + str(round(_stat3.rms[0]/100, 2)) + "   SPP" ,
     )
     plt.plot(
         Time_hms[0 : len(_stat2.dy)],
         _stat2.dy,
         color='deeppink',linestyle='-', linewidth='0.8', #marker='.',markersize='2',
-        label=str(round(_stat2.rms[1]/100, 2)) + "/" + str(round(_stat2.rms[0]/100, 2)) + "   spp-sm",
+        label=str(round(_stat2.rms[1]/100, 2)) + "/" + str(round(_stat2.rms[0]/100, 2)) + "   SM",
     )
     plt.plot(
         Time_hms[0 : len(_stat.dy)],
         _stat.dy,
         color='limegreen',linestyle='-', linewidth='0.8', #marker='.',markersize='1.5',
-        label=str(round(_stat.rms[1]/100, 2)) + "/" + str(round(_stat.rms[0]/100, 2)) + "   spp-sm-op",
+        label=str(round(_stat.rms[1]/100, 2)) + "/" + str(round(_stat.rms[0]/100, 2)) + "   SM-OP",
     )
     #   plt.plot(Time_hms[0:len(_stat.dy)], _stat.dy, 'red', label = 'rms_L: ' + str(round(_stat.rms[1], 3)) + 'cm')
     # plt.legend(loc="lower right",ncol=3,handletextpad=0)
@@ -602,7 +602,7 @@ if __name__ == "__main__":
         calFile3 = sys.argv[3]
         refFile = sys.argv[4]
     filename = calFile1.split(".")[0]
-    deltname ="-dynamic"  # 文件标记
+    deltname ="-dynamic-guoruan"  # 文件标记
     detFile = "det-" + filename + deltname + ".txt"
     detFile2 = "det-" + calFile2.split(".")[0] + deltname +".txt"
     detFile3 = "det-" + calFile3.split(".")[0] + deltname +".txt"

@@ -77,9 +77,12 @@ def Read3DMAResult2(_file):
                 continue
             eachData = eacheline.split(",")
             time = int(eachData[0]) + float(eachData[1]) / 86400.0 / 7.0
-            if 529458 >= float(eachData[1]) >= 529020:   # 20240120 动态 星湖大楼四周绕圈 "02:55:00"-"03:04:00"
+            # if 529458 >= float(eachData[1]) >= 529020:   # 20240120 动态 星湖大楼四周绕圈 "02:55:00"-"03:04:00"
             # if 534034 >= float(eachData[1]):   # 20240120 动态 星湖大楼四周绕圈 回程
             # if 536047 >= float(eachData[1]) >= 534035:   # 静态 回程
+            # if 533694 >= float(eachData[1]) >= 533681:   # 动态 西区宿舍南北向
+            if 533734 >= float(eachData[1]) >= 533721:   # 动态 国软南北向
+
                 result.update(
                     {
                         time: {
