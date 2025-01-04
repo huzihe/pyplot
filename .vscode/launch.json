@@ -303,6 +303,90 @@
             ]
         },
         {
+            "name": "Python: zbl-alloy-A-SM-0605",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20210605/",
+            "args": [
+                "Alloy-sm-20241203-A-0.5max.pos",
+                "Alloy-sm-20241203-A-0.7max.pos",
+                "Alloy-spp-20241203-A.pos",
+            ]
+        },
+        {
+            "name": "Python: zbl-alloy-B-SM-0605",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20210605/",
+            "args": [
+                "Alloy-sm-20241203-B-0.5max.pos",
+                "Alloy-sm-20241203-B-0.7max.pos",
+                "Alloy-spp-20241203-B.pos",
+            ]
+        },
+        {
+            "name": "Python: zbl-alloy-C-SM-0605",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20210605/",
+            "args": [
+                "Alloy-sm-20241203-C-0.5max.pos",
+                "Alloy-sm-20241203-C-0.7max.pos",
+                "Alloy-spp-20241203-C.pos",
+            ]
+        },
+        {
+            "name": "Python: zbl-ublox-A-SM-0605",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20210605/",
+            "args": [
+                "ublox-sm-20241203-A-0.7max.pos",
+                "ublox-sm-20241203-A-max-2.pos",
+                "ublox-spp-20241203-A.pos",
+            ]
+        },
+        {
+            "name": "Python: zbl-ublox-B-SM-0605",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20210605/",
+            "args": [
+                "ublox-sm-20241203-B-0.7max.pos",
+                "ublox-sm-20241203-B-max-2.pos",
+                "ublox-spp-20241203-B.pos",
+            ]
+        },
+        {
+            "name": "Python: zbl-ublox-C-SM-0605",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/20210605/",
+            "args": [
+                "ublox-sm-20241203-C-0.7max.pos",
+                "ublox-sm-20241203-C-max-2.pos",
+                "ublox-spp-20241203-C.pos",
+            ]
+        },
+        {
             "name": "Python: alloy0120",
             "type": "python",
             "request": "launch",

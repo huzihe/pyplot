@@ -30,11 +30,11 @@ def skysegmentaion(idir, filename, flag):
 
     # 输出中间过程文件
     if flag:
-        imdir = idir + "im/"
+        imdir = os.path.dirname(idir) + "/im/"
         if not os.path.exists(imdir):
             os.mkdir(imdir)
 
-    odir = idir + "out/"
+    odir = os.path.dirname(idir) + "/out/"
     if not os.path.exists(odir):
         os.mkdir(odir)
 

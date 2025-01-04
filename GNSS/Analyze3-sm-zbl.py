@@ -81,32 +81,6 @@ def CalDifference(_cal, _ref):
             dist = get_distance_hav(cal["b"],cal["l"],_ref[time]["b"],_ref[time]["l"])
     return result
 
-'''
-description: 
-param {*} _cal
-param {*} _ref 固定点
-return {*}
-'''
-def CalDifference2(_cal, _ref):
-
-    result = {}
-    for time, cal in _cal.items():
-        if time in _cal.keys():
-            result.update(
-                {
-                    time: {
-                        "b": get_deltB(cal["b"],cal["l"],_ref["b"],_ref["l"]),
-                        "l": get_deltL(cal["b"],cal["l"],_ref["b"],_ref["l"]),
-                        "h": cal["h"] - _ref["h"],
-                        "stat": cal["stat"],
-                    }
-                }
-            )
-            # b = get_distance_hav(cal["b"],cal["l"],_ref[time]["b"],cal["l"])
-            # l = get_distance_hav(_ref[time]["b"],cal["l"],_ref[time]["b"],_ref[time]["l"])
-            # dist = get_distance_hav(cal["b"],cal["l"],_ref[time]["b"],_ref[time]["l"])
-    return result
-
 
 def StatisticResult(_det):
     """
@@ -115,7 +89,7 @@ def StatisticResult(_det):
     input      : 残差序列:_det
     """
     all, fix = 0, 0
-    border = 200
+    border = 33
     _stat = cStat()
     for time, det in _det.items():
         all += 1
@@ -617,104 +591,45 @@ def DrawFigureLineWithSat(_stat, _stat2, _stat3, _satnum1, _satnum2, _figname):
     # plt.show()
 
 if __name__ == "__main__":
-    iszbl = False;
-    if iszbl:
-        if len(sys.argv) != 5:
-            print("#usage  :  Analyze.py result1_file result2_file result3_file ref_file")
-            print("#example:  Analyze.py re1.txt re2.txt re3.txt ref.txt")
-            sys.exit(0)
+    if len(sys.argv) != 5:
+        print("#usage  :  Analyze.py result1_file result2_file result3_file ref_file")
+        print("#example:  Analyze.py re1.txt re2.txt re3.txt ref.txt")
+        sys.exit(0)
 
-        if len(sys.argv) == 5:
-            calFile1 = sys.argv[1]
-            calFile2 = sys.argv[2]
-            calFile3 = sys.argv[3]
-            refFile = sys.argv[4]
-        filename = calFile1.split(".")[0]
-        deltname ="-dynamic-guoruan"  # 文件标记
-        detFile = "det-" + filename + deltname + ".txt"
-        detFile2 = "det-" + calFile2.split(".")[0] + deltname +".txt"
-        detFile3 = "det-" + calFile3.split(".")[0] + deltname +".txt"
-        figName = "fig-" + filename + deltname +".png"
+    if len(sys.argv) == 5:
+        calFile1 = sys.argv[1]
+        calFile2 = sys.argv[2]
+        calFile3 = sys.argv[3]
+        refFile = sys.argv[4]
+    filename = calFile1.split(".")[0]
+    deltname ="-dynamic-guoruan"  # 文件标记
+    detFile = "det-" + filename + deltname + ".txt"
+    detFile2 = "det-" + calFile2.split(".")[0] + deltname +".txt"
+    detFile3 = "det-" + calFile3.split(".")[0] + deltname +".txt"
+    figName = "fig-" + filename + deltname +".png"
 
-        # calValue = ReadMyResult(calFile1)
-        # calValue2 = ReadMyResult(calFile2)
-        # calValue3 = ReadMyResult(calFile3)
-        calValue = Read3DMAResult2(calFile1)
-        calValue2 = Read3DMAResult2(calFile2)
-        calValue3 = Read3DMAResult2(calFile3)
+    # calValue = ReadMyResult(calFile1)
+    # calValue2 = ReadMyResult(calFile2)
+    # calValue3 = ReadMyResult(calFile3)
+    calValue = Read3DMAResult2(calFile1)
+    calValue2 = Read3DMAResult2(calFile2)
+    calValue3 = Read3DMAResult2(calFile3)
 
-        refValue = ReadGINSResult(refFile)
+    refValue = ReadGINSResult(refFile)
 
-        detValue = CalDifference(calValue, refValue)
-        Stat = StatisticResult(detValue)
+    detValue = CalDifference(calValue, refValue)
+    Stat = StatisticResult(detValue)
 
-        detValue2 = CalDifference(calValue2, refValue)
-        stat2 = StatisticResult(detValue2)
+    detValue2 = CalDifference(calValue2, refValue)
+    stat2 = StatisticResult(detValue2)
 
-        detValue3 = CalDifference(calValue3, refValue)
-        stat3 = StatisticResult(detValue3)
+    detValue3 = CalDifference(calValue3, refValue)
+    stat3 = StatisticResult(detValue3)
 
-        ExportDifference(detFile, detValue)
-        ExportDifference(detFile2, detValue2)
-        ExportDifference(detFile3, detValue3)
-        DrawFigureLine(Stat, stat2, stat3, figName)
-    else:
-        if len(sys.argv) != 4:
-            print("#usage  :  Analyze.py result1_file result2_file result3_file")
-            print("#example:  Analyze.py re1.txt re2.txt re3.txt")
-            sys.exit(0)
-
-        if len(sys.argv) == 4:
-            calFile1 = sys.argv[1]
-            calFile2 = sys.argv[2]
-            calFile3 = sys.argv[3]
-            # refFile = sys.argv[4]
-        filename = calFile1.split(".")[0]
-        deltname ="-zbl"  # 文件标记
-        detFile = "det-" + filename + deltname + ".txt"
-        detFile2 = "det-" + calFile2.split(".")[0] + deltname +".txt"
-        detFile3 = "det-" + calFile3.split(".")[0] + deltname +".txt"
-        figName = "fig-" + filename + deltname +".png"
-
-        calValue = Read3DMAResult2(calFile1)
-        calValue2 = Read3DMAResult2(calFile2)
-        calValue3 = Read3DMAResult2(calFile3)
-
-        refValue = {}
-        # # 中北路 pt1
-        # refValue.update({
-        #     "b": float(30.555352774666694),
-        #     "l": float(114.33412280293444),
-        #     "h": float(19.34628),
-        # })
-        
-        # # 中北路 pt2
-        # refValue.update({
-        #     "b": float(30.554838697377807),
-        #     "l": float(114.33387322707013),
-        #     "h": float(19.00775),
-        # })
-
-        # 中北路 pt3
-        refValue.update({
-            "b": float(30.556086704722812),
-            "l": float(114.33458625672274),
-            "h": float(18.72402),
-        })
-
-        detValue = CalDifference2(calValue, refValue)
-        Stat = StatisticResult(detValue)
-
-        detValue2 = CalDifference2(calValue2, refValue)
-        stat2 = StatisticResult(detValue2)
-
-        detValue3 = CalDifference2(calValue3, refValue)
-        stat3 = StatisticResult(detValue3)
-
-        ExportDifference(detFile, detValue)
-        ExportDifference(detFile2, detValue2)
-        ExportDifference(detFile3, detValue3)
-        DrawFigureLine(Stat, stat2, stat3, figName)
+    ExportDifference(detFile, detValue)
+    ExportDifference(detFile2, detValue2)
+    ExportDifference(detFile3, detValue3)
+    DrawFigureLine(Stat, stat2, stat3, figName)
     
     # # 带卫星数的统计
     # kmrnx = "../p40-kmeans-0120.rnx"
