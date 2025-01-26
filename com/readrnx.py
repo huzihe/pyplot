@@ -1,7 +1,7 @@
 '''
 Author: hzh huzihe@whu.edu.cn
 Date: 2023-08-13 21:05:21
-LastEditTime: 2024-07-06 15:50:12
+LastEditTime: 2025-01-25 17:39:39
 FilePath: /pyplot/com/readrnx.py
 Descripttion: 
 '''
@@ -58,7 +58,9 @@ def readrnx(rnx):
                     # if 529895 >= float(ws[1]) >= 529801: # 20240120 动态  劝业场
                     # if 530362 >= float(ws[1]) >= 530266: # 20240120 动态  中南路
                     # if 532239 >= float(ws[1]) >= 532212:   # 20240120 动态  凌波门
-                    if 532239 >= float(ws[1]) >= 532158:   # 20240120 动态  东湖南路
+                    # if 532239 >= float(ws[1]) >= 532158:   # 20240120 动态  东湖南路
+                    # if 534035 >= float(ws[1]) >= 533671:     # 20140120 动态 星湖大楼四周
+                    if 536020 >= float(ws[1]) >= 534035:     # 20140120 静态 星湖大楼东侧门口
                     # if time >0:
                         result.update(
                             {
@@ -85,8 +87,10 @@ def readrnx(rnx):
                                 substr = eachLine[48 * itr + 18]
                                 if substr == '1':
                                     los = los + 1
+                                    break
                                 if substr == "0":
                                     nlos = nlos + 1
+                                    break
                             else:
                                 break
                         continue

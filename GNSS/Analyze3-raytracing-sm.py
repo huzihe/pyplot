@@ -216,7 +216,7 @@ def DrawFigure(_stat, _stat2, _stat3, _figname):
     if max(_stat.max[0:2]) / 100 > 5:
         plt.ylim(-limMax, limMax)
     plt.gca().xaxis.set_ticklabels([])
-    plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
+    plt.grid(True)
     plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
 
     # plt.plot(Time_hms[0 : len(_stat.dx)],_stat.dx,color='C1',linestyle='', marker='.',markersize='2',label="satellite")
@@ -248,7 +248,7 @@ def DrawFigure(_stat, _stat2, _stat3, _figname):
         plt.ylim(-max(_stat.max[0:1]) / 100, max(_stat.max[0:1]) / 100)
     # plt.gca().xaxis.set_major_formatter(myFmt)
     plt.gca().xaxis.set_ticklabels([])
-    plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
+    plt.grid(True)
     plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
 
     plt.subplot(3, 1, 3)
@@ -276,7 +276,7 @@ def DrawFigure(_stat, _stat2, _stat3, _figname):
     if max(_stat.max[0:2]) / 100 > 5:
         plt.ylim(-limMax, limMax)
     plt.gca().xaxis.set_major_formatter(myFmt)
-    plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
+    plt.grid(True)
     plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
     plt.subplots_adjust(wspace =0, hspace =0.05)#调整子图间距
 
@@ -333,13 +333,13 @@ def DrawFigureLine(_stat, _stat2, _stat3, _figname):
         Time_hms[0 : len(_stat2.dy)],
         _stat2.dy,
         color='deeppink',linestyle='-', linewidth='0.8', #marker='.',markersize='2',
-        label=str(round(_stat2.rms[1]/100, 2)) + "/" + str(round(_stat2.rms[0]/100, 2)) + "/" + str(round(_stat2.rms[2]/100, 2)) + "     SPP-XGB",
+        label=str(round(_stat2.rms[1]/100, 2)) + "/" + str(round(_stat2.rms[0]/100, 2)) + "/" + str(round(_stat2.rms[2]/100, 2)) + " SPP-SM",
     )
     plt.plot(
         Time_hms[0 : len(_stat.dy)],
         _stat.dy,
         color='limegreen',linestyle='-', linewidth='0.8', #marker='.',markersize='1.5',
-        label=str(round(_stat.rms[1]/100, 2)) + "/" + str(round(_stat.rms[0]/100, 2)) + "/" + str(round(_stat.rms[2]/100, 2)) + "     SPP-KMeans",
+        label=str(round(_stat.rms[1]/100, 2)) + "/" + str(round(_stat.rms[0]/100, 2)) + "/" + str(round(_stat.rms[2]/100, 2)) + " SPP-RT",
     )
     #   plt.plot(Time_hms[0:len(_stat.dy)], _stat.dy, 'red', label = 'rms_L: ' + str(round(_stat.rms[1], 3)) + 'cm')
     # plt.legend(loc="lower right",ncol=3,handletextpad=0)
@@ -416,7 +416,7 @@ def DrawFigureLine(_stat, _stat2, _stat3, _figname):
     plt.savefig(_figname, bbox_inches="tight")
     # plt.show()
 
-def DrawFigureLineWithSat(_stat, _stat2, _stat3, _satnum1, _satnum2, _figname):
+def DrawFigureLineWithSat(_stat, _stat2, _stat3, _satnum1, _figname):
     """
     @author    : shengyixu Created on 2022.8.20
     Purpose    : 绘制散点图或折线图
@@ -450,7 +450,7 @@ def DrawFigureLineWithSat(_stat, _stat2, _stat3, _satnum1, _satnum2, _figname):
         )
     Time_hms = [datetime.strptime(date, "%Y-%m-%d %H:%M:%S") for date in Time_hms]
 
-    limMax = 8
+    limMax = 60
     mScale = 0.7
     lWidth = 0.8
     # locator = mdates.SecondLocator(30)
@@ -465,32 +465,29 @@ def DrawFigureLineWithSat(_stat, _stat2, _stat3, _satnum1, _satnum2, _figname):
         Time_hms[0 : len(_stat2.dx)],
         _stat3.dy,
         color='grey', linestyle='-', linewidth= lWidth, marker='o',markersize= mScale,
-        label=str(round(_stat3.rms[1]/100, 2)) + "/" + str(round(_stat3.rms[0]/100, 2)) + "/" + str(round(_stat3.rms[2]/100, 2)) +"   SPP" ,
-        # label = "SPP",
+        label=str(round(_stat3.rms[1]/100, 2)) + "/" + str(round(_stat3.rms[0]/100, 2)) + "/" + str(round(_stat3.rms[2]/100, 2)) +" SPP" ,
     )
     plt.plot(
         Time_hms[0 : len(_stat2.dy)],
         _stat2.dy,
         color='deeppink', linestyle='-', linewidth= lWidth, marker='o',markersize= mScale,
-        label=str(round(_stat2.rms[1]/100, 2)) + "/" + str(round(_stat2.rms[0]/100, 2)) + "/" + str(round(_stat2.rms[2]/100, 2)) + " XGBoost",
-        # label = "XGBoost",
+        label=str(round(_stat2.rms[1]/100, 2)) + "/" + str(round(_stat2.rms[0]/100, 2)) + "/" + str(round(_stat2.rms[2]/100, 2)) + " SPP-SM",
     )
     plt.plot(
         Time_hms[0 : len(_stat.dy)],
         _stat.dy,
         color='limegreen', linestyle='-', linewidth= lWidth, marker='o',markersize= mScale,
-        label=str(round(_stat.rms[1]/100, 2)) + "/" + str(round(_stat.rms[0]/100, 2)) + "/" + str(round(_stat.rms[2]/100, 2)) + " K-Means",
-        # label = "K-Means",
+        label=str(round(_stat.rms[1]/100, 2)) + "/" + str(round(_stat.rms[0]/100, 2)) + "/" + str(round(_stat.rms[2]/100, 2)) + " SPP-RT",
     )
     #   plt.plot(Time_hms[0:len(_stat.dy)], _stat.dy, 'red', label = 'rms_L: ' + str(round(_stat.rms[1], 3)) + 'cm')
     # plt.legend(loc="lower right",ncol=3,handletextpad=0)
-    # plt.legend(loc="upper left",bbox_to_anchor=(0,1.35),ncol=3,markerscale=1.5, handletextpad=0,columnspacing=0.5, frameon=False)
     plt.legend(loc="upper left",bbox_to_anchor=(0.005,1.8),markerscale=1, handletextpad=0.5,frameon=False)
     plt.ylabel("dE(m)")
     plt.ylim(-max(_stat.max[0:1]) / 100, max(_stat.max[0:1]) / 100)
     if max(_stat.max[0:2]) / 100 > 2:
         plt.ylim(-limMax, limMax)
-    plt.gca().xaxis.set_major_locator(locator)
+    # plt.gca().xaxis.set_major_locator(locator)
+    plt.gca().xaxis.set_major_formatter(myFmt)
     plt.gca().xaxis.set_ticklabels([])
     plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
     plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
@@ -521,15 +518,15 @@ def DrawFigureLineWithSat(_stat, _stat2, _stat3, _satnum1, _satnum2, _figname):
         plt.ylim(-limMax, limMax)
     else:
         plt.ylim(-max(_stat.max[0:1]) / 100, max(_stat.max[0:1]) / 100)
-    # plt.gca().xaxis.set_major_formatter(myFmt)
-    plt.gca().xaxis.set_major_locator(locator)
+    # plt.gca().xaxis.set_major_locator(locator)
+    plt.gca().xaxis.set_major_formatter(myFmt)
     plt.gca().xaxis.set_ticklabels([])
     plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
     plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
 
     plt.subplot(4, 1, 3)
     plt.plot(
-        Time_hms[0 : len(_stat2.dx)],
+        Time_hms[0 : len(_stat3.dz)],
         _stat3.dz,
         color='grey',linestyle='-', linewidth= lWidth, marker='o',markersize= mScale,
         # label="spp: " + str(round(_stat3.rms[2]/100, 3)) + "m",
@@ -551,42 +548,206 @@ def DrawFigureLineWithSat(_stat, _stat2, _stat3, _satnum1, _satnum2, _figname):
     plt.ylim(-max(_stat.max[0:1]) / 100, max(_stat.max[0:1]) / 100)
     if max(_stat.max[0:2]) / 100 > 2:
         plt.ylim(-95, 95)
-    # plt.yticks(np.arange(-80, 80+0.1, 80))
-    plt.gca().xaxis.set_major_locator(locator)
+    plt.yticks(np.arange(-80, 80+0.1, 80))
+    # plt.gca().xaxis.set_major_locator(locator)
+    plt.gca().xaxis.set_major_formatter(myFmt)
     plt.gca().xaxis.set_ticklabels([])
-    # plt.gca().xaxis.set_major_formatter(myFmt)
     plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
+
     plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
 
     plt.subplot(4, 1, 4)
     plt.plot(
-        Time_hms[0 : len(_stat2.dx)],
+        Time_hms[0 : len(_satnum1.dz)],
         _satnum1.dz,
-        color='grey',
+        color='red',
         linestyle='-',linewidth= lWidth, marker='o',markersize= mScale,
-        # label="Satellite"
+        label="All"
         )
     plt.plot(
-        Time_hms[0 : len(_stat2.dx)],
+        Time_hms[0 : len(_satnum1.dy)],
         _satnum1.dy,
-        color='limegreen',
+        color='blue',
         linestyle='-',linewidth= lWidth, marker='o',markersize= mScale,
-        # label="kmeans"
+        label="LOS"
         )
-    plt.plot(
-        Time_hms[0 : len(_stat2.dx)],
-        _satnum2.dy,
-        color='deeppink',
-        linestyle='-',linewidth= lWidth, marker='o',markersize= mScale,
-        # label="xgboost"
-        )
-    # plt.legend(loc="lower right",)
+    plt.legend(loc="lower right",)
     plt.ylabel("Sat. Num")
-    plt.ylim(0, 25)
+    plt.ylim(0, 30)
     plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
     plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
-    plt.gca().xaxis.set_major_locator(locator)
+    plt.gca().xaxis.set_major_formatter(myFmt)
+    plt.subplots_adjust(wspace =0, hspace =0.05)#调整子图间距
 
+    # plt.xlabel("Time")
+    plt.savefig(_figname, bbox_inches="tight")
+    # plt.show()
+
+def DrawFigureLineWithSat1(_stat, _stat2, _stat3, _satnum1, _figname):
+    """
+    @author    : shengyixu Created on 2022.8.20
+    Purpose    : 绘制散点图或折线图
+    input      : 类cStat的对象:_stat
+    """
+    # 时间格式：%Y-%m-%d %H:%M:%S，x轴显示：%H:%M:%S
+    ymdhms = np.zeros((len(_stat.gpsw), 6), dtype=float)
+    Time_hms = []
+    for ieph in range(0, len(_stat.gpsw)):
+        (
+            ymdhms[ieph][0],
+            ymdhms[ieph][1],
+            ymdhms[ieph][2],
+            ymdhms[ieph][3],
+            ymdhms[ieph][4],
+            ymdhms[ieph][5],
+        ) = gpsws2ymdhms(
+            int(_stat.gpsw[ieph]),
+            (_stat.gpsw[ieph] - int(_stat.gpsw[ieph])) * 86400 * 7,
+        )
+        Time_hms.append(
+            "%04d-%02d-%02d %02d:%02d:%02d"
+            % (
+                ymdhms[ieph][0],
+                ymdhms[ieph][1],
+                ymdhms[ieph][2],
+                ymdhms[ieph][3],
+                ymdhms[ieph][4],
+                ymdhms[ieph][5],
+            )
+        )
+    Time_hms = [datetime.strptime(date, "%Y-%m-%d %H:%M:%S") for date in Time_hms]
+
+    limMax = 60
+    mScale = 0.7
+    lWidth = 0.8
+    # locator = mdates.SecondLocator(30)
+    locator = mdates.SecondLocator(bysecond=[0, 30])
+
+    ## draw position
+    # plt.figure(dpi=300, figsize=(14.4/Inch, 10/Inch))
+    plt.figure(dpi=300,figsize=(4.0,4*1.0))
+    myFmt = mdates.DateFormatter("%M:%S")
+    plt.subplot(4, 1, 1)
+    plt.plot(
+        Time_hms[0 : len(_stat2.dx)],
+        _stat3.dy,
+        color='grey', linestyle='-', linewidth= lWidth, marker='o',markersize= mScale,
+        label = "SPP" ,
+        # label=str(round(_stat3.rms[1]/100, 2)) + "/" + str(round(_stat3.rms[0]/100, 2)) + "/" + str(round(_stat3.rms[2]/100, 2)) +" SPP" ,
+    )
+    plt.plot(
+        Time_hms[0 : len(_stat2.dy)],
+        _stat2.dy,
+        color='deeppink', linestyle='-', linewidth= lWidth, marker='o',markersize= mScale,
+        label = "NLOS-W" ,
+        # label=str(round(_stat2.rms[1]/100, 2)) + "/" + str(round(_stat2.rms[0]/100, 2)) + "/" + str(round(_stat2.rms[2]/100, 2)) + " SPP-SM",
+    )
+    plt.plot(
+        Time_hms[0 : len(_stat.dy)],
+        _stat.dy,
+        color='limegreen', linestyle='-', linewidth= lWidth, marker='o',markersize= mScale,
+        label = "SPP-RT" ,
+        # label=str(round(_stat.rms[1]/100, 2)) + "/" + str(round(_stat.rms[0]/100, 2)) + "/" + str(round(_stat.rms[2]/100, 2)) + " SPP-RT",
+    )
+    #   plt.plot(Time_hms[0:len(_stat.dy)], _stat.dy, 'red', label = 'rms_L: ' + str(round(_stat.rms[1], 3)) + 'cm')
+    # plt.legend(loc="lower right",ncol=3,handletextpad=0)
+    plt.legend(loc="upper left",bbox_to_anchor=(0,1.35),ncol=3,markerscale=1.5, handletextpad=0,columnspacing=0.5, frameon=False)
+    # plt.legend(loc="upper left",bbox_to_anchor=(0.005,1.8),markerscale=1, handletextpad=0.5,frameon=False)
+    plt.ylabel("dE(m)")
+    plt.ylim(-max(_stat.max[0:1]) / 100, max(_stat.max[0:1]) / 100)
+    if max(_stat.max[0:2]) / 100 > 2:
+        plt.ylim(-limMax, limMax)
+    # plt.gca().xaxis.set_major_locator(locator)
+    plt.gca().xaxis.set_major_formatter(myFmt)
+    plt.gca().xaxis.set_ticklabels([])
+    plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
+    plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
+
+    # plt.plot(Time_hms[0 : len(_stat.dx)],_stat.dx,color='C1',linestyle='', marker='.',markersize='2',label="satellite")
+
+    plt.subplot(4, 1, 2)
+    plt.plot(
+        Time_hms[0 : len(_stat3.dx)],
+        _stat3.dx,
+        color='grey',linestyle='-', linewidth= lWidth, marker='o',markersize= mScale,
+        # label=str(round(_stat3.rms[0]/100, 2)) + "/" + str(round(_stat3.rms[1]/100, 2)) + "/" + str(round(_stat3.rms[2]/100, 2)) +" spp" ,
+    )
+    plt.plot(
+        Time_hms[0 : len(_stat2.dx)],
+        _stat2.dx,
+        color='deeppink',linestyle='-', linewidth= lWidth, marker='o',markersize= mScale,
+        # label=str(round(_stat2.rms[0]/100, 2)) + "/" + str(round(_stat2.rms[1]/100, 2)) + "/" + str(round(_stat2.rms[2]/100, 2)) + " spp-xgb",
+    )
+    plt.plot(
+        Time_hms[0 : len(_stat.dx)],
+        _stat.dx,
+        color='limegreen',linestyle='-', linewidth= lWidth, marker='o',markersize= mScale,
+        # label=str(round(_stat.rms[0]/100, 2)) + "/" + str(round(_stat.rms[1]/100, 2)) + "/" + str(round(_stat.rms[2]/100, 2)) + " spp-kmeans",
+    )
+    plt.ylabel("dN(m)")
+    if max(_stat.max[0:2]) / 100 > 2:
+        plt.ylim(-limMax, limMax)
+    else:
+        plt.ylim(-max(_stat.max[0:1]) / 100, max(_stat.max[0:1]) / 100)
+    # plt.gca().xaxis.set_major_locator(locator)
+    plt.gca().xaxis.set_major_formatter(myFmt)
+    plt.gca().xaxis.set_ticklabels([])
+    plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
+    plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
+
+    plt.subplot(4, 1, 3)
+    plt.plot(
+        Time_hms[0 : len(_stat3.dz)],
+        _stat3.dz,
+        color='grey',linestyle='-', linewidth= lWidth, marker='o',markersize= mScale,
+        # label="spp: " + str(round(_stat3.rms[2]/100, 3)) + "m",
+    )
+    plt.plot(
+        Time_hms[0 : len(_stat2.dz)],
+        _stat2.dz,
+        color='deeppink',linestyle='-', linewidth= lWidth, marker='o',markersize= mScale,
+        # label="spp_xgb: " + str(round(_stat2.rms[2]/100, 3)) + "m",
+    )
+    plt.plot(
+        Time_hms[0 : len(_stat.dz)],
+        _stat.dz,
+        color='limegreen',linestyle='-', linewidth= lWidth, marker='o',markersize= mScale,
+        # label="spp_kmeans: " + str(round(_stat.rms[2]/100, 3)) + "m",
+    )
+    # plt.legend(loc="lower right",ncol=3,handletextpad=0)
+    plt.ylabel("dU(m)")
+    plt.ylim(-max(_stat.max[0:1]) / 100, max(_stat.max[0:1]) / 100)
+    if max(_stat.max[0:2]) / 100 > 2:
+        plt.ylim(-95, 95)
+    plt.yticks(np.arange(-80, 80+0.1, 80))
+    # plt.gca().xaxis.set_major_locator(locator)
+    plt.gca().xaxis.set_major_formatter(myFmt)
+    plt.gca().xaxis.set_ticklabels([])
+    plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
+
+    plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
+
+    plt.subplot(4, 1, 4)
+    plt.plot(
+        Time_hms[0 : len(_satnum1.dz)],
+        _satnum1.dz,
+        color='red',
+        linestyle='-',linewidth= lWidth, marker='o',markersize= mScale,
+        label="All"
+        )
+    plt.plot(
+        Time_hms[0 : len(_satnum1.dy)],
+        _satnum1.dy,
+        color='blue',
+        linestyle='-',linewidth= lWidth, marker='o',markersize= mScale,
+        label="LOS"
+        )
+    plt.legend(loc="lower right",)
+    plt.ylabel("Sat. Num")
+    plt.ylim(0, 30)
+    plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
+    plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
+    plt.gca().xaxis.set_major_formatter(myFmt)
     plt.subplots_adjust(wspace =0, hspace =0.05)#调整子图间距
 
     # plt.xlabel("Time")
@@ -605,7 +766,7 @@ if __name__ == "__main__":
         calFile3 = sys.argv[3]
         refFile = sys.argv[4]
     filename = calFile1.split(".")[0]
-    deltname ="-donghunanlu—0119"  # 文件标记
+    deltname ="-sw-sat-0125"  # 文件标记
     detFile = "det-" + filename + deltname + ".txt"
     detFile2 = "det-" + calFile2.split(".")[0] + deltname +".txt"
     detFile3 = "det-" + calFile3.split(".")[0] + deltname +".txt"
@@ -631,12 +792,16 @@ if __name__ == "__main__":
     ExportDifference(detFile3, detValue3)
     # DrawFigureLine(Stat, stat2, stat3, figName)
     
-    kmrnx = "../p40-kmeans-0120.rnx"
-    kmeans = readrnx(kmrnx)
-    kmeansSatnum = StatisticSatNumResult(kmeans)
+    # 带卫星数的统计
+    nlosrnx = "alloy-3dma-0120.rnx"
+    # nlosrnx = "ublox-3dma-0120.rnx"
+    # nlosrnx = "p40-3dma-0120.rnx"
+    nlosd = readrnx(nlosrnx)
+    nlosSatnum = StatisticSatNumResult(nlosd)
+    # nlosSatnum.dx.pop()
+    # nlosSatnum.dy.pop()
+    # nlosSatnum.dz.pop()
 
-    xgbrnx = "../p40-xgboost-0120.rnx"
-    xgboost = readrnx(xgbrnx)
-    xgbSatnum = StatisticSatNumResult(xgboost)
 
-    DrawFigureLineWithSat(Stat, stat2, stat3, kmeansSatnum, xgbSatnum, figName)
+    DrawFigureLineWithSat(Stat, stat2, stat3, nlosSatnum, figName)
+    # DrawFigureLineWithSat1(Stat, stat2, stat3, nlosSatnum, figName)

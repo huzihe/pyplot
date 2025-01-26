@@ -9,6 +9,11 @@ Descripttion:
 @author    : shengyixu Created on 2022.8.20
 Purpose    : 读取各软件输出的结果文件
 """
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
+
+from mytime import ymdhms2gpsws
 
 
 def ReadGINSResult(_file):
@@ -81,8 +86,8 @@ def Read3DMAResult2(_file):
             # if 534034 >= float(eachData[1]):   # 20240120 动态 星湖大楼四周绕圈 回程
             # if 536047 >= float(eachData[1]) >= 534035:   # 静态 回程
             # if 533694 >= float(eachData[1]) >= 533681:   # 动态 西区宿舍南北向
-            if 533734 >= float(eachData[1]) >= 533721:   # 动态 国软南北向
-
+            # if 533734 >= float(eachData[1]) >= 533721:   # 动态 国软南北向
+            if 536020 >= float(eachData[1]) >= 533670:     # 20140120 动态 星湖大楼四周+东侧门口
                 result.update(
                     {
                         time: {
@@ -129,7 +134,10 @@ def ReadMyResult(_file):
             # if 529895 >= float(eachData[1]) >= 529801:   # 20240120 动态  劝业场
             # if 536047 >= float(eachData[1]) >= 534035:   # 20240120 静态 星湖大楼东侧门口
             # if 529012 >= float(eachData[1]) >= 528000:   # 20240120 静态 星湖大楼西北角
-            if 529458 >= float(eachData[1]) >= 529020:   # 20240120 动态 星湖大楼四周绕圈 "02:55:00"-"03:04:00"
+            # if 529458 >= float(eachData[1]) >= 529020:   # 20240120 动态 星湖大楼四周绕圈 "02:55:00"-"03:04:00"
+            # if 536020 >= float(eachData[1]) >= 533670:     # 20140120 动态 星湖大楼四周+东侧门口
+            # if 534035 >= float(eachData[1]) >= 533671:     # 20140120 动态 星湖大楼四周
+            if 536020 >= float(eachData[1]) >= 534035:     # 20140120 静态 星湖大楼东侧门口
                 result.update(
                     {
                         time: {
@@ -173,3 +181,57 @@ def ReadIERefResult(_file):
                 }
             )  # note stat shoule be 14
     return result
+
+def ReadPandaResult(_file):
+    '''
+    Author: hzh
+    Date: 2025-01-25 23:34:34
+    LastEditTime: 2025-01-26 10:12:12
+    FilePath: /pyplot/com/panda2csv.py
+    Descripttion: 
+    '''
+    result = {}
+    with open(_file, "r") as file:
+        lines = file.readlines()
+        # 找到 "END OF HEADER" 行的索引
+        end_header_index = next((i for i, line in enumerate(lines) if line.startswith("##-> END OF HEADER")), None)
+        if end_header_index is None:
+            raise ValueError("文件头部分未找到 '##-> END OF HEADER' 标记")
+    
+        content = lines[end_header_index + 1:]
+        
+        for eachLine in content:
+            if eachLine.startswith("%"):
+                continue
+            # eachData = eachLine.split(",")
+            # data.append(row)
+            # GPSweek(int) + GPSsecond => week(float)
+            eachData = eachLine.strip().split()
+            ws = ymdhms2gpsws(
+                int(eachData[0]),
+                int(eachData[1]),
+                int(eachData[2]),
+                int(eachData[3]),
+                int(eachData[4]),
+                int(float(eachData[5])),
+            )
+            time = int(ws[0]) + float(ws[1]) / 86400.0 / 7.0
+            # if 536020 >= float(eachData[1]) >= 533670:     # 20140120 动态 星湖大楼四周+东侧门口
+            # if 534035 >= float(eachData[1]) >= 533671:     # 20140120 动态 星湖大楼四周
+            # if 536020 >= float(eachData[1]) >= 534035:     # 20140120 静态 星湖大楼东侧门口
+            result.update(
+                {
+                    time: {
+                        "b": float(eachData[16]),
+                        "l": float(eachData[17]),
+                        "h": float(eachData[18]),
+                        "num": float(eachData[19]),
+                        "stat": float(eachData[26]),
+                    }
+                }
+            )
+    return result
+
+if __name__ == '__main__':
+    ppp = './data/202401/PPP/pos_2024020_ally_3d_if'
+    stat = ReadPandaResult(ppp)

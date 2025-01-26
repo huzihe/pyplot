@@ -258,6 +258,51 @@
             ]
         },
         {
+            "name": "Python: alloy-SPP-SM-0120",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/202401/shadowmatching/",
+            "args": [
+                "spp-lsq-alloy-0120-rt-weight.txt",
+                "spp-lsq-alloy-0120-sm.txt",
+                "spp-lsq-alloy-0120.txt",
+                "gins.txt"
+            ]
+        },
+        {
+            "name": "Python: ublox-SPP-SM-0120",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/202401/shadowmatching/",
+            "args": [
+                "spp-lsq-ublox-0120-rt-weight.txt",
+                "spp-lsq-ublox-0120-sm.txt",
+                "spp-lsq-ublox-0120.txt",
+                "gins.txt"
+            ]
+        },
+        {
+            "name": "Python: p40-SPP-SM-0120",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/202401/shadowmatching/",
+            "args": [
+                "spp-lsq-p40-0120-rt-weight.txt",
+                "spp-lsq-p40-0120-sm.txt",
+                "spp-lsq-p40-0120.txt",
+                "gins.txt"
+            ]
+        },
+        {
             "name": "Python: 1-P40-SM-0120",
             "type": "python",
             "request": "launch",
