@@ -1,7 +1,7 @@
 '''
 Author: hzh huzihe@whu.edu.cn
 Date: 2024-12-01 11:21:32
-LastEditTime: 2024-12-02 00:11:14
+LastEditTime: 2025-01-27 11:30:41
 FilePath: /pyplot/GNSS/statics-bar.py
 Descripttion: 
 '''
@@ -38,6 +38,38 @@ def DrawBarGroup(_figname):
     ax1.bar(x, u_blox, 0.8*width, label='u-blox', color='red')
     ax1.bar(x + width, p40, 0.8*width, label='P40', color='LimeGreen')
     ax1.set_ylabel('Silhouette coefficient')
+    ax1.set_xticks(x)
+    ax1.set_xticklabels(labels)
+    ax1.legend()
+    # 调整布局并显示
+    ax1.set_axisbelow(True)
+    plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
+    plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
+
+    plt.tight_layout()
+    plt.savefig(_figname, bbox_inches="tight")
+    # plt.show()
+
+def DrawBarGroupPPP(_figname):
+    # 数据准备
+    labels = ['E', 'N', 'U']
+    PPP = [4.40, 3.92, 13.32]
+    PPP_NLOS_W = [1.95, 0.35, 2.08]
+    PPP_RT = [1.94, 0.34, 2.09]
+
+    x = np.arange(len(labels))  # 横坐标位置
+    width = 0.15  # 柱状图宽度
+
+    inch = 1/2.54
+
+    plt.figure(dpi=300, figsize=(9*inch, 6*inch))
+    plt.subplots_adjust(wspace =0.1, hspace =0)#调整子图间距        
+    ax1 = plt.subplot(1,1,1)
+    # 创建图形与子图
+    ax1.bar(x - width, PPP, 0.8*width, label='PPP', color='blue')
+    ax1.bar(x, PPP_NLOS_W, 0.8*width, label='PPP-NLOS-W', color='red')
+    ax1.bar(x + width, PPP_RT, 0.8*width, label='PPP-RT', color='LimeGreen')
+    ax1.set_ylabel('RMS (m)')
     ax1.set_xticks(x)
     ax1.set_xticklabels(labels)
     ax1.legend()
@@ -103,9 +135,68 @@ def DrawBarGroup2(_figname):
     plt.savefig(_figname, bbox_inches="tight")
     # plt.show()
 
+def DrawBarGroupPPP2(_figname):
+    # 数据准备
+    labels = ['E', 'N', 'U']
+    PPP = [4.40, 3.92, 13.32]
+    PPP_NLOS_W = [1.95, 0.35, 2.08]
+    PPP_RT = [1.94, 0.34, 2.09]
+
+    dPPP = [4.26, 5.23, 11.2]
+    dPPP_NLOS_W = [1.57, 0.66, 2.69]
+    dPPP_RT = [1.6, 1.04, 2.82]
+
+    x = np.arange(len(labels))  # 横坐标位置
+    width = 0.15  # 柱状图宽度
+    inch = 1/2.54
+    plt.figure(dpi=300, figsize=(11.9*inch, 8*inch))
+    plt.subplots_adjust(wspace =0.1, hspace =0)#调整子图间距
+    
+    ax1 = plt.subplot(1,2,1)
+    # 创建图形与子图
+    ax1.bar(x - width, PPP, 0.8*width, color='blue')
+    ax1.bar(x, PPP_NLOS_W, 0.8*width, color='red')
+    ax1.bar(x + width, PPP_RT, 0.8*width, color='LimeGreen')
+    ax1.set_ylabel('static RMS (m)')
+    plt.ylim(0,15)
+    ax1.set_xticks(x)
+    ax1.set_xticklabels(labels)
+    # ax1.legend()
+    ax1.set_axisbelow(True)
+    
+    plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
+    plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
+
+    ax2 = plt.subplot(1,2,2)
+    # 右侧子图：Cross Street
+    ax2.bar(x - width, dPPP, 0.8*width, label='PPP', color='blue')
+    ax2.bar(x, dPPP_NLOS_W, 0.8*width, label='PPP-W', color='red')
+    ax2.bar(x + width, dPPP_RT, 0.8*width, label='PPP-RT', color='LimeGreen')
+    ax2.set_ylabel('kinermatic RMS (m)')
+    plt.ylim(0,15)
+    ax2.set_xticks(x)
+    ax2.yaxis.set_major_formatter(plt.NullFormatter())  # 隐藏右侧纵坐标数值
+    ax2.set_xticklabels(labels)
+    ax2.legend()
+    ax2.set_axisbelow(True)
+
+    # 调整布局并显示
+    plt.grid(True, color='lightgray', linestyle='-', linewidth=0.5, zorder=0)
+    plt.gca().tick_params(axis='both', direction='in', length=2, which='both', top=True)
+
+    plt.tight_layout()
+    plt.savefig(_figname, bbox_inches="tight")
+    # plt.show()
+
 if __name__ == "__main__":
     
     figName = "./data/SM-bar.png"
     # DrawBarGroup(figName)
-    figName = "./data/SM-bar2.png"
-    DrawBarGroup2(figName)
+    # figName = "./data/SM-bar2.png"
+    # DrawBarGroup2(figName)
+
+    # PPPfigName = "./data/PPP-bar.png"
+    # DrawBarGroupPPP(PPPfigName)
+
+    PPPfigName = "./data/PPP-bar2.png"
+    DrawBarGroupPPP2(PPPfigName)

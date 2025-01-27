@@ -1,7 +1,7 @@
 '''
 Author: hzh huzihe@whu.edu.cn
 Date: 2025-01-25 23:34:34
-LastEditTime: 2025-01-26 10:12:12
+LastEditTime: 2025-01-27 09:47:07
 FilePath: /pyplot/com/panda2csv.py
 Descripttion: 
 '''
@@ -37,24 +37,72 @@ def text_to_csv(text_file, csv_file):
     writer.writerows(data)
 
 # 示例用法
-text_file = './data/202401/PPP/pos_2024020_ally_3d_if'
-csv_file = './data/202401/PPP/pos_2024020_ally_3d_if.csv'
+# text_file = './data/202401/PPP/pos_2024020_ally_3d_if'
+# csv_file = './data/202401/PPP/pos_2024020_ally_3d_if.csv'
+# text_to_csv(text_file, csv_file)
+
+# text_file = './data/202401/PPP/pos_2024020_ally_3d_if_dw'
+# csv_file = './data/202401/PPP/pos_2024020_ally_3d_if_dw.csv'
+# text_to_csv(text_file, csv_file)
+
+# text_file = './data/202401/PPP/pos_2024020_ally_rt_if_del'
+# csv_file = './data/202401/PPP/pos_2024020_ally_rt_if_del.csv'
+# text_to_csv(text_file, csv_file)
+
+# text_file = './data/202401/PPP/pos_2024020_ally_rt_if'
+# csv_file = './data/202401/PPP/pos_2024020_ally_rt_if.csv'
+# text_to_csv(text_file, csv_file)
+
+# text_file = './data/202401/PPP/pos_2024020_ally_rt_if_dw'
+# csv_file = './data/202401/PPP/pos_2024020_ally_rt_if_dw.csv'
+# text_to_csv(text_file, csv_file)
+
+# text_file = './data/202401/PPP/pos_2024020_k_ally_3d_if'
+# csv_file = './data/202401/PPP/pos_2024020_k_ally_3d_if.csv'
+# text_to_csv(text_file, csv_file)
+
+# text_file = './data/202401/PPP/pos_2024020_k_ally_3d_if_dw'
+# csv_file = './data/202401/PPP/pos_2024020_k_ally_3d_if_dw.csv'
+# text_to_csv(text_file, csv_file)
+
+# text_file = './data/202401/PPP/pos_2024020_k_ally_3d_if_del'
+# csv_file = './data/202401/PPP/pos_2024020_k_ally_3d_if_del.csv'
+# text_to_csv(text_file, csv_file)
+
+# text_file = './data/202401/PPP/pos_2024020_k_ally_rt_if_del'
+# csv_file = './data/202401/PPP/pos_2024020_k_ally_rt_if_del.csv'
+# text_to_csv(text_file, csv_file)
+
+# text_file = './data/202401/PPP/pos_2024020_k_ally_rt_if'
+# csv_file = './data/202401/PPP/pos_2024020_k_ally_rt_if.csv'
+# text_to_csv(text_file, csv_file)
+
+# text_file = './data/202401/PPP/pos_2024020_k_ally_rt_if_dw'
+# csv_file = './data/202401/PPP/pos_2024020_k_ally_rt_if_dw.csv'
+# text_to_csv(text_file, csv_file)
+
+text_file = './data/202401/PPP/pos_2024020_k_ublx_3d_if'
+csv_file = './data/202401/PPP/pos_2024020_k_ublx_3d_if.csv'
 text_to_csv(text_file, csv_file)
 
-text_file = './data/202401/PPP/pos_2024020_ally_3d_if_dw'
-csv_file = './data/202401/PPP/pos_2024020_ally_3d_if_dw.csv'
+text_file = './data/202401/PPP/pos_2024020_k_ublx_3d_if_dw'
+csv_file = './data/202401/PPP/pos_2024020_k_ublx_3d_if_dw.csv'
 text_to_csv(text_file, csv_file)
 
-text_file = './data/202401/PPP/pos_2024020_ally_rt_if_del'
-csv_file = './data/202401/PPP/pos_2024020_ally_rt_if_del.csv'
+text_file = './data/202401/PPP/pos_2024020_k_ublx_3d_if_del'
+csv_file = './data/202401/PPP/pos_2024020_k_ublx_3d_if_del.csv'
 text_to_csv(text_file, csv_file)
 
-text_file = './data/202401/PPP/pos_2024020_ally_rt_if'
-csv_file = './data/202401/PPP/pos_2024020_ally_rt_if.csv'
+text_file = './data/202401/PPP/pos_2024020_k_ublx_rt_if_del'
+csv_file = './data/202401/PPP/pos_2024020_k_ublx_rt_if_del.csv'
 text_to_csv(text_file, csv_file)
 
-text_file = './data/202401/PPP/pos_2024020_ally_rt_if_dw'
-csv_file = './data/202401/PPP/pos_2024020_ally_rt_if_dw.csv'
+text_file = './data/202401/PPP/pos_2024020_k_ublx_rt_if'
+csv_file = './data/202401/PPP/pos_2024020_k_ublx_rt_if.csv'
+text_to_csv(text_file, csv_file)
+
+text_file = './data/202401/PPP/pos_2024020_k_ublx_rt_if_dw'
+csv_file = './data/202401/PPP/pos_2024020_k_ublx_rt_if_dw.csv'
 text_to_csv(text_file, csv_file)
 
 

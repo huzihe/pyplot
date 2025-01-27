@@ -273,6 +273,21 @@
             ]
         },
         {
+            "name": "Python: alloy-PPP-S",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/202401/PPP/",
+            "args": [
+                "pos_2024020_S_ublx_rt_if_dw",
+                "pos_2024020_s_ublx_3d_if_dw",
+                "pos_2024020_S_ublx_3d_if",
+                "gins.txt"
+            ]
+        },
+        {
             "name": "Python: ublox-SPP-SM-0120",
             "type": "python",
             "request": "launch",
@@ -458,6 +473,19 @@
                 "CK6n-3dma-0611-static.txt",
                 "CK6n-spp-0611-static.txt",
                 "../alloy/gins.txt"
+            ]
+        },
+        {
+            "name": "Python: Panda diff",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/data/202401/PPP",
+            "args": [
+                "pos_2024020_k_ublx_3d_if",
+                "pos_2024020_k_ublx_3d_if_dw",
             ]
         },
         {
