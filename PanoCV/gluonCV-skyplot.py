@@ -80,10 +80,107 @@ def skysegmentaion(idir, filename, flag):
     az.append(az[0])
     el.append(el[0])
 
-    fig, ax = plt.subplots(subplot_kw={"projection": "polar"}, figsize=(4.4, 4.4))
+    inch = 1/2.54
+    fig, ax = plt.subplots(subplot_kw={"projection": "polar"}, dpi=300, figsize=(8.4 * inch, 8.4 * inch))
+    # fig, ax = plt.subplots(subplot_kw={"projection": "polar"}, figsize=(4.4, 4.4))
     # 天空阴影图极坐标绘制
-    ax.patch.set_facecolor("0.85")  # 底色设置为灰色
-    ax.plot(az, el)  # 绘制建筑边界
+    ax.patch.set_facecolor("0.9")  # 底色设置为灰色
+    ax.plot(az, el, linewidth=1.0, color='C9')  # 绘制建筑边界
+    ax.fill(az, el, "w")  # 中间天空填充白色
+
+    ax.set_rmax(2)
+    ax.set_rticks([90, 80, 60, 40, 20])  # Less radial ticks
+    ax.set_rlabel_position(0)  # Move radial labels away from plotted line
+    ax.set_theta_zero_location("N")  # 0°位置为正北方向
+    ax.set_thetagrids(np.arange(0.0, 360.0, 30.0))
+    ax.set_theta_direction(-1)  # 顺时针
+    ax.set_rlim(90, 0)
+
+    plt.savefig(os.path.join(odir, filename))
+    print(file + " skyplot is done!")
+
+def skytreesegmentaion(idir, filename, flag):
+    # img = image.imread('./data/cv/cv1.jpg')
+    file = os.path.join(idir, filename)
+    if not os.path.exists(file):
+        return
+
+    # 输出中间过程文件
+    if flag:
+        imdir = os.path.dirname(idir) + "/im/"
+        if not os.path.exists(imdir):
+            os.mkdir(imdir)
+
+    odir = os.path.dirname(idir) + "/out/"
+    if not os.path.exists(odir):
+        os.mkdir(odir)
+
+    img = image.imread(file)
+    img = test_transform(img, ctx)
+
+    model2 = gluoncv.model_zoo.get_model("deeplab_resnet101_ade", pretrained=True)
+    output = model2.predict(img)
+    predict = mx.nd.squeeze(mx.nd.argmax(output, 1)).asnumpy()
+    mask = get_color_pallete(predict, "ade20k")
+    sky = predict == 2
+    print(
+        file + " 天空率为:", str(len(predict[sky]) / (predict.shape[0] * predict.shape[1]))
+    )
+
+    if flag:
+        base = mpimg.imread(file)
+        plt.figure(figsize=(10, 5))
+        # plt.imshow(base)
+        plt.imshow(mask, alpha=0.5)
+        plt.axis("off")
+        plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0)
+        plt.margins(0, 0)
+        plt.savefig(os.path.join(imdir, filename), dpi=250)
+        print(file + " segmentation is done!")
+
+    az = []
+    el = []
+    eltree = []
+    rows = predict.shape[0]
+    cols = predict.shape[1]
+    orientation = 180
+    for col in range(360):
+        frac = math.modf((col + orientation) / 360)
+        cole = int(frac[0] * cols)
+        for row in range(1, int(rows / 2), 2):
+            if predict[row, cole] != 2:
+                az.append(col * np.pi / 180)
+                el.append(90 - row * 2 / rows * 90)
+                ele = row * 2 / predict.shape[0] * 90
+                break
+    az.append(az[0])
+    el.append(el[0])
+
+    for col in range(360):
+        frac = math.modf((col + orientation) / 360)
+        cole = int(frac[0] * cols)
+        setflag = False
+        setele = 0
+        for row in range(1, int(rows / 2), 2):
+            d = predict[row, cole]
+            if predict[row, cole] != 2 and predict[row, cole] != 4:
+                eltree.append(90 - row * 2 / rows * 90)
+                ele = row * 2 / predict.shape[0] * 90
+                setele = 90 - row * 2 / rows * 90
+                setflag = True
+                break
+        if not setflag:
+            eltree.append(setele)
+    eltree.append(eltree[0])
+
+    inch = 1/2.54
+    fig, ax = plt.subplots(subplot_kw={"projection": "polar"}, dpi=300, figsize=(8.4 * inch, 8.4 * inch))
+    # fig, ax = plt.subplots(subplot_kw={"projection": "polar"}, figsize=(4.4, 4.4))
+    # 天空阴影图极坐标绘制
+    ax.patch.set_facecolor("0.9")  # 底色设置为灰色
+    ax.plot(az, eltree, linewidth=1.0, color='r')  # 绘制建筑边界含
+    ax.fill(az, eltree, "g")  # 中间天空填充白色
+    ax.plot(az, el, linewidth=1.0, color='C9')  # 绘制建筑边界含树木
     ax.fill(az, el, "w")  # 中间天空填充白色
 
     ax.set_rmax(2)
@@ -98,12 +195,13 @@ def skysegmentaion(idir, filename, flag):
     print(file + " skyplot is done!")
 
 
-path = "./data/sky/res"
+path = "./data/cv/sky/res_egova1"
 
 # filenames = os.walk(path)
 # for filename in filenames:
 #     skysegmentaion(path,filename,opath)
 filenames = os.listdir(path)
 for i in filenames:
-    skysegmentaion(path, i, True)
+    # skysegmentaion(path, i, True)
+    skytreesegmentaion(path, i, True)
 print("it's done!")

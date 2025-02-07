@@ -1,13 +1,20 @@
 '''
 Author: hzh huzihe@whu.edu.cn
 Date: 2024-12-31 23:10:38
-LastEditTime: 2025-01-01 16:17:35
-FilePath: /pyplot/PanoCV/openCV.PY
+LastEditTime: 2025-02-07 23:20:17
+FilePath: /pyplot/PanoCV/openCV.py
 Descripttion: 
 '''
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+import os
+
+def get_files(path):
+    for filepath, dirnames, filenames in os.walk(path):
+        for filename in filenames:
+            print(os.path.join(filepath, filename))
 
 # 字体调整
 plt.rcParams['font.sans-serif'] = ['Arial']  # 如果要显示中文字体,则在此处设为：simhei,Arial Unicode MS
@@ -22,6 +29,23 @@ plt.rcParams['axes.labelsize'] = 14  # 坐标轴标签字体大小
 inch = 1/2.54
 
 def Otsu(inPath,outPath):
+    # 1. 加载图像并转换为灰度图
+    image = cv2.imread(inPath)  # 替换为你的图像路径
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # 2. 高斯模糊（可选，但推荐）
+    blur = cv2.GaussianBlur(gray, (5, 5), 0)
+
+    # 3. 使用 Otsu 阈值分割
+    # 返回值 ret 为 Otsu 方法自动计算的最佳阈值
+    ret, binary = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    cv2.adaptiveThreshold
+
+    # # 4. 显示结果
+    mpimg.imsave(outPath, binary, cmap='gray')
+    # plt.show()
+
+def OtsuProcess(inPath,outPath):
     # 1. 加载图像并转换为灰度图
     image = cv2.imread(inPath)  # 替换为你的图像路径
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -60,7 +84,6 @@ def Otsu(inPath,outPath):
     plt.xticks([])
     plt.ylabel('Otsu Result')
     plt.imshow(binary, cmap='gray')
-
 
     plt.tight_layout()
     plt.savefig(outPath)
@@ -119,10 +142,96 @@ def OtsuGaussian(inPath,outPath):
     plt.savefig(outPath)
     plt.show()
 
-if __name__ == "__main__":
-    inImage = './data/cv/cv2.jpg'
-    outImage = './data/cv/cv2_OtsuGaussian.jpg'
-    # OtsuGaussian(inImage,outImage)
+def resize(inPath,outPath):
+    img = cv2.imread(inPath)
+    # 获取图片尺寸
+    height, width = img.shape[:2]
 
-    outOtsu= './data/cv/cv2_Otsu.jpg'
-    Otsu(inImage,outOtsu)
+    # 缩小图片尺寸为原来的一半
+    resized_img = cv2.resize(img, (width//2, height//2), interpolation=cv2.INTER_AREA)
+
+    cv2.imwrite(outPath, resized_img)
+
+if __name__ == "__main__":
+    # inImage = './data/cv/cv2.jpg'
+    # outImage = './data/cv/cv2_OtsuGaussian.jpg'
+    # # OtsuGaussian(inImage,outImage)
+
+    # outOtsu= './data/cv/cv2_Otsu.jpg'
+    # # OtsuProcess(inImage,outOtsu)
+
+    # inImage = './data/sky/res/cv3.jpg'
+    # outImage = './data/cv/cv3_resize.jpg'
+    # resize(inImage,outImage)
+
+    # path = "./data/cv/sky/res_cityscapes"
+    # outPath = "./data/cv/sky/out_otsu"
+    # filenames = os.listdir(path)
+    # for i in filenames:
+    #     Otsu(os.path.join(path, i), os.path.join(outPath, i.replace(".jpg", "_otsu.jpg")))
+    # print("it's done!")
+
+    # path = "./data/cv/sky/res_egova"
+    # outPath = "./data/cv/sky/out_otsu"
+    # filenames = os.listdir(path)
+    # for i in filenames:
+    #     Otsu(os.path.join(path, i), os.path.join(outPath, i.replace(".jpg", "_otsu.jpg")))
+    # print("it's done!")
+
+    path = "./data/cv/sky/res"
+    outPath = "./data/cv/sky/res_wuce"
+    filenames = os.listdir(path)
+    for i in filenames:
+        resize(os.path.join(path, i), os.path.join(outPath, i))
+    print("it's done!")
+
+    # # ade20k
+    # path = "./data/cv/sky/res_ade20k"
+    # outPath = "./data/cv/sky/out_ade20k/"
+    # filenames = os.listdir(path)
+    # for i in filenames:
+    #     Otsu(os.path.join(path, i), os.path.join(outPath, i.replace(".jpg", "_otsu.jpg")))
+    # print("it's done!")
+
+    # # skyfinder
+    # path = "./data/cv/sky/res_skyfinder/684"
+    # outPath = "./data/cv/sky/skyfinder/"
+    # filenames = os.listdir(path)
+    # for i in filenames:
+    #     Otsu(os.path.join(path, i), os.path.join(outPath, i.replace(".jpg", "_otsu.jpg")))
+    # print("it's done!")
+
+    # path = "./data/cv/sky/res_skyfinder/3297"
+    # outPath = "./data/cv/sky/skyfinder/"
+    # filenames = os.listdir(path)
+    # for i in filenames:
+    #     Otsu(os.path.join(path, i), os.path.join(outPath, i.replace(".jpg", "_otsu.jpg")))
+    # print("it's done!")
+
+    # path = "./data/cv/sky/res_skyfinder/4181"
+    # outPath = "./data/cv/sky/skyfinder/"
+    # filenames = os.listdir(path)
+    # for i in filenames:
+    #     Otsu(os.path.join(path, i), os.path.join(outPath, i.replace(".jpg", "_otsu.jpg")))
+    # print("it's done!")
+
+    # path = "./data/cv/sky/res_skyfinder/9483"
+    # outPath = "./data/cv/sky/skyfinder/"
+    # filenames = os.listdir(path)
+    # for i in filenames:
+    #     Otsu(os.path.join(path, i), os.path.join(outPath, i.replace(".jpg", "_otsu.jpg")))
+    # print("it's done!")
+
+    # path = "./data/cv/sky/res_skyfinder/11331"
+    # outPath = "./data/cv/sky/skyfinder/"
+    # filenames = os.listdir(path)
+    # for i in filenames:
+    #     Otsu(os.path.join(path, i), os.path.join(outPath, i.replace(".jpg", "_otsu.jpg")))
+    # print("it's done!")
+
+    # path = "./data/cv/sky/res_skyfinder/18590"
+    # outPath = "./data/cv/sky/skyfinder/"
+    # filenames = os.listdir(path)
+    # for i in filenames:
+    #     Otsu(os.path.join(path, i), os.path.join(outPath, i.replace(".jpg", "_otsu.jpg")))
+    # print("it's done!")
